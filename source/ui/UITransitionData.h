@@ -8,67 +8,61 @@
 #define TRANSITION_DATA_ID_MOVETO   0
 #define TRANSITION_DATA_ID_FADE	    1
 #define TRANSITION_DATA_ID_ANIMATE  2
+#define TRANSITION_DATA_ID_COLOUR   3
 
-struct TransitionData
+class TransitionData
 {
-	// Constructor for data
-	TransitionData() :
-		transition_first_tick(true)
-	{}
+public:
+	TransitionData(int8_t id, float time);
+	~TransitionData() {}
 
-	// Variables for data
+public:
 	int8_t transition_id;
 	float  transition_time;
 	bool   transition_first_tick;
 };
 
-struct TransitionMoveTo : public TransitionData
+class TransitionMoveTo : public TransitionData
 {
-	// Constructor for data
-	TransitionMoveTo(sf::Vector2f position, float time) :
-		TransitionData(),
-		transition_position(position),
-		transition_position_first(sf::Vector2f())
-	{
-		transition_id   = TRANSITION_DATA_ID_MOVETO;
-		transition_time = time;
-	}
+public:
+	TransitionMoveTo(sf::Vector2f position, float time);
+	~TransitionMoveTo() {}
 
-	// Variables for data
+public:
 	sf::Vector2f transition_position;
 	sf::Vector2f transition_position_first;
 };
 
-struct TransitionFade : public TransitionData
+class TransitionFade : public TransitionData
 {
-	// Constructor for data
-	TransitionFade(int8_t to_alpha, float time) :
-		TransitionData(),
-		transition_alpha(to_alpha),
-		transition_alpha_first(255)
-	{
-		transition_id   = TRANSITION_DATA_ID_FADE;
-		transition_time = time;
-	}
+public:
+	TransitionFade(int8_t to_alpha, float time);
+	~TransitionFade() {}
 
-	// Variables for data
+public:
 	int8_t transition_alpha;
 	int8_t transition_alpha_first;
 };
 
-struct TransitionAnimate : public TransitionData
+class TransitionAnimate : public TransitionData
 {
-	// Constructor for data
-	TransitionAnimate(std::string animation_name) :
-		TransitionData(),
-		transition_animation(animation_name)
-	{
-		transition_id   = TRANSITION_DATA_ID_ANIMATE;
-		transition_time = -1;
-	}
+public:
+	TransitionAnimate(std::string animation_name);
+	~TransitionAnimate();
 
-	// Variables for data
+public:
 	std::string transition_animation;
+};
+
+class TransitionColour : public TransitionData
+{
+public:
+	TransitionColour(sf::Color colour, float time);
+	~TransitionColour() {}
+
+public:
+	sf::Color transition_colour;
+	sf::Color transition_colour_first;
 };
 
 #endif // _UITRANSITIONDATA_H

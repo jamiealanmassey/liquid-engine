@@ -7,10 +7,8 @@ Button::Button(sf::Vector2f position, std::string id) :
 	UIElement(position, id),
 	m_ButtonState(eButtonState::BUTTONSTATE_DEFAULT)
 {
+	// Set initial transitioning states
 	m_TransitionState->initDefaultStates();
-
-	m_TransitionState->addStateUpdateCallback("TEnabled", std::bind(TransitionFuncMoveTo, std::placeholders::_1, std::placeholders::_2,
-		new TransitionMoveTo(sf::Vector2f((float)randomRange(-600, 600) + 800.0f, 600.0f), 1500.0f)));
 }
 
 Button::~Button()

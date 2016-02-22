@@ -9,13 +9,6 @@
 #include "UITransitionData.h"
 #include "UITransitionFuncs.h"
 
-#define TRANSITION_STATE_ENABLED  122
-#define TRANSITION_STATE_DISABLED 123
-#define TRANSITION_STATE_ENTERED  124
-#define TRANSITION_STATE_EXITED   125
-#define TRANSITION_STATE_PRESSED  126
-#define TRANSITION_STATE_RELEASED 127
-
 #define STATE_MODE_UNDEFINED 0
 #define STATE_MODE_WAITING   1
 #define STATE_MODE_RUNNING   2
@@ -29,6 +22,10 @@ public:
 	typedef std::function<bool(UIElement*, UITransitionState*)>	FuncStateStart;
 	typedef std::function<bool(UIElement*, UITransitionState*)> FuncStateUpdate;
 	typedef std::function<void(UIElement*, UITransitionState*)>	FuncStateFinish;
+
+	typedef std::map<std::string, FuncStateStart>				FuncStartTable;
+	typedef std::map<std::string, std::vector<FuncStateUpdate>> FuncUpdateTable;
+	typedef std::map<std::string, FuncStateFinish>				FuncFinishTable;
 
 public:
 	UITransitionState(UIElement* parent_element);
@@ -66,9 +63,9 @@ private:
 	void updateNextState();
 
 private:
-	std::map<std::string, FuncStateStart>  f_StartCallbacks;  ///< Table of start callbacks
-	std::map<std::string, FuncStateUpdate> f_UpdateCallbacks; ///< Table of update callbacks
-	std::map<std::string, FuncStateFinish> f_FinishCallbacks; ///< Table of finish callbacks
+	FuncStartTable  f_StartCallbacks;  ///< Table of start callbacks
+	FuncUpdateTable f_UpdateCallbacks; ///< Table of update callbacks
+	FuncFinishTable f_FinishCallbacks; ///< Table of finish callbacks
 
 protected:
 	std::map<std::string, int8_t> m_StatesMode;	   ///< Stores the current mode of each state

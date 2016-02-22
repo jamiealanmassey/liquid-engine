@@ -36,9 +36,15 @@ void UITransitionState::update()
 		// if it has finished, if it hasn't then do nothing, otherwise if it doesn't have
 		// a callback and we have a next state automatically switch to that state
 		if (f_UpdateCallbacks.find(m_StateCurrent) != f_UpdateCallbacks.end() &&
-			f_UpdateCallbacks[m_StateCurrent](m_ParentElement, this))
+			f_UpdateCallbacks[m_StateCurrent].empty() == false)
 		{
-			m_StatesMode[m_StateCurrent] = STATE_MODE_COMPLETE;
+			int8_t finished = f_UpdateCallbacks[m_StateCurrent].size();
+
+			for (auto func_call : f_UpdateCallbacks[m_StateCurrent])
+				finished -= (bool)func_call(m_ParentElement, this);
+
+			if (finished == 0)
+				m_StatesMode[m_StateCurrent] = STATE_MODE_COMPLETE;
 		}
 		else if (f_FinishCallbacks.find(m_StateCurrent) != f_FinishCallbacks.end() &&
 				 m_StateNext != "")
@@ -99,12 +105,8 @@ void UITransitionState::addStateStartCallback(std::string state_name, FuncStateS
 
 void UITransitionState::addStateUpdateCallback(std::string state_name, FuncStateUpdate state_func)
 {
-	// Search map of state callbacks, if it doesn't exist add it to the map
-	// otherwise output
-	if (f_UpdateCallbacks.find(state_name) == f_UpdateCallbacks.end())
-		f_UpdateCallbacks[state_name] = state_func;
-	else
-		std::cout << "UITransitionState update callback for state " << state_name << " already exists!\n";
+	// Add the callback to the update functions
+	f_UpdateCallbacks[state_name].push_back(state_func);
 }
 
 void UITransitionState::addStateFinishCallback(std::string state_name, FuncStateFinish state_func)

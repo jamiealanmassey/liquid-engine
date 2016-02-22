@@ -76,6 +76,7 @@ public:
 	Renderable*				getRenderable()				{ return m_Renderable;		 }
 	GameScene*				getParentScene()			{ return m_ParentScene;		 }
 	UIElement*				getParent()					{ return m_Parent;			 }
+	UITransitionState*		getTransitionState()		{ return m_TransitionState;  }
 	std::vector<UIElement*> getChildren()				{ return m_Children;		 }
 
 public:
