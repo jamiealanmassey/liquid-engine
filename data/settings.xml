@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Settings>
+	<Setting ID="custom_assets" 	Value="data/custom/" />
+	<Setting ID="screen_width" 		Value="1680" 		 />
+	<Setting ID="screen_height" 	Value="1050" 		 />
+	<Setting ID="fullscreen" 		Value="false" 		 />
+	<Setting ID="particles_enabled" Value="true" 		 />
+	<Setting ID="vsync" 			Value="true" 		 />
+	<Setting ID="scale_gui" 		Value="1.0" 		 />
+	<Setting ID="frame_limit" 		Value="60" 			 />
+	<Setting ID="volume_master" 	Value="100.0" 		 />
+	<Setting ID="volume_music" 		Value="100.0" 		 />
+	<Setting ID="volume_sfx" 		Value="100.0" 		 />
+	<Setting ID="volume_dialogue" 	Value="100.0" 		 />
+</Settings>
