@@ -15,11 +15,9 @@ ParticleEmitter::ParticleEmitter(std::string identifier, sf::Vector2f position, 
 	m_Speed({ 0.0f, 0.0f, 0.0f }),
 	m_LifeSpan(0.0f),
 	m_LifeSpanVariant(0.0f),
-	m_PulseLength(0.0f)
+	m_PulseLength(0.0f),
+	m_XMLFile(xml_file)
 {
-	// Load XML file if provided
-	if (!xml_file.empty())
-		loadXMLData(xml_file);
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -34,6 +32,13 @@ ParticleEmitter::~ParticleEmitter()
 	// Delete particles
 	if (m_Particles)
 		delete[] m_Particles;
+}
+
+void ParticleEmitter::implInitialise()
+{
+	// Load XML file if provided
+	if (!m_XMLFile.empty())
+		loadXMLData(m_XMLFile);
 }
 
 void ParticleEmitter::implUpdate()

@@ -17,6 +17,8 @@ public:
 	/* Getters for nodes */
 	const NavNode& getNode(int32_t idx) const;
 		  NavNode& getNode(int32_t idx);
+		 
+	int32_t getNodeIdx(sf::Vector2f position);
 
 	/* Getters for edges */
 	const NavEdge& getEdge(int32_t from, int32_t to) const;

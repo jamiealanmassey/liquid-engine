@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 #include "../utilities/DeltaTime.h"
 
-GameManager::GameManager(std::string game_name, std::string config_file) :
+GameManager::GameManager() :
 	m_PopNextStateFront(false),
 	m_PopNextStateBack(false),
 	m_SuspendGame(false),
@@ -11,8 +11,8 @@ GameManager::GameManager(std::string game_name, std::string config_file) :
 	f_Execute(nullptr),
 	f_LoadConfig(nullptr)
 {
-	m_GameName = game_name;
-	m_ConfigFile = config_file;
+	m_GameName = "";
+	m_ConfigFile = "";
 }
 
 GameManager::~GameManager()
@@ -137,6 +137,11 @@ void GameManager::execute()
 
 	// 
 	ResourceManager::instance().initialise();
+
+	// If we have an LuaInstance we want to initialise() it and make sure that
+	// all relevant functions are registered
+	if (m_LuaInstance)
+		m_LuaInstance->initialise();
 }
 
 void GameManager::simulate()
@@ -438,6 +443,8 @@ void GameManager::pollEventData()
 			m_EventData.window_gain_focus = true;
 		else if (m_EventPoll.type == sf::Event::Closed)
 			m_EventData.window_closed = true;
+		else if (m_EventPoll.type == sf::Event::MouseMoved)
+			m_EventData.mouse_moved = true;
 	}
 }
 
@@ -459,4 +466,10 @@ int32_t GameManager::getNextUniqueID()
 	// Increment unique ID and return it
 	m_NextUniqueID++;
 	return m_NextUniqueID;
+}
+
+GameManager& GameManager::instance()
+{
+	static GameManager singleton;
+	return singleton;
 }

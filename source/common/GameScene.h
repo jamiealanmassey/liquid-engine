@@ -67,7 +67,6 @@ public:
 	GameManager* getGameManager() { return m_GameManager; }
 	Renderer*    getRenderer()	  { return m_Renderer;    }
 	UIManager*   getUIManager()	  { return m_UIManager;   }
-	LuaInstance* getLuaInstance() { return m_LuaInstance; }
 	b2World*	 getBox2DWorld()  { return m_Box2DWorld;  }
 	std::string  getStateName()	  { return m_StateName;   }
 
@@ -75,13 +74,13 @@ protected:
 	GameManager*	 m_GameManager;		///< Pointer to LiquidEntry
 	Renderer*		 m_Renderer;		///< Renderer for drawing to the screen
 	UIManager*		 m_UIManager;		///< Manager for user interface
-	LuaInstance*	 m_LuaInstance;		///< LuaInstance for passing and calling LuaScripts/Funcs
 	ContactListener* m_ContactListener; ///< Contact listener for collisions
 	b2World*		 m_Box2DWorld;		///< World for Box2D
 
 protected:
-	std::vector<Entity*> m_Entities;  ///< List of entities that exist in the world
-	std::string			 m_StateName; ///< String identifier representing state
+	std::vector<Entity*> m_Entities;     ///< List of entities that exist in the world
+	std::vector<Entity*> m_EntityBuffer; ///< Buffer for adding entities
+	std::string			 m_StateName;	 ///< String identifier representing state
 
 private:
 	bool m_AllowUpdate;		   ///< Flag that denotes whether we should update the Scene

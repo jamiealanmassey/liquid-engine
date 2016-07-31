@@ -42,9 +42,9 @@ public:
 	~Entity();
 
 	/* Core entity functions */
-	void update(float delta);
-	void updatePost(float delta);
-	void updateTween(float delta);
+	void update();
+	void updatePost();
+	void updateTween();
 
 	/* Inheritence implemented update */
 	virtual void implInitialise() {}

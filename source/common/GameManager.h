@@ -31,6 +31,7 @@ struct EventData
 	bool window_lost_focus;
 	bool window_gain_focus;
 	bool window_closed;
+	bool mouse_moved;
 
 	sf::Keyboard::Key data_key_pressed;
 	sf::Keyboard::Key data_key_released;
@@ -81,7 +82,7 @@ public:
 	};
 
 public:
-	GameManager(std::string game_name, std::string config_file);
+	GameManager();
 	~GameManager();
 
 	/* Functions to add states into the list */
@@ -121,11 +122,20 @@ public:
 	void pause()  { m_SuspendGame = true;  }
 	void resume() { m_SuspendGame = false; }
 
+	/* Essential Setters */
+	void setGameName(std::string name)		   { m_GameName = name;		   }
+	void setConfigFile(std::string file)	   { m_ConfigFile = file;	   }
+	void setLuaInstance(LuaInstance* instance) { m_LuaInstance = instance; }
+
 	/* Getter functions */
 	sf::RenderWindow* getRenderWindow()		  { return m_RenderWindow; }
 	EventData		  getEventData()	const { return m_EventData;    }
 	GameSettings	  getGameSettings() const { return m_GameSettings; }
 	GameBindings	  getGameBindings() const { return m_GameBindings; }
+	LuaInstance*	  getLuaInstance()		  { return m_LuaInstance; }
+
+	/* Instance Func */
+	static GameManager& instance();
 
 public:
 	std::function<void(GameManager*)> f_Execute;    ///< Stores a function ptr to be called on execution
@@ -147,6 +157,7 @@ protected:
 	EventData		  m_EventData;	  ///< Stores event flags and data for each frame
 	GameSettings	  m_GameSettings; ///< Stores data structure defining settings
 	GameBindings	  m_GameBindings; ///< Tables of input bindings
+	LuaInstance*	  m_LuaInstance;  ///< LuaInstance for passing and calling LuaScripts/Funcs
 
 private:
 	bool	m_PopNextStateFront; ///< Flag to denote whether to pop the front state next tick

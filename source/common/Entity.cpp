@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "GameScene.h"
 #include "GameManager.h"
+#include "../utilities/DeltaTime.h"
 
 Entity::Entity(sf::Vector2f position, std::string uid) :
 	m_Moved(false),
@@ -53,7 +54,7 @@ Entity::~Entity()
 		f_Killed(this);
 }
 
-void Entity::update(float delta)
+void Entity::update()
 {
 	// Reset flag for Entity movement
 	m_Moved = false;
@@ -74,7 +75,7 @@ void Entity::update(float delta)
 
 	// Function callback for when the Entity is updated
 	if (f_Update)
-		f_Update(this, delta);
+		f_Update(this, Delta);
 
 	// Call down to inherited update
 	implUpdate();
@@ -83,7 +84,7 @@ void Entity::update(float delta)
 	for (auto tween : m_Tweening)
 	{
 		// Add elapsed time and call func
-		tween.elapsed += delta;
+		tween.elapsed += Delta;
 		tween.func_ptr(tween.elapsed);
 
 		// If elapsed time has passed timer, tweening is done
@@ -92,7 +93,7 @@ void Entity::update(float delta)
 	}
 
 	// Update tweeners
-	updateTween(delta);
+	updateTween();
 
 	// Iterate over each active tweening mechanism and if it has finished erase it from
 	// the list of running tweeners and reset iterator position
@@ -104,25 +105,25 @@ void Entity::update(float delta)
 	}
 }
 
-void Entity::updatePost(float delta)
+void Entity::updatePost()
 {
 	// Function callback for Entity postUpdate()
 	if (f_UpdatePost)
-		f_UpdatePost(this, delta);
+		f_UpdatePost(this, Delta);
 
 	// Call down to inherited updatePost
 	implUpdatePost();
 }
 
-void Entity::updateTween(float delta)
+void Entity::updateTween()
 {
 	// Iterate through each active tweener calling to the function pointer
 	// with the passed time; also check for tweener's that have finished
 	for (auto tween : m_Tweening)
 	{
 		// Add to elapsed time and call down to stored function
-		tween.elapsed = std::min(tween.elapsed + delta, tween.timer);
-		tween.func_ptr(delta);
+		tween.elapsed = std::min(tween.elapsed + Delta, tween.timer);
+		tween.func_ptr(Delta);
 
 		// If the elapsed time has surpassed the timer set finished flag to true
 		if (tween.elapsed >= tween.timer)
@@ -176,7 +177,7 @@ void Entity::setPosition(sf::Vector2f pos)
 
 	// Iterate through children and assign new position accordingly
 	for (auto child : m_Children)
-		child->setPosition(m_Position - (child->getPosition() + m_Position));
+		child->setPosition(m_Position /*- (child->getPosition() + m_Position)*/);
 
 	// Function callback for setPosition(x, y)
 	if (f_SetPosition)
@@ -213,7 +214,7 @@ void Entity::addPosition(sf::Vector2f pos)
 
 	// Iterate through children and assign new position accordingly
 	for (auto child : m_Children)
-		child->setPosition(m_Position - (child->getPosition() + m_Position));
+		child->setPosition(m_Position /*- (child->getPosition() + m_Position)*/);
 
 	// Function callback for setPosition(x, y)
 	if (f_AddPosition)

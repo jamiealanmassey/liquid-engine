@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "../common/ResourceManager.h"
 
 Particle::Particle(std::string texture) :
 	Renderable(texture, 4),

@@ -17,9 +17,9 @@ class ParticleEmitter : public Entity
 public:
 	enum eEmitterType
 	{
-		Type_Undefined = 0,
+		Type_Undefined	 = 0,
 		Type_Directional = 1,
-		Type_Circular = 2
+		Type_Circular	 = 2
 		// TODO: Particle Beams?
 	};
 
@@ -27,6 +27,7 @@ public:
 	ParticleEmitter(std::string identifier, sf::Vector2f position, std::string xml_file = "");
 	~ParticleEmitter();
 
+	virtual void implInitialise() override;
 	virtual void implUpdate() override;
 	virtual void implUpdatePost() {}
 	
@@ -41,6 +42,7 @@ protected:
 	float        m_BirthRate;
 	float        m_BirthAccum;
 	std::string  m_ParticleTexture;
+	std::string  m_XMLFile;
 
 	// Particle data
 	LerpVector	 m_Direction;

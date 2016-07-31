@@ -273,6 +273,9 @@ std::string Renderable::processShader(std::string file, sf::Shader::Type type)
 
 void Renderable::changeAnimation(std::string name, int32_t begin, int32_t end)
 {
+	if (m_AnimationTable.find(name) == m_AnimationTable.end())
+		return;
+
 	// Store the new mode, a flag for whether the bounds are unique or default etc.
 	eAnimationMode new_mode	   = eAnimationMode::DEFAULT;
 	bool default_bounds		   = (begin == -1 && end == -1);

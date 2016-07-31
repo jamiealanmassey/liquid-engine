@@ -14,16 +14,7 @@ GameScene::GameScene(LuaInstance* lua_instance, std::string state_name) :
 	std::srand(std::time(nullptr));
 
 	// Setup variables for use
-	m_LuaInstance = lua_instance;
 	m_StateName   = state_name;
-
-	// If we have an LuaInstance we want to initialise() it and make sure that
-	// all relevant functions are registered
-	if (m_LuaInstance)
-	{
-		m_LuaInstance->init();
-		m_LuaInstance->registerLuaFunctions();
-	}
 }
 
 GameScene::~GameScene()
@@ -34,7 +25,7 @@ void GameScene::init()
 {
 	// Create renderer, Box2D world, UIManager and contact listener
 	m_Renderer		  = new Renderer(this);
-	m_UIManager		  = new UIManager(this);
+	m_UIManager		  = new UIManager(this, "UIDefaultSkin", "assets/UIDefaultSkin.skindat");
 	m_Box2DWorld	  = new b2World(b2Vec2(0.0f, 0.0f));
 	m_ContactListener = new ContactListener();
 
@@ -80,6 +71,20 @@ void GameScene::update(float delta)
 	if (!m_AllowUpdate)
 		return;
 
+	for (int i = 0; i < m_EntityBuffer.size(); i++)
+	{
+		// Add entity to the Scene
+		m_Entities.push_back(m_EntityBuffer[i]);
+		m_EntityBuffer[i]->setGameScene(this);
+		m_EntityBuffer[i]->implInitialise();
+
+		// If the Entity has a renderable add it to the Renderer
+		if (m_EntityBuffer[i]->checkRenderable())
+			m_Renderer->addRenderable(m_EntityBuffer[i]->getRenderable());
+	}
+
+	m_EntityBuffer.clear();
+
 	// Call down to the renderer
 	m_Renderer->update();
 
@@ -89,14 +94,14 @@ void GameScene::update(float delta)
 
 	// Update all entities
 	for (auto entity : m_Entities)
-		entity->update(delta);
+		entity->update();
 
 	// Update all entities for post
 	for (auto entity : m_Entities)
-		entity->updatePost(delta);
+		entity->updatePost();
 
 	// Update UIManager
-	m_UIManager->update(delta, m_GameManager->getEventData());
+	m_UIManager->update(m_GameManager->getEventData());
 
 	// Iterate through entities and remove any dead ones
 	std::vector<Entity*>::iterator it = m_Entities.begin();
@@ -111,7 +116,7 @@ void GameScene::update(float delta)
 				break;
 		}
 	}
-	
+
 	// Call down to user override
 	implUpdate();
 }
@@ -122,16 +127,14 @@ void GameScene::render(sf::RenderTarget& target)
 	m_Renderer->render(target);
 }
 
+void addEntityBuffer(Entity* entity)
+{
+}
+
 void GameScene::addEntity(Entity* entity)
 {
-	// Add entity to the Scene
-	m_Entities.push_back(entity);
-	entity->setGameScene(this);
-	entity->implInitialise();
-
-	// If the Entity has a renderable add it to the Renderer
-	if (entity->checkRenderable())
-		m_Renderer->addRenderable(entity->getRenderable());
+	// Add to buffer for adding Entity to the scene
+	m_EntityBuffer.push_back(entity);
 }
 
 void GameScene::addEntity(std::vector<Entity*> entities)

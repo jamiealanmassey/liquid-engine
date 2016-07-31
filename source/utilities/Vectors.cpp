@@ -182,7 +182,7 @@ sf::Color colFromStr(string str, eBracketStyle style, char delim)
 		if ((str[0] != brackets[0]) || (str.back() != brackets[1]))
 		{
 			cout << "Could not convert string \"" << str << "\" to Color!" << endl;
-			return sf::Color();
+			return sf::Color::Transparent;
 		}
 
 		// Remove brackets from string for easier access to the numbers
@@ -196,7 +196,7 @@ sf::Color colFromStr(string str, eBracketStyle style, char delim)
 	if ((rg == string::npos) || (gb == string::npos))
 	{
 		cout << "Could not convert string \"" << str << "\" to Color!" << endl;
-		return sf::Color();
+		return sf::Color::Transparent;
 	}
 
 	// Parse alpha value
@@ -210,7 +210,7 @@ sf::Color colFromStr(string str, eBracketStyle style, char delim)
 		if (!(ss >> tmp))
 		{
 			cout << "Could not convert string \"" << str << "\" to Color!" << endl;
-			return sf::Color();
+			return sf::Color::Transparent;
 		}
 		col.a = tmp;
 	}
@@ -222,7 +222,7 @@ sf::Color colFromStr(string str, eBracketStyle style, char delim)
 	if (!(ss >> tmp))
 	{
 		cout << "Could not convert string \"" << str << "\" to Color!" << endl;
-		return sf::Color();
+		return sf::Color::Transparent;
 	}
 	col.r = tmp;
 
@@ -230,7 +230,7 @@ sf::Color colFromStr(string str, eBracketStyle style, char delim)
 	if (!(ss >> tmp))
 	{
 		cout << "Could not convert string \"" << str << "\" to Color!" << endl;
-		return sf::Color();
+		return sf::Color::Transparent;
 	}
 	col.g = tmp;
 
@@ -238,7 +238,7 @@ sf::Color colFromStr(string str, eBracketStyle style, char delim)
 	if (!(ss >> tmp))
 	{
 		cout << "Could not convert string \"" << str << "\" to Color!" << endl;
-		return sf::Color();
+		return sf::Color::Transparent;
 	}
 	col.b = tmp;
 

@@ -69,6 +69,17 @@ NavNode& NavGraph::getNode(int32_t idx)
 	return m_Nodes[idx];
 }
 
+int32_t NavGraph::getNodeIdx(sf::Vector2f position)
+{
+	for (auto node : m_Nodes)
+	{
+		if (node.getPosition() == position)
+			return node.getIndex();
+	}
+
+	return INVALID_NODE_INDEX;
+}
+
 const NavEdge& NavGraph::getEdge(int32_t from, int32_t to) const
 {
 	// Check for valid from index

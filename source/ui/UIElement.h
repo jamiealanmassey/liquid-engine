@@ -1,109 +1,198 @@
 #ifndef _UIELEMENT_H
 #define _UIELEMENT_H
 
-#include "UITransitionState.h"
+#include "UIEventTable.h"
+#include "UITransitionTable.h"
+#include "UISkinRenderable.h"
 #include "../graphics/Renderable.h"
+#include <vector>
+
+#define LISTEN_PRESSED	0
+#define LISTEN_RELEASED 1
+#define LISTEN_HIDE		2
+#define LISTEN_SHOW		3
+#define LISTEN_DESTROY	4
 
 class GameScene;
+class UIManager;
+class UITooltip;
+
 class UIElement
 {
 public:
-	enum eAnchor
+	typedef std::vector<UIElement*>		   ElementList;
+	typedef std::map<int32_t, ElementList> Listeners;
+
+public:
+	enum eCentreAnchor
 	{
-		ANCHOR_NONE   = 0,
-		ANCHOR_LEFT	  = 1,
-		ANCHOR_MIDDLE = 2,
-		ANCHOR_RIGHT  = 3,
-		ANCHOR_TOP	  = 4,
-		ANCHOR_BOTTOM = 5,
-		ANCHOR_CENTRE = 6,
+		NONE	   = 0,
+		BOTH	   = 1,
+		HORIZONTAL = 2,
+		VERTICAL   = 3,
 	};
 
 public:
-	UIElement(sf::Vector2f position, std::string id = "");
-	~UIElement();
+	UIElement();
+	UIElement(UIElement* parent, std::string id, sf::Vector2f size, std::string elementName);
+	virtual ~UIElement();
 
-	/* Core UIElement Functions */
-	virtual void init()				 {								}
-	virtual void update(float delta) { m_TransitionState->update(); }
+	void initialise();
+	void update();
+
+	virtual void implInitialise() {};
+	virtual void implUpdate()     {};
+
+	virtual bool acceptsFocus()		   const;
+	virtual bool acceptsFocusFromKbd() const;
+
+	virtual void setPressed(bool flag);
+	virtual void setEntered(bool flag);
+
+	virtual void addChild(UIElement* child);
+	virtual void removeChild(UIElement* child);
+
+	void listen(UIElement* element, int32_t eventID);
+	void ignore(UIElement* element, int32_t eventID);
+
+	virtual void triggerListener(int32_t eventID);
+	virtual void acceptListener(UIElement* element, int32_t eventID);
+
+	const ElementList& getChildrenConst() const;
+		  ElementList& getChildren();
+		  UIElement*   findChildByID(std::string id);
+		  UIElement*   findChildByName(std::string elementName);
+		  void		   destroyChildren();
 	
-	/* Positioning Functions */
-	void setPosition(sf::Vector2f position);
-	void setPosition(float x, float y);
-	void setPositionRelative(sf::Vector2f position);
-	void setPositionRelative(float x, float y);
+	UIElement* getParent()			const;
+	UIElement* getNextSibling()		const;
+	UIElement* getPreviousSibling() const;
 
-	/* Misc Functions */
-	void alignElement();
-	void attachRenderable(Renderable* renderable);
+	sf::Vector2f getSize()		const { return m_Size;	    }
+	sf::Vector2f getMinSize()	const { return m_SizeMin;   }
+	sf::Vector2f getMaxSize()	const { return m_SizeMax;   }
+	float		 getMinWidth()	const { return m_SizeMin.x; }
+	float		 getMaxWidth()	const { return m_SizeMax.x; }
+	float		 getMinHeight()	const { return m_SizeMin.y; }
+	float		 getMaxHeight()	const { return m_SizeMax.y; }
+	
+	virtual void setMinSize(const sf::Vector2f& size);
+	virtual void setMaxSize(const sf::Vector2f& size);
+	virtual void setSize(float width, float height);
+	virtual void setSize(const sf::Vector2f& size);
 
-	/* Child control functions */
-	void addChild(UIElement* child);
-	void addChild(std::vector<UIElement*> children);
-	void removeChild(UIElement* child);
+	sf::Vector2f getPositionAbsolute() const;
+	sf::Vector2f getPosition()		   const;
+	sf::IntRect  getBounds()		   const;
 
-	void destroy() { m_DestroyNextFrame = true; }
+	void parentMoved();
+	void fitElements();
+	void centre(eCentreAnchor anchor = eCentreAnchor::BOTH);
 
-	/* Overridable actions for when an event occurs */
-	virtual void onPressed(sf::Mouse::Button button)  {}
-	virtual void onReleased(sf::Mouse::Button button) {}
-	virtual void onEnter()							  {}
-	virtual void onExit()							  {}
-	virtual void onFocus()							  {}
-	virtual void onDefocus()						  {}
+	void move(float x, float y);
+	void move(const sf::Vector2f& point);
+	
+	virtual void setPosition(const sf::Vector2f& point);
+	virtual void setPosition(float x, float y);
 
-	/* Setter Functions */
-	void setEntered(bool flag)		    { m_Entered = flag;			 }
-	void setFocused(bool flag)		    { m_Focused = flag;			 }
-	void setPressed(bool flag)			{ m_Pressed = flag;			 }
-	void setAllowInteraction(bool flag) { m_AllowInteraction = flag; }
-	void setAnchor(eAnchor anchor)		{ m_Anchor = anchor;		 }
-	void setParent(UIElement* element)  { m_Parent = element;		 }
-	void setGameScene(GameScene* scene) { m_ParentScene = scene;	 }
+	virtual void lowerZ();
+	virtual void raiseZ();
 
-	/* Checking Functions */
-	bool checkEntered()			 const { return m_Entered;		    }
-	bool checkFocused()			 const { return m_Focused;		    }
-	bool checkPressed()			 const { return m_Pressed;		    }
-	bool checkAllowInteraction() const { return m_AllowInteraction; }
-	bool checkRenderable()		 const { return m_RenderableExists; }
-	bool checkToDestroy()	     const { return m_DestroyNextFrame; }
+	virtual void show();
+	virtual void hide();
+	virtual void enable();
+	virtual void disable();
 
-	/* Getter Functions */
-	sf::Vector2f			getPosition()		  const { return m_Position;		 }
-	sf::Vector2f			getPositionRelative() const { return m_PositionRelative; }
-	eAnchor					getAnchor()			  const { return m_Anchor;			 }
-	Renderable*				getRenderable()				{ return m_Renderable;		 }
-	GameScene*				getParentScene()			{ return m_ParentScene;		 }
-	UIElement*				getParent()					{ return m_Parent;			 }
-	UITransitionState*		getTransitionState()		{ return m_TransitionState;  }
-	std::vector<UIElement*> getChildren()				{ return m_Children;		 }
+	//void attachTooltip(UITooltipCtrl* tooltip);
+	void attachTooltip(std::string info, std::string font = "kenvector");
+	bool removeTooltip();
 
-public:
-	std::function<void(UIElement*, sf::Mouse::Button)> f_OnPressed;  ///< Function callback for when mouse button is pressed
-	std::function<void(UIElement*, sf::Mouse::Button)> f_OnReleased; ///< Function callback for when mouse button is released
-	std::function<void(UIElement*)>					   f_OnEntered;  ///< Function callback for when cursor enters element
-	std::function<void(UIElement*)>					   f_OnExit;	 ///< Function callback for when cursor leaves element
-	std::function<void(UIElement*)>					   f_OnFocus;	 ///< Function callback for when element is focused
-	std::function<void(UIElement*)>					   f_OnDefocus;  ///< Function callback for when element is defocused
+	/*UITooltipCtrl* getTooltip();*/
+	UITooltip*  getTooltip();
+	std::string getTooltipText() const;
+	std::string getID()   const;
+	std::string getName() const;
+
+	void setID(std::string id);
+	void setName(std::string name);
+
+	void close();
+	void destroy();
+
+	void setCanFocus(bool flag);
+	void setCanFocusFromKbd(bool flag);
+	void setCanEnter(bool flag);
+	void setFocus(bool flag);
+
+	void setTooltipFollow(bool flag);
+	void setTooltipOffset(const sf::Vector2f& point);
+
+	bool canAcceptFocus()		 const;
+	bool canAcceptFocusFromKbd() const;
+	bool canEnter()				 const;
+	bool hasFocus()				 const;
+	bool canLoseFocus()			 const;
+
+	bool isInside(float x, float y)			 const;
+	bool isInside(const sf::Vector2f& point) const;
+
+	bool isEnabled()		  const { return m_Enabled;			 }
+	bool isActive()			  const { return m_Active;			 }
+	bool isPressed()		  const { return m_Pressed;			 }
+	bool isEntered()		  const { return m_Entered;			 }
+	bool isDestroyNextFrame() const { return m_DestroyNextFrame; }
+
+	void setParentScene(GameScene* scene)	  { m_ParentScene = scene;     }
+	void setParentManager(UIManager* manager) { m_ParentManager = manager; }
+
+	void setPositionPressed(sf::Vector2f& point)    { m_PositionPressed = point;    }
+	void setPositionPressedAbs(sf::Vector2f& point) { m_PositionPressedAbs = point; }
+
+	UISkinRenderable* getRenderable() { return m_Renderable; }
 
 protected:
-	bool					m_Entered;			///< Flag to denote whether element has been entered
-	bool					m_Focused;			///< Flag to denote whether element has been focused
-	bool					m_Pressed;			///< Flag to denote if button is being pressed
-	bool					m_AllowInteraction; ///< Flag for allowing interaction
-	bool					m_RenderableExists; ///< Flag to denote if renderable exists
-	bool					m_DestroyNextFrame; ///< Flag stating whether to destroy element
-	sf::Vector2f			m_Position;			///< Stored position of element
-	sf::Vector2f			m_PositionRelative; ///< Relative position of element to parent
-	eAnchor					m_Anchor;			///< Anchor enumerator for positioning element in parent
-	Renderable*				m_Renderable;		///< Renderable component to element
-	GameScene*				m_ParentScene;		///< Pointer to parent scene
-	UIElement*				m_Parent;			///< Parent of element
-	UITransitionState*		m_TransitionState;	///< Transition state of the element
-	std::vector<UIElement*> m_Children;			///< List of children to this element
-	std::string				m_UID;				///< Unique identifier for element
+	void setParent(UIElement* parent) 
+		{ m_ParentElement = parent; }
+
+public:
+	UIEventTable	  UIEventTable;
+	UITransitionTable UITransitionTable;
+
+protected:
+	bool			  m_Focused;
+	bool			  m_AcceptsFocus;
+	bool			  m_AcceptsFocusFromKbd;
+	bool			  m_AcceptsEntered;
+	bool			  m_DestroyNextFrame;
+	bool			  m_RenderableExists;
+	bool			  m_Enabled;
+	bool			  m_Active;
+	bool			  m_Pressed;
+	bool			  m_Entered;
+	bool			  m_WaitHide;
+	bool			  m_WaitDisable;
+	bool			  m_WaitDestroy;
+	bool			  m_TooltipFollow;
+	bool			  m_CanLoseFocus;
+	sf::Vector2f	  m_Position;
+	sf::Vector2f	  m_PositionAbsolute;
+	sf::Vector2f	  m_Size;
+	sf::Vector2f	  m_SizeMin;
+	sf::Vector2f	  m_SizeMax;
+	sf::Vector2f	  m_TooltipOffset;
+	sf::Vector2f	  m_PositionPressed;
+	sf::Vector2f	  m_PositionPressedAbs;
+	std::string		  m_ID;
+	std::string		  m_Name;
+	UISkinRenderable* m_Renderable;
+	UIElement*		  m_ParentElement;
+	UIManager*		  m_ParentManager;
+	UITooltip*		  m_Tooltip;
+	GameScene*		  m_ParentScene;
+	ElementList		  m_Children;
+	Listeners		  m_Listeners;
+	eCentreAnchor	  m_CentreAnchor;
+	
 };
 
 #endif // _UIELEMENT_H
- 

@@ -4,6 +4,12 @@
 #include <LuaBridge/LuaBridge.h>
 #include <lua.hpp>
 
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 class LuaInstance
 {
 public:
@@ -11,12 +17,14 @@ public:
 	~LuaInstance();
 
 	/* Core lua functionality */
-	void init();
+	void initialise();
 	bool runScript(std::string script_file);
 
 	/* Functions to register Lua Functions */
 		    void registerLuaFunctions();
-	virtual void registerLuaFunctionsUser() = 0;
+	virtual void registerLuaFunctionsUser() {}
+
+	luabridge::lua_State* getLuaState() { return m_LuaState; }
 
 protected:
 	luabridge::lua_State* m_LuaState; ///< Holds a pointer to the LuaState
