@@ -1,285 +1,171 @@
 #include "GameScene.h"
-#include "GameManager.h"
-#include "../utilities/Vectors.h"
-#include "../utilities/DeltaTime.h"
+#include "Entity.h"
 
-GameScene::GameScene(LuaInstance* lua_instance, std::string state_name) :
-	m_GameManager(nullptr),
-	m_AllowUpdate(true),
-	m_AllowUpdateEvents(true),
-	m_AllowRender(true),
-	m_AllowPostProcesses(true)
-{
-	// Seed time
-	std::srand(std::time(nullptr));
+namespace liquid {
+namespace common {
 
-	// Setup variables for use
-	m_StateName   = state_name;
-}
+    GameScene::GameScene()
+    {
+        mSceneName = "";
+        //mSpatialManager = nullptr;
+        mAllowUpdate = true;
+        mAllowUpdateEvents = true;
+        mAllowRenderer = true;
+        mAllowPostProcesses = true;
+    }
 
-GameScene::~GameScene()
-{
-}
+    GameScene::~GameScene()
+    {}
 
-void GameScene::init()
-{
-	// Create renderer, Box2D world, UIManager and contact listener
-	m_Renderer		  = new Renderer(this);
-	m_UIManager		  = new UIManager(this, "UIDefaultSkin", "assets/UIDefaultSkin.skindat");
-	m_Box2DWorld	  = new b2World(b2Vec2(0.0f, 0.0f));
-	m_ContactListener = new ContactListener();
+    void GameScene::initialise()
+    {
 
-	// Connect contact listener to world
-	m_Box2DWorld->SetContactListener(m_ContactListener);
+    }
 
-	// Call down to override
-	implInitialise();
-}
+    // TODO: Use LiquidEventData definition
+    void GameScene::updateEvents()
+    {
+        
+    }
 
-void GameScene::updateEvents(EventData event_data)
-{
-	if (!m_AllowUpdateEvents)
-		return;
+    void GameScene::update()
+    {
+        if (mAllowUpdate == false)
+            return;
 
-	for (auto entity : m_Entities)
-	{
-		if (event_data.key_pressed)
-		{
-			if (entity->f_OnKeyPressed)
-				entity->f_OnKeyPressed(event_data.data_key_pressed);
-		}
-		else if (event_data.key_released)
-		{
-			if (entity->f_OnKeyReleased)
-				entity->f_OnKeyReleased(event_data.data_key_released);
-		}
-		else if (event_data.mouse_button_pressed)
-		{
-			if (entity->f_OnMousePressed)
-				entity->f_OnMousePressed(event_data.data_mouse_pos, event_data.data_mouse_pressed);
-		}
-		else if (event_data.mouse_button_released)
-		{
-			if (entity->f_OnMouseReleased)
-				entity->f_OnMouseReleased(event_data.data_mouse_pos, event_data.data_mouse_released);
-		}
-	}
-}
+        for (auto entity : mEntitiesBuffer)
+        {
+            mEntities.push_back(entity);
+            mEntities.back()->setParentGameScene(this);
+            mEntities.back()->initialise();
 
-void GameScene::update(float delta)
-{
-	if (!m_AllowUpdate)
-		return;
+            // TODO: Add entity to the Spatial Manager if possible
+        }
 
-	for (int i = 0; i < m_EntityBuffer.size(); i++)
-	{
-		// Add entity to the Scene
-		m_Entities.push_back(m_EntityBuffer[i]);
-		m_EntityBuffer[i]->setGameScene(this);
-		m_EntityBuffer[i]->implInitialise();
+        mEntitiesBuffer.clear();
+        // TODO: Update renderer
 
-		// If the Entity has a renderable add it to the Renderer
-		if (m_EntityBuffer[i]->checkRenderable())
-			m_Renderer->addRenderable(m_EntityBuffer[i]->getRenderable());
-	}
+        for (auto entity : mEntities)
+        {
+            if (entity->getEntityState() == Entity::eEntityState::ENTITYSTATE_ACTIVE)
+            {
+                entity->updatePre();
+                entity->update();
+                entity->updatePost();
+            }
+        }
 
-	m_EntityBuffer.clear();
+        /*if (mSpatialManager)
+            mSpatialManager->update();*/
 
-	// Call down to the renderer
-	m_Renderer->update();
+        std::vector<Entity*>::iterator it;
+        for (it = mEntities.begin(); it != mEntities.end(); ++it)
+        {
+            if ((*it)->getEntityState() == Entity::eEntityState::ENTITYSTATE_DEAD)
+            {
+                it = mEntities.erase(it);
+                if (it == mEntities.end())
+                    break;
+            }
+        }
 
-	// Update Box2D World
-	if (m_Box2DWorld)
-		m_Box2DWorld->Step(Delta, 6, 2);
+        // TODO: Render from given Renderer
 
-	// Update all entities
-	for (auto entity : m_Entities)
-		entity->update();
+    }
 
-	// Update all entities for post
-	for (auto entity : m_Entities)
-		entity->updatePost();
+    void GameScene::addEntity(Entity* entity)
+    {
+        mEntitiesBuffer.push_back(entity);
+    }
 
-	// Update UIManager
-	m_UIManager->update(m_GameManager->getEventData());
+    void GameScene::addEntity(std::vector<Entity*> entities)
+    {
+        mEntitiesBuffer.insert(mEntitiesBuffer.begin(), entities.begin(), entities.end());
+    }
 
-	// Iterate through entities and remove any dead ones
-	std::vector<Entity*>::iterator it = m_Entities.begin();
-	for (; it != m_Entities.end(); ++it)
-	{
-		if ((*it)->getEntityState() == Entity::eEntityState::ENTITYSTATE_DEAD)
-		{
-			((*it))->implKill();
-			it = m_Entities.erase(it);
+    Entity* GameScene::getEntityAtPoint(float x, float y)
+    {
+        // TODO: Use spatial to make this more efficient
+        for (auto entity : mEntities)
+        {
+            if (entity->isPointInside(x, y))
+                return entity;
+        }
 
-			if (it == m_Entities.end())
-				break;
-		}
-	}
+        return nullptr;
+    }
 
-	// Call down to user override
-	implUpdate();
-}
+    Entity* GameScene::getEntityWithUID(std::string uid)
+    {
+        // TODO: Maybe make a lookup table?
+        std::vector<Entity*>::iterator it = 
+        std::find_if(mEntities.begin(), mEntities.end(),
+            [&id = uid](const Entity* entity) {
+            return entity->getEntityUID() == id;
+        });
 
-void GameScene::render(sf::RenderTarget& target)
-{
-	// Call down to the Renderer
-	m_Renderer->render(target);
-}
+        return (*it);
+    }
 
-void addEntityBuffer(Entity* entity)
-{
-}
+    /*void GameScene::setSpatialManager(Spatial* spatial)
+    {
+        mSpatialManager = spatial;
+        mSpatialManager->initialise();
+    }*/
 
-void GameScene::addEntity(Entity* entity)
-{
-	// Add to buffer for adding Entity to the scene
-	m_EntityBuffer.push_back(entity);
-}
+    void GameScene::setAllowUpdate(bool isAllowed)
+    {
+        mAllowUpdate = isAllowed;
+    }
 
-void GameScene::addEntity(std::vector<Entity*> entities)
-{
-	// Iterate over each passed entity and call down to addEntity(entity)
-	for (auto entity : entities)
-		addEntity(entity);
-}
+    void GameScene::setAllowUpdateEvents(bool isAllowed)
+    {
+        mAllowUpdateEvents = isAllowed;
+    }
 
-Entity* GameScene::getEntityAtPoint(sf::Vector2f point)
-{
-	// Iterate through each Entity in the scene so we can check points
-	for (uint32_t i = 0; i < m_Entities.size(); i++)
-	{
-		// If it is renderable we need to take into account the texture size of the renderable as well
-		// as the position of the entity, otherwise we can straight up make a position comparison
-		if (m_Entities[i]->checkRenderable())
-		{
-			// Take a pointer to the renderable
-			Renderable* renderable_ptr = m_Entities[i]->getRenderable();
+    void GameScene::setAllowRenderer(bool isAllowed)
+    {
+        mAllowRenderer = isAllowed;
+    }
 
-			// If the point is inside of the renderable and the Entity then return this Entity
-			if (point.x > (m_Entities[i]->getPosition().x - renderable_ptr->getTexture()->getSize().y) &&
-				point.y > (m_Entities[i]->getPosition().y - renderable_ptr->getTexture()->getSize().y) &&
-				point.x < (m_Entities[i]->getPosition().x + renderable_ptr->getTexture()->getSize().x) &&
-				point.y < (m_Entities[i]->getPosition().y + renderable_ptr->getTexture()->getSize().y))
-			{
-				return m_Entities[i];
-			}
-		}
-		else
-		{
-			// If the point is equal to the position of the Entity return it
-			if (point == m_Entities[i]->getPosition())
-				return m_Entities[i];
-		}
-	}
+    void GameScene::setAllowPostProcesses(bool isAllowed)
+    {
+        mAllowPostProcesses = isAllowed;
+    }
 
-	// Otherwise we have no Entity at this position
-	return nullptr;
-}
+    std::vector<Entity*>& GameScene::getEntities()
+    {
+        return mEntities;
+    }
 
-Entity* GameScene::getEntityAtPointWithUID(sf::Vector2f point, std::string uid)
-{
-	// Iterate through each Entity in the scene so we can check points
-	for (uint32_t i = 0; i < m_Entities.size(); i++)
-	{
-		// First make sure that the UID matches
-		if (m_Entities[i]->getUID() != uid)
-			continue;
+    std::string GameScene::getSceneName() const
+    {
+        return mSceneName;
+    }
 
-		// If it is renderable we need to take into account the texture size of the renderable as well
-		// as the position of the entity, otherwise we can straight up make a position comparison
-		if (m_Entities[i]->checkRenderable())
-		{
-			// Take a pointer to the renderable
-			Renderable* renderable_ptr = m_Entities[i]->getRenderable();
+    /*Spatial* GameScene::getSpatialManager() const
+    {
+        return mSpatialManager;
+    }*/
 
-			// If the point is inside of the renderable and the Entity then return this Entity
-			if (point.x >(m_Entities[i]->getPosition().x - renderable_ptr->getTexture()->getSize().y) &&
-				point.y > (m_Entities[i]->getPosition().y - renderable_ptr->getTexture()->getSize().y) &&
-				point.x < (m_Entities[i]->getPosition().x + renderable_ptr->getTexture()->getSize().x) &&
-				point.y < (m_Entities[i]->getPosition().y + renderable_ptr->getTexture()->getSize().y))
-			{
-				return m_Entities[i];
-			}
-		}
-		else
-		{
-			// If the point is equal to the position of the Entity return it
-			if (point == m_Entities[i]->getPosition())
-				return m_Entities[i];
-		}
-	}
+    bool GameScene::isAllowedUpdate() const
+    {
+        return mAllowUpdate;
+    }
 
-	// Otherwise we have no Entity at this position
-	return nullptr;
-}
+    bool GameScene::isAllowedUpdateEvents() const
+    {
+        return mAllowUpdateEvents;
+    }
 
-Entity* GameScene::getEntityClosestToPoint(sf::Vector2f point)
-{
-	// If Entities vector is empty, return nothing
-	if (m_Entities.size() == 0)
-		return nullptr;
+    bool GameScene::isAllowedRenderer() const
+    {
+        return mAllowRenderer;
+    }
 
-	// Sample first Entity
-	Entity* closest = m_Entities[0];
-	float distance = lengthSq(point - closest->getPosition());
+    bool GameScene::isAllowedPostProcesses() const
+    {
+        return mAllowPostProcesses;
+    }
 
-	// Find out if this really is the closest Entity
-	for (uint32_t i = 0; i < m_Entities.size(); i++)
-	{
-		if (lengthSq(point - m_Entities[i]->getPosition()) < distance)
-		{
-			closest  = m_Entities[i];
-			distance = lengthSq(point - m_Entities[i]->getPosition());
-		}
-	}
-
-	// Return closest Entity
-	return closest;
-}
-
-Entity* GameScene::getEntityClosestToPointWithUID(sf::Vector2f point, std::string uid)
-{
-	// If Culling vector is empty, return nothing
-	if (m_Entities.size() == 0)
-		return nullptr;
-
-	// Sample first Entity
-	Entity* closest = m_Entities[0];
-	float distance = lengthSq(point - closest->getPosition());
-
-	// Find out if this really is the closest Entity
-	for (uint32_t i = 0; i < m_Entities.size(); i++)
-	{
-		if (m_Entities[i]->getUID() == uid &&
-			lengthSq(point - m_Entities[i]->getPosition()) < distance)
-		{
-			closest = m_Entities[i];
-			distance = lengthSq(point - m_Entities[i]->getPosition());
-		}
-	}
-
-	// Return closest Entity
-	if (closest->getUID() == uid)
-		return closest;
-	else
-		return nullptr;
-}
-
-Entity* GameScene::getEntityWithUID(std::string uid)
-{
-	// Iterate over entities, if we have a UID match return that result
-	for (auto entity : m_Entities)
-	{
-		if (entity->getUID() == uid)
-			return entity;
-	}
-
-	// Otherwise return null
-	return nullptr;
-}
-
-std::vector<Entity*> GameScene::getAllEntities()
-{
-	return m_Entities;
-}
+}}

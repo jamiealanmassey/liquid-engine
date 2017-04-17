@@ -1,38 +1,58 @@
 #include "Random.h"
 
-int32_t randomRange(int32_t min, int32_t max)
-{
-	return rand() % (max - min) + min;//((max - min) * (rand() / RAND_MAX)) + min;
-}
+namespace liquid {
+namespace utilities {
 
-float randomRangeF(float min, float max)
-{
-	return ((max - min) * ((float)rand() / RAND_MAX)) + min;
-}
+    Random::Random()
+    {
+        std::srand(std::time(nullptr));
+    }
 
-double randomRangeD(double min, double max)
-{
-	return ((max - min) * ((double)rand() / RAND_MAX)) + min;
-}
+    Random::~Random()
+    {}
 
-sf::Vector2f randomRangeV(sf::Vector2f min, sf::Vector2f max)
-{
-	float rx = randomRangeF(min.x, max.x);
-	float ry = randomRangeF(min.y, max.y);
-	return sf::Vector2f(rx, ry);
-}
+    int32_t Random::randomRange(int32_t min, int32_t max)
+    {
+        return std::rand() % (max - min) + min;
+    }
 
-sf::Vector2f randomUnitVector()
-{
-	float x		 = randomRangeF(-1.0f, 1.0f);
-	float y		 = randomRangeF(-1.0f, 1.0f);
-	float length = sqrt((x * x) + (y * y));
+    float Random::randomRange(float min, float max)
+    {
+        return ((max - min) * ((float)std::rand() / RAND_MAX)) + min;
+    }
 
-	if (length != 0.0f)
-	{
-		x /= length;
-		y /= length;
-	}
+    double Random::randomRange(double min, double max)
+    {
+        return ((max - min) * ((double)std::rand() / RAND_MAX)) + min;
+    }
 
-	return sf::Vector2f(x, y);
-}
+    std::array<float, 2> Random::randomRange(std::array<float, 2> min, std::array<float, 2> max)
+    {
+        float rx = randomRange(min[0], max[0]);
+        float ry = randomRange(min[1], max[1]);
+
+        return { rx,ry };
+    }
+
+    std::array<float, 2> Random::randomUnitVector()
+    {
+        float rx = randomRange(-1.0f, 1.0f);
+        float ry = randomRange(-1.0f, 1.0f);
+        float len = std::sqrt((rx * rx) + (ry * ry));
+
+        if (len != 0.0f)
+        {
+            rx /= len;
+            ry /= len;
+        }
+
+        return { rx,ry };
+    }
+
+    Random& Random::instance()
+    {
+        static Random singleton;
+        return singleton;
+    }
+
+}}

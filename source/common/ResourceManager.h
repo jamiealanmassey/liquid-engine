@@ -1,81 +1,83 @@
+#include <map>
+#include <algorithm>
+
+namespace liquid { namespace common {
 #ifndef _RESOURCEMANAGER_H
 #define _RESOURCEMANAGER_H
 
-#include <PugiXML/pugixml.hpp>
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <vector>
-#include <map>
-#include <Windows.h>
+/**
+ * \class ResourceManager
+ *
+ * \ingroup Common
+ * \brief Singleton class that allows storing of any generic data collection
+ *
+ * \author Jamie Massey
+ * \version 2.0
+ * \date 09/04/2017
+ *
+ */
 
-enum eFileType
-{
-	FILETYPE_TEXTURE	= 0,
-	FILETYPE_BATCHDEF	= 1,
-	FILETYPE_MUSIC		= 2,
-	FILETYPE_SOUND		= 3,
-	FILETYPE_FONT		= 4,
-	FILETYPE_VERTSHADER = 5,
-	FILETYPE_FRAGSHADER = 6,
-};
+// TODO: Implement a class that handles ID pools, use it here and in EventDispatcher
 
-struct LookupData
-{
-	LookupData() :
-		texture(nullptr),
-		batchdef(""),
-		font(nullptr),
-		shader(nullptr)
-	{}
-
-	sf::Texture* texture;
-	std::string  batchdef;
-	sf::Font*	 font;
-	sf::Shader*  shader;
-};
-
+template <class T>
 class ResourceManager
 {
 public:
-	typedef std::vector<std::string>							DirectoryList;
-	typedef std::map<std::string, std::vector<std::string>>		DataSources;
-	typedef std::map<std::string, std::map<eFileType, int32_t>> LookupTable;
+    typedef int32_t ResourceID;
 
 public:
-	ResourceManager();
-	~ResourceManager();
+    /** \brief Adds a new Resource to the collection defined by template class
+      * \param resource Resource to be added to the collection
+      * \return Next ResourceID that represents this resource
+      */
+    static ResourceID addResource(T* resource)
+    {
+        ResourceID id = getNextResourceID();
+        getResources()[id] = resource;
+        return id;
+    }
 
-	/* Core Functions */
-	void initialise();
+    /** \brief Remove an existing resource from the collection
+      * \param id ResourceID representing the resource you wish to remove
+      */
+    static void removeResource(ResourceID id)
+    {
+        getResources().erase(id);
+    }
 
-	/* Compilation of data for storing resources */
-	void compileDirectoryList();
-	void compileDataSources();
-	void compileLookupTable();
+    /** \brief Retrieve the Resource related to the given ID
+      * \param id ResourceID of the resource you wish to retrieve
+      * \return The resource specified, nullptr if it doesn't exist
+      */
+    static T* getResource(ResourceID id)
+    {
+        return getResources()[id];
+    }
 
-	/* Helper Function(s) */
-	bool findTypeExists(std::string table_name, eFileType file_type);
-
-	/* Lookup Functions */
-	LookupData   lookupName(std::string name);
-	sf::Texture* lookupTexture(std::string name);
-	std::string	 lookupBatchData(std::string name);
-	sf::Font*	 lookupFont(std::string name);
-	sf::Shader*	 lookupShader(std::string name);
-
-	/* Instance Func */
-	static ResourceManager& instance();
+    /// \brief Removes all Resources from this class specific store
+    static void flushResources()
+    {
+        getResources().erase(getResources().begin(), getResources().end());
+        getResources().clear();
+    }
 
 protected:
-	DirectoryList m_DirectoryList; ///< List of sourced directories
-	DataSources   m_DataSources; ///< Map of data sources stored during sourcing
-	LookupTable	  m_LookupTable; ///< Lookup table for resources
+    /** \brief Returns the resources for this class-type
+      * \return Map with value pairs <ResourceID, T*>
+      */
+    static std::map<ResourceID, T*>& getResources()
+    {
+        static std::map<ResourceID, T*> resources;
+        return resources;
+    }
 
-private:
-	std::map<std::pair<std::string, int32_t>, sf::Texture*> m_TextureTable; ///< Stored textures
-	std::map<std::pair<std::string, int32_t>, std::string>	m_BatchTable;	///< Stored batches
-	std::map<std::pair<std::string, int32_t>, sf::Font*>	m_FontTable;	///< Stored fonts
-	std::map<std::pair<std::string, int32_t>, sf::Shader*>	m_ShaderTable;	///< Stored shaders
+    /// \return The next Event Handle for this class-type
+    static ResourceID getNextResourceID()
+    {
+        static ResourceID resourceID = 0;
+        return ++resourceID;
+    }
 };
 
 #endif // _RESOURCEMANAGER_H
+}}

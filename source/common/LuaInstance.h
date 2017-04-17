@@ -1,33 +1,37 @@
+#include <string>
+
+namespace liquid { namespace common {
 #ifndef _LUAINSTANCE_H
 #define _LUAINSTANCE_H
 
-#include <LuaBridge/LuaBridge.h>
-#include <lua.hpp>
+/** 
+ * \class LuaInstance
+ *
+ * \ingroup Common
+ * \brief Managing class to run and control LUA scripts via LuaBridge
+ *
+ * \author Jamie Massey
+ * \version 2.0
+ * \date 10/04/2017
+ *
+ */
 
-extern "C" {
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
-}
-
+// TODO: Link and initialise LuaBridge
 class LuaInstance
 {
 public:
-	LuaInstance();
-	~LuaInstance();
+    LuaInstance();
+    ~LuaInstance();
 
-	/* Core lua functionality */
-	void initialise();
-	bool runScript(std::string script_file);
+    void initialise();
+    bool runScript(std::string scriptLoc);
+    virtual void registerFunctions();
 
-	/* Functions to register Lua Functions */
-		    void registerLuaFunctions();
-	virtual void registerLuaFunctionsUser() {}
-
-	luabridge::lua_State* getLuaState() { return m_LuaState; }
+    // luabridge::lua_State* getLuaState();
 
 protected:
-	luabridge::lua_State* m_LuaState; ///< Holds a pointer to the LuaState
+    // luabridge::lua_State* mLuaState;
 };
 
 #endif // _LUAINSTANCE_H
+}}

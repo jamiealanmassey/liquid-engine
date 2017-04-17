@@ -1,58 +1,98 @@
+#include <array>
+#include <map>
+#include <list>
+#include "../common/GameScene.h"
+#include "IRenderable.h"
+
+namespace liquid { namespace graphics {
 #ifndef _RENDERER_H
 #define _RENDERER_H
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <iostream>
-#include <algorithm>
+/**
+ * \class Renderer
+ *
+ * \ingroup Graphics
+ * \brief Interface class to define how to render the game world
+ * 
+ * \author Jamie Massey
+ * \version 2.0
+ * \date 16/04/2017
+ * 
+ */
 
-class Renderable;
-class GameManager;
-class GameScene;
+// TODO: Implement these
 class PostProcessor;
-
 class Renderer
 {
 public:
-	Renderer(GameScene* scene_ptr);
-	~Renderer();
+    /** \brief Renderer Constructor
+      * \param gameSceneParent Pointer to the parent common::GameScene
+      */
+    Renderer(common::GameScene* gameSceneParent);
 
-	/* Core renderer functionality */
-	void update();
-	void render(sf::RenderTarget& target);
-	void renderWorld(sf::RenderTarget& target);
-	void RenderUI(sf::RenderTarget& target);
+    /// Renderer Destructor
+    ~Renderer();
 
-	/* Helper functions for Renderables */
-	void addRenderable(Renderable* renderable);
-	void removeRenderable(Renderable* renderable);
+    /** \brief Adds a Renderable to draw to the Renderer
+      * \param renderable Interface class to add any Renderable type to the Renderer
+      */
+    virtual void addRenderable(IRenderable* renderable);
+    
+    /** \brief Remove a Renderable from the Renderer
+      * \param renderable Pointer to the Renderable you want to remove
+      */
+    virtual void removeRenderable(IRenderable* renderable);
 
-	/* Helper functions for PostProcessors */
-	void addPostProcessor(PostProcessor* processor);
-	void removePostProcessor(std::string name);
-	void removeAllPostProcessors();
+    /// \brief Called every frame to draw everything to the Screen
+    virtual void draw();
 
-	PostProcessor* getPostProcessor(std::string name);
+    /** \brief Adds a PostProcessor effect to the Renderer
+      * \param postProcessor Pointer to post processor to add
+      */
+    virtual void addPostProcessor(PostProcessor* postProcessor);
 
-	/* Getter functions */
-	GameScene*				   getParentScene()	  { return m_ParentScene;	}
-	std::vector<Renderable*>&  getWorldPipeline() { return m_WorldPipeline; }
-	std::vector<sf::Texture*>& getTextures()	  { return m_Textures;		}
-	sf::RenderTexture*		   getWorldBuffer()   { return m_WorldBuffer;	}
-	sf::RenderTexture*		   getUIBuffer()	  { return m_UIBuffer;		}
-	sf::View*				   getWorldView()	  { return m_WorldView;		}
-	sf::View*				   getUIView()		  { return m_UIView;		}
+    /** \brief Remove a PostProcessor effect to the Renderer
+      * \param postProcessor Pointer to post processor to add
+      */
+    virtual void removePostProcessor(PostProcessor* postProcessor);
+
+    /** \brief Remove a PostProcessor effect to the Renderer
+      * \param postProcessorName Name of PostProcessor to remove represented as an std::string
+      */
+    virtual void removePostProcessor(std::string postProcessorName);
+
+    /// \brief Removes all attached PostProcessor objects
+    virtual void removeAllPostProcessors();
+
+    /// \return Gets the position of the mouse relative to the Renderer
+    virtual std::array<float, 2> getMousePosition();
+
+    /** \brief Get this Renderer's Parent common::GameScene
+      * \return Pointer to the parent GameScene, nullptr if none
+      */
+    common::GameScene* getGameSceneParent();
+
+    /** \brief Get PostProcessor with the given name
+      * \param postProcessorName std::string representation of the PostProcessor name
+      * \return Pointer to the PostProcessor, nullptr if not found
+      */
+    PostProcessor* getPostProcessor(std::string postProcessorName);
+
+    /** \brief Gets all the post processors
+      * \return Collection of PostProcessors as a std::list
+      */
+    std::list<PostProcessor*>& getPostProcessors();
+
+    /** \brief Gets all Renderable objects stored in the Renderer
+      * \return Collection of Renderable objects as a std::list
+      */
+    std::list<IRenderable*>& getRenderables();
 
 protected:
-	GameScene*				    m_ParentScene;	  ///< Pointer to parent Game Scene
-	std::vector<PostProcessor*> m_PostProcessors; ///< List of active PostProcessors
-	std::vector<Renderable*>    m_WorldPipeline;  ///< List of World Renderables to draw
-	std::vector<Renderable*>	m_UIPipeline;	  ///< List of UI Renderables to draw
-	std::vector<sf::Texture*>   m_Textures;		  ///< List of stored textures in game
-	sf::RenderTexture*		    m_WorldBuffer;    ///< Buffer to draw game world to screen
-	sf::RenderTexture*		    m_UIBuffer;		  ///< Buffer to draw game interface to screen
-	sf::View*				    m_WorldView;	  ///< View for the World buffer
-	sf::View*				    m_UIView;		  ///< View for the UI buffer
+    std::list<IRenderable*>   mRenderables;     ///< Collection of Renderable objects to be drawn every frame
+    std::list<PostProcessor*> mPostProcessors;  ///< Collection of PostProcessor objects to apply
+    common::GameScene*        mGameSceneParent; ///< Pointer to the Parent common::GameScene
 };
 
 #endif // _RENDERER_H
+}}

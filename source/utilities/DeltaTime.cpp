@@ -1,42 +1,52 @@
 #include "DeltaTime.h"
 
-DeltaTime::DeltaTime() :
-	m_Delta(0.0f)
-{
-	m_DeltaCache.resize(DELTA_CACHE_SIZE, 0.0f);
-}
+namespace liquid { 
+namespace utilities {
 
-DeltaTime::~DeltaTime()
-{
-}
+    DeltaTime::DeltaTime()
+    {
+        mDelta = 0.0f;
+        mDeltaCache.resize(DELTA_CACHE_SIZE, 0.0f);
+    }
 
-DeltaTime& DeltaTime::Instance()
-{
-	static DeltaTime singleton;
-	return singleton;
-}
+    DeltaTime::~DeltaTime()
+    {}
 
-void DeltaTime::Start()
-{
-	m_TickTime = m_StartTime = m_Clock.now();
-}
+    void DeltaTime::start()
+    {
+        mTickTime = mStartTime = mClock.now();
+    }
 
-void DeltaTime::Tick()
-{
-	// Update chache
-	float delta = duration_cast<duration<float, std::milli>>(m_Clock.now() - m_TickTime).count();
+    void DeltaTime::tick()
+    {
+        float delta = std::chrono::duration_cast<
+                      std::chrono::duration<float, std::milli>>
+                      (mClock.now() - mTickTime).count();
 
-	m_Delta -= m_DeltaCache[0] / (float)m_DeltaCache.size();
-	m_Delta += delta / (float)m_DeltaCache.size();
+        mDelta -= mDeltaCache[0] / (float)mDeltaCache.size();
+        mDelta += delta / (float)mDeltaCache.size();
 
-	copy(m_DeltaCache.begin() + 1, m_DeltaCache.end(), m_DeltaCache.begin());
-	m_DeltaCache[m_DeltaCache.size() - 1] = delta;
+        std::copy(mDeltaCache.begin() + 1, mDeltaCache.end(), mDeltaCache.begin());
+        mDeltaCache[mDeltaCache.size() - 1] = delta;
+        mTickTime = mClock.now();
+    }
 
-	//Reset clock
-	m_TickTime = m_Clock.now();
-}
+    float DeltaTime::getDelta() const
+    {
+        return mDelta;
+    }
 
-float DeltaTime::GetTimeSinceStart() const
-{
-	return duration_cast<duration<float, std::milli>>(m_Clock.now() - m_StartTime).count();
-}
+    float DeltaTime::getTimeSinceStart() const
+    {
+        return std::chrono::duration_cast<
+               std::chrono::duration<float, std::milli>>
+               (mClock.now() - mStartTime).count();
+    }
+
+    DeltaTime& DeltaTime::instance()
+    {
+        static DeltaTime instance;
+        return instance;
+    }
+
+}}
