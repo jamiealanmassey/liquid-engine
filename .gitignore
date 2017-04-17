@@ -1,5 +1,7 @@
 Doxyfile
+html/
 include/
+include/SFML
 lib/
 solution/
 include/SFML/Audio.hpp
