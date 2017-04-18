@@ -6,13 +6,13 @@ make 2D game development a little easier.
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  
 Allegro (http://liballeg.org/) (add ALLEGRO to Preprocessor definitions)  
 
-#Roadmap
-Particles
-Lighting System
-Navigation (Pathfinding)
-Basic Artifical Intelligence
-Modular UI
-Timeline Features (Cinematic sequencing of events)
+# Roadmap
+&#x25a0; Particles  
+&#x25a0; Lighting System  
+&#x25a0; Navigation (Pathfinding)  
+&#x25a0; Basic Artifical Intelligence  
+&#x25a0; Modular UI  
+&#x25a0; Timeline Features (Cinematic sequencing of events)  
 
 # Project Module Structure
 Liquid  
