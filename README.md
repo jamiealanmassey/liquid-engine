@@ -6,7 +6,7 @@ make 2D game development a little easier.
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  
 Allegro (http://liballeg.org/) (add ALLEGRO to Preprocessor definitions)  
 
-# Module Structure
+# Project Module Structure
 Liquid  
 |-- ai  
 |-- common  
@@ -14,6 +14,7 @@ Liquid
 |-- events  
 |-- graphics  
 |-- impl  
+|-- lighting  
 |-- navigation  
 |-- spatial  
 |-- timeline  
