@@ -49,6 +49,13 @@
 #include "impl/sfml/SFMLRenderableBatch.h"
 #include "impl/sfml/SFMLRenderer.h"
 
+#include "tweener/EasingFuncs.h"
+#include "tweener/EasingFunction.h"
+#include "tweener/ITweener.h"
+#include "tweener/Tweener.h"
+#include "tweener/TweenerGroup.h"
+#include "tweener/TweenerSequence.h"
+
 #include "utilities/DeltaTime.h"
 #include "utilities/Random.h"
 #include "utilities/Vertex2.h"

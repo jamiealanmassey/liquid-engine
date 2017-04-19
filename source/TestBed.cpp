@@ -85,6 +85,18 @@ int main()
         return true;
     });
 
+    double val = 10;
+    liquid::tweener::Tweener* tweener = new liquid::tweener::Tweener(val, 20.0, 20000.0,
+        liquid::tweener::EasingFunction(liquid::tweener::EasingFuncs::bounce));
+
+    liquid::utilities::DeltaTime::instance().start();
+    while (tweener->isFinished() == false)
+    {
+        liquid::utilities::DeltaTime::instance().tick();
+        tweener->update();
+        std::cout << (val = tweener->getValue()) << std::endl;
+    }
+
     liquid::common::GameManager::instance().execute();
     liquid::common::GameManager::instance().simulate();
     liquid::common::GameManager::instance().terminate();
