@@ -1,6 +1,7 @@
 #ifdef SFML
 #include "SFMLRenderer.h"
 #include "../../graphics/Renderable.h"
+#include "../../utilities/DeltaTime.h"
 
 namespace liquid {
 namespace impl {
@@ -33,6 +34,8 @@ namespace impl {
             object->draw(this);
 
         mRenderWindow->display();
+        std::string dt = std::to_string(1000.0f / utilities::DELTA);
+        mRenderWindow->setTitle("Window - " + dt);
     }
 
     sf::RenderWindow* SFMLRenderer::getRenderWindow() const

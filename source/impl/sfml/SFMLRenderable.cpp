@@ -1,4 +1,4 @@
-//#ifdef SFML
+#ifdef SFML
 #include "SFMLRenderable.h"
 #include "SFMLRenderer.h"
 
@@ -43,4 +43,4 @@ SFMLRenderable::SFMLRenderable(std::array<utilities::Vertex2*, 4> vertices, sf::
 
 }}
 
-//#endif // SFML
+#endif // SFML

@@ -1,4 +1,4 @@
-//#ifdef SFML
+#ifdef SFML
 #include <SFML/Graphics.hpp>
 #include "SFMLRenderable.h"
 #include "../../data/Settings.h"
@@ -47,4 +47,4 @@ protected:
 #endif // _SFMLRENDERER_H
 }}
 
-//#endif // SFML
+#endif // SFML

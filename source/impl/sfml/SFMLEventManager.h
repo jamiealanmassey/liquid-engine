@@ -1,4 +1,4 @@
-//#ifdef SFML
+#ifdef SFML
 #include "../../events/EventManager.h"
 
 namespace liquid { namespace impl {
@@ -39,4 +39,4 @@ protected:
 #endif // _SFMLEVENTMANAGER_H
 }}
 
-//#endif // SFML
+#endif // SFML

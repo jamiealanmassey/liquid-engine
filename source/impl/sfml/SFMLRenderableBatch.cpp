@@ -19,9 +19,9 @@ namespace impl {
         sf::RenderStates states;
         states.texture = &mTexture;
         
-        std::vector<sf::Vertex> converted;
+        std::vector<sf::Vertex> converted(mVertices.size());
         for (uint32_t i = 0; i < mVertices.size(); i++)
-            converted.push_back(convertFromVertex2(mVertices[i]));
+            converted[i] = convertFromVertex2(mVertices[i]);
 
         SFMLRenderer* sfml = static_cast<SFMLRenderer*>(renderer);
         sf::RenderWindow* window = sfml->getRenderWindow();

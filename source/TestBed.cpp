@@ -41,20 +41,20 @@ int main()
     liquid::common::GameManager::instance().setRendererClass(renderer);
     liquid::common::GameManager::instance().addGameSceneBack(scene);
 
-    sf::Texture texture;
+    /*sf::Texture texture;
     if (!texture.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/test.png"))
-        return 0;
+        return 0;*/
 
     liquid::utilities::Vertex2* vert0 = new liquid::utilities::Vertex2({ 20.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert1 = new liquid::utilities::Vertex2({ 276.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });
     liquid::utilities::Vertex2* vert2 = new liquid::utilities::Vertex2({ 276.0f, 276.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 256.0f });
     liquid::utilities::Vertex2* vert3 = new liquid::utilities::Vertex2({ 20.0f, 276.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 256.0f });
-    liquid::impl::SFMLRenderable* renderable = new liquid::impl::SFMLRenderable({ vert0,vert1,vert2,vert3 }, texture, 1.0f);
+    //liquid::impl::SFMLRenderable* renderable = new liquid::impl::SFMLRenderable({ vert0,vert1,vert2,vert3 }, texture, 1.0f);
     //renderer->addRenderable(renderable);
 
-    sf::Vector2u texSize = texture.getSize();
+    //sf::Vector2u texSize = texture.getSize();
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 3);
+    //liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 3);
     liquid::common::Entity* entity1 = new liquid::common::Entity();
     liquid::common::Entity* entity2 = new liquid::common::Entity();
     liquid::common::Entity* entity3 = new liquid::common::Entity();
@@ -63,9 +63,13 @@ int main()
     entity2->setPosition(475.0f, 175.0f);
     entity3->setPosition(800.0f, 350.0f);
 
-    entity1->setVerticesPtr(batch->nextVertices());
+    scene->addEntity(entity1);
+    scene->addEntity(entity2);
+    scene->addEntity(entity3);
+
+    /*entity1->setVerticesPtr(batch->nextVertices());
     entity2->setVerticesPtr(batch->nextVertices());
-    entity3->setVerticesPtr(batch->nextVertices());
+    entity3->setVerticesPtr(batch->nextVertices());*/
     //renderer->addRenderable(batch);
 
     auto leftHandle = liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
@@ -89,13 +93,23 @@ int main()
     if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/smoke.png"))
         return 2;
 
-    liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 10);
-    renderer->addRenderable(particleBatch);
-
+    liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 50);
     liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ConfigurationParser());
-    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 10);
+    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 50);
     emitter->setPosition(950.0f, 500.0f);
+    emitter->setRepeat(true);
+    renderer->addRenderable(particleBatch);
     scene->addEntity(emitter);
+
+    auto mouseHandle = liquid::events::EventDispatcher<liquid::events::MouseEventData>::addListener(
+        [&em = emitter](const liquid::events::MouseEventData& evnt)->bool
+        {
+            if (evnt.mMouseButton == sf::Mouse::Left && evnt.mPressed == true)
+                em->emit();
+
+            return true;
+        }
+    );
 
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });

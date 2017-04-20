@@ -58,8 +58,8 @@ protected:
     std::chrono::high_resolution_clock::time_point mStartTime;  ///< Start time of the DeltaTime singleton class
 };
 
-#define DELTA DeltaTime::instance().getDelta();
-#define TIME DeltaTime::instance().getTimeSinceStart();
+#define DELTA DeltaTime::instance().getDelta()
+#define TIME DeltaTime::instance().getTimeSinceStart()
 
 #endif // _DELTATIME_H
 }}

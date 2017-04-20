@@ -33,7 +33,7 @@ public:
       * in conjunction with the EventData class to dispatch events accordingly when
       * desired input event have come in.
       */
-    virtual void updateEvents() = 0;
+    virtual void updateEvents() {};
 };
 
 #endif // _EVENTMANAGER_H

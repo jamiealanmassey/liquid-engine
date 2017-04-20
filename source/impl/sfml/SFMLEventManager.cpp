@@ -1,4 +1,4 @@
-//#ifdef SFML
+#ifdef SFML
 #include "SFMLEventManager.h"
 #include "SFMLRenderer.h"
 #include "../../common/GameManager.h"
@@ -67,4 +67,4 @@ namespace impl {
 
 }}
 
-//#endif // SFML
+#endif // SFML

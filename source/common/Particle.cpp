@@ -6,63 +6,18 @@
 namespace liquid {
 namespace common {
 
-    Particle::Particle(const data::ParticleData& data)
+    Particle::Particle(const data::ParticleData& data) :
+        Entity(),
+        mParticleData(data)
     {
-        mVelocityTweeners[0].setTarget(
-            data.getVelocityX()[PARTICLE_TARGET_VALUE] +
-            utilities::Random::instance().randomRange(
-                data.getVelocityX()[PARTICLE_VARIANCE_MIN],
-                data.getVelocityX()[PARTICLE_VARIANCE_MAX]
-            )
-        );
-
-        mVelocityTweeners[1].setTarget(
-            data.getVelocityY()[PARTICLE_TARGET_VALUE] +
-            utilities::Random::instance().randomRange(
-                data.getVelocityY()[PARTICLE_VARIANCE_MIN],
-                data.getVelocityY()[PARTICLE_VARIANCE_MAX]
-            )
-        );
-
-        mColourTweeners[0].setTarget(
-            data.getColourR()[PARTICLE_TARGET_VALUE] +
-            utilities::Random::instance().randomRange(
-                data.getColourR()[PARTICLE_VARIANCE_MIN],
-                data.getColourR()[PARTICLE_VARIANCE_MAX]
-            )
-        );
-
-        mColourTweeners[1].setTarget(
-            data.getColourG()[PARTICLE_TARGET_VALUE] +
-            utilities::Random::instance().randomRange(
-                data.getColourG()[PARTICLE_VARIANCE_MIN],
-                data.getColourG()[PARTICLE_VARIANCE_MAX]
-            )
-        );
-
-        mColourTweeners[2].setTarget(
-            data.getColourB()[PARTICLE_TARGET_VALUE] +
-            utilities::Random::instance().randomRange(
-                data.getColourB()[PARTICLE_VARIANCE_MIN],
-                data.getColourB()[PARTICLE_VARIANCE_MAX]
-            )
-        );
-
-        mColourTweeners[3].setTarget(
-            data.getColourA()[PARTICLE_TARGET_VALUE] +
-            utilities::Random::instance().randomRange(
-                data.getColourA()[PARTICLE_VARIANCE_MIN],
-                data.getColourA()[PARTICLE_VARIANCE_MAX]
-            )
-        );
-
+        calculateTargets();
         mLifeSpan = data.getLifeSpan()[PARTICLE_VALUE] +
             utilities::Random::instance().randomRange(
                 data.getLifeSpan()[PARTICLE_VARIANCE_MIN],
                 data.getLifeSpan()[PARTICLE_VARIANCE_MAX]
             );
 
-        mLifeTime = 0.0f;
+        mLifeTime = mLifeSpan;
         mVelocityX = data.getVelocityX()[PARTICLE_VALUE];
         mVelocityY = data.getVelocityY()[PARTICLE_VALUE];
         mColour[0] = data.getColourR()[PARTICLE_VALUE];
@@ -80,9 +35,10 @@ namespace common {
         mVelocityTweeners[0].setDuration(mLifeSpan);
         mVelocityTweeners[1].setDuration(mLifeSpan);
 
+        tweener::EasingFunction elastic(tweener::EasingFuncs::bounce);
         tweener::EasingFunction linear(tweener::EasingFuncs::linear);
-        mVelocityTweeners[0].setEasingFunc(linear);
-        mVelocityTweeners[1].setEasingFunc(linear);
+        mVelocityTweeners[0].setEasingFunc(elastic);
+        mVelocityTweeners[1].setEasingFunc(elastic);
 
         for (uint32_t i = 0; i < 4; i++)
         {
@@ -95,7 +51,15 @@ namespace common {
     {}
 
     void Particle::initialise()
-    {}
+    {
+        if (mVerticesSet)
+        {
+            mVerticesPtr[0]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            mVerticesPtr[1]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            mVerticesPtr[2]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            mVerticesPtr[3]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+        }
+    }
 
     void Particle::update()
     {
@@ -128,6 +92,16 @@ namespace common {
                 mVerticesPtr[3]->setColour(mColour);
             }
         }
+        /*else if (std::min(mLifeTime, 8000.0f))
+        {
+            if (mVerticesSet)
+            {
+                mVerticesPtr[0]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+                mVerticesPtr[1]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+                mVerticesPtr[2]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+                mVerticesPtr[3]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            }
+        }*/
     }
 
     void Particle::emit(float x, float y)
@@ -140,6 +114,8 @@ namespace common {
 
         for (uint32_t i = 0; i < 4; i++)
             mColourTweeners[i].reset();
+
+        calculateTargets();
     }
 
     void Particle::setLifeSpan(float lifespan)
@@ -163,7 +139,7 @@ namespace common {
 
     const bool Particle::isAlive() const
     {
-        return (mLifeTime <= mLifeSpan);
+        return (mLifeTime < mLifeSpan);
     }
 
     const float Particle::getVelocityX() const
@@ -189,6 +165,57 @@ namespace common {
     const std::array<float, 4> Particle::getColour() const
     {
         return mColour;
+    }
+
+    void Particle::calculateTargets()
+    {
+        mVelocityTweeners[0].setTarget(
+            mParticleData.getVelocityX()[PARTICLE_TARGET_VALUE] +
+            liquid::utilities::Random::instance().randomRange(
+                mParticleData.getVelocityX()[PARTICLE_VARIANCE_MIN],
+                mParticleData.getVelocityX()[PARTICLE_VARIANCE_MAX]
+            )
+        );
+
+        mVelocityTweeners[1].setTarget(
+            mParticleData.getVelocityY()[PARTICLE_TARGET_VALUE] +
+            liquid::utilities::Random::instance().randomRange(
+                mParticleData.getVelocityY()[PARTICLE_VARIANCE_MIN],
+                mParticleData.getVelocityY()[PARTICLE_VARIANCE_MAX]
+            )
+        );
+
+        mColourTweeners[0].setTarget(
+            mParticleData.getColourR()[PARTICLE_TARGET_VALUE] +
+            utilities::Random::instance().randomRange(
+                mParticleData.getColourR()[PARTICLE_VARIANCE_MIN],
+                mParticleData.getColourR()[PARTICLE_VARIANCE_MAX]
+            )
+        );
+
+        mColourTweeners[1].setTarget(
+            mParticleData.getColourG()[PARTICLE_TARGET_VALUE] +
+            utilities::Random::instance().randomRange(
+                mParticleData.getColourG()[PARTICLE_VARIANCE_MIN],
+                mParticleData.getColourG()[PARTICLE_VARIANCE_MAX]
+            )
+        );
+
+        mColourTweeners[2].setTarget(
+            mParticleData.getColourB()[PARTICLE_TARGET_VALUE] +
+            utilities::Random::instance().randomRange(
+                mParticleData.getColourB()[PARTICLE_VARIANCE_MIN],
+                mParticleData.getColourB()[PARTICLE_VARIANCE_MAX]
+            )
+        );
+
+        mColourTweeners[3].setTarget(
+            mParticleData.getColourA()[PARTICLE_TARGET_VALUE] +
+            utilities::Random::instance().randomRange(
+                mParticleData.getColourA()[PARTICLE_VARIANCE_MIN],
+                mParticleData.getColourA()[PARTICLE_VARIANCE_MAX]
+            )
+        );
     }
 
 }}

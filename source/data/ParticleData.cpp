@@ -7,37 +7,37 @@ namespace data {
     {
         // TODO: Remove this hardcode
         std::string defaultParticle =
-            "velocityX 0.05\n"
-            "velocityXMin -0.4\n"
-            "velocityXMax 0.2\n"
-            "velocityXTarget 0.1\n"
+            "velocityX 0.0\n"
+            "velocityXMin -0.5\n"
+            "velocityXMax 0.5\n"
+            "velocityXTarget 0.0\n"
             "\n"
-            "velocityY 0.05\n"
-            "velocityYMin -0.4\n"
-            "velocityYMax 0.2\n"
-            "velocityYTarget 0.1\n"
+            "velocityY 0.0\n"
+            "velocityYMin 0.0\n"
+            "velocityYMax 0.0\n"
+            "velocityYTarget -1.5\n"
             "\n"
             "colourR 100.0\n"
-            "colourRMin 0.0\n"
-            "colourRMax 0.0\n"
+            "colourRMin -50.0\n"
+            "colourRMax -100.0\n"
             "colourRTarget 255.0\n"
             "\n"
             "colourG 100.0\n"
-            "colourGMin 0.0\n"
-            "colourGMax 0.0\n"
-            "colourGTarget 255.0\n"
+            "colourGMin -50.0\n"
+            "colourGMax -100.0\n"
+            "colourGTarget 155.0\n"
             "\n"
             "colourB 100.0\n"
             "colourBMin 0.0\n"
             "colourBMax 0.0\n"
-            "colourBTarget 255.0\n"
+            "colourBTarget 100.0\n"
             "\n"
             "colourA 255.0\n"
             "colourAMin 0.0\n"
             "colourAMax 0.0\n"
             "colourATarget 0.0\n"
             "\n"
-            "lifespan 2000.0\n"
+            "lifespan 1500.0\n"
             "lifespanMin 0.0\n"
             "lifespanMax 0.0\n"
             "\n";
@@ -95,7 +95,7 @@ namespace data {
     ParticleData::~ParticleData()
     {}
 
-    const ParticleData::ParticleData::ParticleNode ParticleData::ParticleData::getVelocityX() const
+    const ParticleData::ParticleNode ParticleData::ParticleData::getVelocityX() const
     {
         return mVelocityX;
     }

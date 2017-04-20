@@ -8,14 +8,18 @@ namespace common {
         Entity(),
         mParticleData(particleData)
     {
+        mParticles.resize(count);
         mParticlesCount = count;
+        mParticlesBirth = count;
         mBirthRate = 100.0f;
         mBirthAccumulator = 0.0f;
+        mRepeat = true;
 
         for (uint32_t i = 0; i < mParticlesCount; i++)
         {
-            mParticles.push_back(new Particle(mParticleData));
-            mParticles.back()->setVerticesPtr(batch->nextVertices());
+            mParticles[i] = new Particle(mParticleData);
+            mParticles[i]->setVerticesPtr(batch->nextVertices());
+            mParticles[i]->initialise();
         }
     }
 
@@ -29,7 +33,8 @@ namespace common {
 
     void ParticleEmitter::update()
     {
-        mBirthAccumulator += utilities::DELTA;
+        if (mRepeat == true || (mRepeat == false && mParticlesBirth > 0))
+            mBirthAccumulator += utilities::DELTA;
 
         for (uint32_t i = 0; i < mParticlesCount; i++)
         {
@@ -37,10 +42,16 @@ namespace common {
                 mParticles[i]->update();
             else
             {
+                if (mRepeat == false && mParticlesBirth == 0)
+                    continue;
+
                 if (mBirthAccumulator >= mBirthRate)
                 {
                     mParticles[i]->emit(mPositionX, mPositionY);
                     mBirthAccumulator -= mBirthRate;
+
+                    if (mRepeat == false)
+                        mParticlesBirth--;
                 }
             }
         }
@@ -49,6 +60,28 @@ namespace common {
     void ParticleEmitter::updatePost()
     {
 
+    }
+
+    void ParticleEmitter::setPosition(float x, float y)
+    {
+        Entity::setPosition(x, y);
+
+        for (uint32_t i = 0; i < mParticlesCount; i++)
+            mParticles[i]->setPosition(x, y);
+    }
+
+    void ParticleEmitter::addPosition(float x, float y)
+    {
+        Entity::addPosition(x, y);
+
+        for (uint32_t i = 0; i < mParticlesCount; i++)
+            mParticles[i]->addPosition(x, y);
+    }
+
+    void ParticleEmitter::emit()
+    {
+        if (mParticlesBirth == 0 && mRepeat == false)
+            mParticlesBirth += mParticlesCount;
     }
 
     void ParticleEmitter::setBirthRate(float rate)

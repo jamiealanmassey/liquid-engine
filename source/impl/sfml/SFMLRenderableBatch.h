@@ -1,4 +1,4 @@
-//#ifdef SFML
+#ifdef SFML
 #include "../../graphics/RenderableBatch.h"
 #include "../../graphics/Renderer.h"
 #include <SFML/Graphics.hpp>
@@ -51,4 +51,4 @@ protected:
 #endif // _SFMLRENDERABLEBATCH_H
 }}
 
-//#endif // SFML
+#endif // SFML

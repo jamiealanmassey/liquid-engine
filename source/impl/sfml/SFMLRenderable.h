@@ -1,4 +1,4 @@
-//#ifdef SFML
+#ifdef SFML
 #include "../../graphics/Renderable.h"
 #include "../../graphics/Renderer.h"
 #include "../../utilities/Vertex2.h"
@@ -49,4 +49,4 @@ protected:
 #endif // _SFMLRENDERABLE_H
 }}
 
-//#endif // SFML
+#endif // SFML
