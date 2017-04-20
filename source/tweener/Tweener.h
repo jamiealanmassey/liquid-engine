@@ -25,6 +25,9 @@ public:
     typedef std::function<void(double)> UpdateFunc;
 
 public:
+    /// Tweener Constructor
+    Tweener();
+
     /** \brief Tweener Constructor
       * \param value The initial value of this Tweener
       * \param target The target value of this Tweener
@@ -54,6 +57,14 @@ public:
       * \return True if the Tweener has finished, otherwise False
       */
     virtual bool isFinished() override;
+
+    /// \brief Resets the Tweener to its initial state
+    void reset();
+
+    /** \brief Sets the initial value of the Tweener
+      * \param value Value to assign
+      */
+    void setInitial(double value);
 
     /** \brief Sets the target value of the Tweener
       * \param value Value to assign

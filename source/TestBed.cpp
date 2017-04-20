@@ -85,8 +85,27 @@ int main()
         return true;
     });
 
-    double val = 10;
-    liquid::tweener::Tweener* tweener = new liquid::tweener::Tweener(val, 20.0, 20000.0,
+    sf::Texture texture2;
+    if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/smoke.png"))
+        return 2;
+
+    liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
+    liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });
+    liquid::utilities::Vertex2* vert6 = new liquid::utilities::Vertex2({ 256.0f, 256.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 256.0f });
+    liquid::utilities::Vertex2* vert7 = new liquid::utilities::Vertex2({ 0.0f, 256.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 256.0f });
+    liquid::impl::SFMLRenderable* renderable2 = new liquid::impl::SFMLRenderable({ vert4,vert5,vert6,vert7 }, texture2, 1.0f);
+    renderer->addRenderable(renderable2);
+
+    liquid::common::Particle* particle = new liquid::common::Particle(
+        liquid::data::ParticleData(liquid::data::ConfigurationParser())
+    );
+
+    particle->setVerticesPtr({ vert4,vert5,vert6,vert7 });
+    particle->emit(500.0f, 500.0f);
+    scene->addEntity(particle);
+
+    /*double val = 10;
+    liquid::tweener::Tweener* tweener = new liquid::tweener::Tweener(val, 200.0, 20000.0,
         liquid::tweener::EasingFunction(liquid::tweener::EasingFuncs::bounce));
 
     liquid::utilities::DeltaTime::instance().start();
@@ -95,7 +114,7 @@ int main()
         liquid::utilities::DeltaTime::instance().tick();
         tweener->update();
         std::cout << (val = tweener->getValue()) << std::endl;
-    }
+    }*/
 
     liquid::common::GameManager::instance().execute();
     liquid::common::GameManager::instance().simulate();

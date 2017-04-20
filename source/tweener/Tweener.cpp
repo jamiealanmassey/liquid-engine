@@ -4,7 +4,19 @@
 namespace liquid {
 namespace tweener {
 
-    Tweener::Tweener(double value, double target, double duration, EasingFunction easingFunc)
+    Tweener::Tweener() :
+        ITweener()
+    {
+        mElapsed = 0.0f;
+        mInitial = 0.0f;
+        mTarget = 0.0f;
+        mDuration = 0.0f;
+        mValue = 0.0f;
+        mUpdateFunc = nullptr;
+    }
+
+    Tweener::Tweener(double value, double target, double duration, EasingFunction easingFunc) :
+        ITweener()
     {
         mElapsed = 0;
         mInitial = value;
@@ -15,7 +27,8 @@ namespace tweener {
         mUpdateFunc = nullptr;
     }
 
-    Tweener::Tweener(double value, double target, double duration, EasingFunction easingFunc, UpdateFunc updateFunc)
+    Tweener::Tweener(double value, double target, double duration, EasingFunction easingFunc, UpdateFunc updateFunc) :
+        ITweener()
     {
         mElapsed = 0;
         mInitial = value;
@@ -55,6 +68,17 @@ namespace tweener {
         }
 
         return false;
+    }
+
+    void Tweener::reset()
+    {
+        mElapsed = 0.0f;
+        mValue = mInitial;
+    }
+
+    void Tweener::setInitial(double value)
+    {
+        mInitial = value;
     }
 
     void Tweener::setTarget(double value)

@@ -1,4 +1,6 @@
 #include "Entity.h"
+#include "../data/ParticleData.h"
+#include "../tweener/Tweener.h"
 #include <array>
 
 namespace liquid { namespace common {
@@ -20,7 +22,7 @@ namespace liquid { namespace common {
 class Particle : public Entity
 {
 public:
-    Particle();
+    Particle(const data::ParticleData& data);
     ~Particle();
 
     void initialise() override;
@@ -44,6 +46,10 @@ protected:
     float                mLifeTime;  ///< 
     float                mLifeSpan;  ///< 
     std::array<float, 4> mColour;    ///< 
+
+protected:
+    tweener::Tweener mVelocityTweeners[2]; ///< 
+    tweener::Tweener mColourTweeners[4];   ///< 
 };
 
 #endif // _PARTICLE_H

@@ -22,6 +22,8 @@ namespace common {
     void GameManager::execute()
     {
         // TODO: Load game settings/bindings
+        utilities::DeltaTime::instance().start();
+
         // TODO: Setup Context given
         // TODO: Start DeltaTime
         // TODO: Initialise the ResourceManager

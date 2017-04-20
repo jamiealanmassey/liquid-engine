@@ -26,11 +26,13 @@
 #include "common/GameManager.h"
 #include "common/GameScene.h"
 #include "common/LuaInstance.h"
+#include "common/Particle.h"
 #include "common/ResourceManager.h"
 
 #include "data/Bindings.h"
 #include "data/ConfigurationParser.h"
 #include "data/Directories.h"
+#include "data/ParticleData.h"
 #include "data/Settings.h"
 
 #include "events/EventDispatcher.h"
