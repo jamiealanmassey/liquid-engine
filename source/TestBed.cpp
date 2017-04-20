@@ -93,11 +93,11 @@ int main()
     if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/smoke.png"))
         return 2;
 
-    liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 50);
+    /*liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 50);
     liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ConfigurationParser());
     liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 50);
     emitter->setPosition(950.0f, 500.0f);
-    emitter->setRepeat(true);
+    emitter->setRepeat(false);
     renderer->addRenderable(particleBatch);
     scene->addEntity(emitter);
 
@@ -109,7 +109,7 @@ int main()
 
             return true;
         }
-    );
+    );*/
 
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });

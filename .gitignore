@@ -4,6 +4,7 @@ include/
 include/SFML
 lib/
 solution/
+bin/
 include/SFML/Audio.hpp
 include/SFML/Audio/AlResource.hpp
 include/SFML/Audio/Export.hpp
