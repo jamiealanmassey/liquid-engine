@@ -8,13 +8,13 @@ namespace data {
         // TODO: Remove this hardcode
         std::string defaultParticle =
             "velocityX 0.05\n"
-            "velocityXMin -0.025\n"
-            "velocityXMax 0.025\n"
+            "velocityXMin -0.4\n"
+            "velocityXMax 0.2\n"
             "velocityXTarget 0.1\n"
             "\n"
             "velocityY 0.05\n"
-            "velocityYMin -0.025\n"
-            "velocityYMax 0.025\n"
+            "velocityYMin -0.4\n"
+            "velocityYMax 0.2\n"
             "velocityYTarget 0.1\n"
             "\n"
             "colourR 100.0\n"

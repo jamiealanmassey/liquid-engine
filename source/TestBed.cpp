@@ -50,7 +50,7 @@ int main()
     liquid::utilities::Vertex2* vert2 = new liquid::utilities::Vertex2({ 276.0f, 276.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 256.0f });
     liquid::utilities::Vertex2* vert3 = new liquid::utilities::Vertex2({ 20.0f, 276.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 256.0f });
     liquid::impl::SFMLRenderable* renderable = new liquid::impl::SFMLRenderable({ vert0,vert1,vert2,vert3 }, texture, 1.0f);
-    renderer->addRenderable(renderable);
+    //renderer->addRenderable(renderable);
 
     sf::Vector2u texSize = texture.getSize();
 
@@ -66,7 +66,7 @@ int main()
     entity1->setVerticesPtr(batch->nextVertices());
     entity2->setVerticesPtr(batch->nextVertices());
     entity3->setVerticesPtr(batch->nextVertices());
-    renderer->addRenderable(batch);
+    //renderer->addRenderable(batch);
 
     auto leftHandle = liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
         [&ent = entity1](const liquid::events::KeyboardEventData& evnt)->bool
@@ -89,7 +89,15 @@ int main()
     if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/smoke.png"))
         return 2;
 
-    liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
+    liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 10);
+    renderer->addRenderable(particleBatch);
+
+    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ConfigurationParser());
+    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 10);
+    emitter->setPosition(950.0f, 500.0f);
+    scene->addEntity(emitter);
+
+    /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });
     liquid::utilities::Vertex2* vert6 = new liquid::utilities::Vertex2({ 256.0f, 256.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 256.0f });
     liquid::utilities::Vertex2* vert7 = new liquid::utilities::Vertex2({ 0.0f, 256.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 256.0f });
@@ -102,7 +110,7 @@ int main()
 
     particle->setVerticesPtr({ vert4,vert5,vert6,vert7 });
     particle->emit(500.0f, 500.0f);
-    scene->addEntity(particle);
+    scene->addEntity(particle);*/
 
     /*double val = 10;
     liquid::tweener::Tweener* tweener = new liquid::tweener::Tweener(val, 200.0, 20000.0,

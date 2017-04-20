@@ -27,6 +27,7 @@
 #include "common/GameScene.h"
 #include "common/LuaInstance.h"
 #include "common/Particle.h"
+#include "common/ParticleEmitter.h"
 #include "common/ResourceManager.h"
 
 #include "data/Bindings.h"
