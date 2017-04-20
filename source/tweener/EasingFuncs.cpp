@@ -16,7 +16,7 @@ namespace tweener {
 
     double EasingFuncs::quadratic(double t)
     {
-        return t * t;
+        return std::pow(t, 2);
     }
 
     double EasingFuncs::cubic(double t)

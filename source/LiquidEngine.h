@@ -10,6 +10,7 @@
   * \defgroup Impl
   * \defgroup Navigation
   * \defgroup Spatial
+  * \defgroup Tweener
   * \defgroup UI
   * \defgroup Utilities
   *
