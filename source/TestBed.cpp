@@ -72,6 +72,11 @@ int main()
     entity3->setVerticesPtr(batch->nextVertices());*/
     //renderer->addRenderable(batch);
 
+    liquid::navigation::NavGraph* graph = new liquid::navigation::NavGraph();
+    graph->addNavNode(500.0f, 500.0f);
+    graph->addNavNode(250.0f, 250.0f);
+    graph->addNavEdge(0, 1);
+
     auto leftHandle = liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
         [&ent = entity1](const liquid::events::KeyboardEventData& evnt)->bool
     {

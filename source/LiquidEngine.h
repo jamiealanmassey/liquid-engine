@@ -53,6 +53,10 @@
 #include "impl/sfml/SFMLRenderableBatch.h"
 #include "impl/sfml/SFMLRenderer.h"
 
+#include "navigation/NavEdge.h"
+#include "navigation/NavGraph.h"
+#include "navigation/NavNode.h"
+
 #include "tweener/EasingFuncs.h"
 #include "tweener/EasingFunction.h"
 #include "tweener/ITweener.h"
