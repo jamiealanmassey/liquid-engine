@@ -75,7 +75,24 @@ int main()
     liquid::navigation::NavGraph* graph = new liquid::navigation::NavGraph();
     graph->addNavNode(500.0f, 500.0f);
     graph->addNavNode(250.0f, 250.0f);
+    graph->addNavNode(700.0f, 250.0f);
+    graph->addNavNode(710.0f, 250.0f);
+    graph->addNavNode(720.0f, 250.0f);
+    graph->addNavNode(730.0f, 250.0f);
+
     graph->addNavEdge(0, 1);
+    graph->addNavEdge(0, 2);
+    graph->addNavEdge(0, 3);
+    graph->addNavEdge(0, 4);
+    graph->addNavEdge(0, 5);
+
+    liquid::navigation::AStar* aStar = new liquid::navigation::AStar(graph);
+    liquid::navigation::NavPath path = aStar->search(1, 4);
+
+    while (path.isEmpty() == false)
+        std::cout << "node : " << path.popFront().getNodeIndex() << std::endl;
+
+    std::cout << std::endl;
 
     auto leftHandle = liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
         [&ent = entity1](const liquid::events::KeyboardEventData& evnt)->bool

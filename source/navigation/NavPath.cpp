@@ -49,15 +49,17 @@ namespace navigation {
 
     std::vector<NavNode> NavPath::getNavPath()
     {
-        std::vector<NavNode> nodes(mNodes.size());
-        std::copy(mNodes.begin(), mNodes.end(), nodes);
+        std::vector<NavNode> nodes;
+        nodes.reserve(mNodes.size());
+        nodes.insert(nodes.end(), mNodes.begin(), mNodes.end());
         return nodes;
     }
 
     std::vector<NavNode> NavPath::getNavPathReversed()
     {
-        std::vector<NavNode> nodes(mNodes.size());
-        std::copy_backward(mNodes.begin(), mNodes.end(), nodes);
+        std::vector<NavNode> nodes;
+        nodes.reserve(mNodes.size());
+        nodes.insert(nodes.end(), mNodes.rbegin(), mNodes.rend());
         return nodes;
     }
 
