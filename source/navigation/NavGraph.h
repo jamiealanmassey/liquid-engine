@@ -53,6 +53,9 @@ public:
     const bool isEmpty() const;
     const bool isDirected() const;
 
+    NavNodeCollection& getNodesAsReference();
+    NavEdgeCollection& getEdgesAsReference();
+
 protected:
     bool              mDirected; ///< 
     NavNodeCollection mNodes;    ///< 

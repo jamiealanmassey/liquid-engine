@@ -273,4 +273,14 @@ namespace navigation {
         return mDirected;
     }
 
+    NavGraph::NavNodeCollection& NavGraph::getNodesAsReference()
+    {
+        return mNodes;
+    }
+
+    NavGraph::NavEdgeCollection& NavGraph::getEdgesAsReference()
+    {
+        return mEdges;
+    }
+
 }}
