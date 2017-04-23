@@ -27,6 +27,8 @@ namespace spatial {
             else
                 return (positionX <= mCentre[0]) ? 2 : 3;
         }
+
+        return -1;
     }
 
     bool QuadNode::insertEntity(common::Entity* entityPtr)
@@ -72,17 +74,7 @@ namespace spatial {
         {
             int32_t q = quadrant(entityPtr);
             if (mChildNodes[q] != nullptr)
-            {
-                if (mChildNodes[q]->removeEntity(entityPtr))
-                {
-                    if (mChildNodes[q]->getCount() == 0)
-                    {
-                        delete mChildNodes[q];
-                        mChildNodes[q] = nullptr;
-                        return true;
-                    }
-                }
-            }
+                return mChildNodes[q]->removeEntity(entityPtr);
         }
         else
         {
@@ -99,6 +91,23 @@ namespace spatial {
         {
             if (mChildNodes[i] == node)
                 delete mChildNodes[i];
+        }
+    }
+
+    void QuadNode::pruneDeadBranches()
+    {
+        for (int32_t i = 0; i < 4; i++)
+        {
+            if (mChildNodes[i] != nullptr)
+            {
+                mChildNodes[i]->pruneDeadBranches();
+
+                if (mChildNodes[i]->getCount() == 0 && hasChildren() == false)
+                {
+                    delete mChildNodes[i];
+                    mChildNodes[i] = nullptr;
+                }
+            }
         }
     }
 
@@ -125,6 +134,17 @@ namespace spatial {
     void QuadNode::setSize(std::array<float, 2> size)
     {
         mSize = size;
+    }
+
+    const bool QuadNode::hasChildren() const
+    {
+        for (int32_t i = 0; i < 4; i++)
+        {
+            if (mChildNodes[i] != nullptr)
+                return true;
+        }
+
+        return false;
     }
 
     const bool QuadNode::isRootNode() const

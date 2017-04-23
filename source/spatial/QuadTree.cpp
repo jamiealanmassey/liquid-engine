@@ -24,14 +24,14 @@ namespace spatial {
 
     void QuadTree::insertEntity(common::Entity* entityPtr)
     {
-        if (mRootNode->insertEntity(entityPtr))
-            mNumEntities++;
+        mRootNode->insertEntity(entityPtr);
+        mNumEntities++;
     }
 
     void QuadTree::removeEntity(common::Entity* entityPtr)
     {
-        if (mRootNode->removeEntity(entityPtr))
-            mNumEntities--;
+        mRootNode->removeEntity(entityPtr);
+        mNumEntities--;
     }
 
     std::vector<common::Entity*> QuadTree::query(std::array<float, 4> region)
@@ -68,6 +68,11 @@ namespace spatial {
         }
 
         return entities;
+    }
+
+    void QuadTree::pruneDeadBranches()
+    {
+        mRootNode->pruneDeadBranches();
     }
 
 }}

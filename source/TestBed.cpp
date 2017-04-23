@@ -151,9 +151,10 @@ int main()
     for (int32_t i = 0; i < 150; i++)
         quadTree->insertEntity(entities[i]);
 
-    /*for (int32_t i = 0; i < 20; i++)
-        quadTree->removeEntity(entities[i]);*/
+    for (int32_t i = 0; i < 20; i++)
+        quadTree->removeEntity(entities[i]);
 
+    quadTree->pruneDeadBranches();
     std::vector<liquid::common::Entity*> query = quadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
 
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
