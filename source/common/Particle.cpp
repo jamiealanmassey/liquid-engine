@@ -35,7 +35,7 @@ namespace common {
         mVelocityTweeners[0].setDuration(mLifeSpan);
         mVelocityTweeners[1].setDuration(mLifeSpan);
 
-        tweener::EasingFunction elastic(tweener::EasingFuncs::bounce);
+        tweener::EasingFunction elastic(tweener::EasingFuncs::quadratic, tweener::EasingFunction::EASINGTYPE_OUT);
         tweener::EasingFunction linear(tweener::EasingFuncs::linear);
         mVelocityTweeners[0].setEasingFunc(elastic);
         mVelocityTweeners[1].setEasingFunc(elastic);
@@ -114,6 +114,14 @@ namespace common {
 
         for (uint32_t i = 0; i < 4; i++)
             mColourTweeners[i].reset();
+
+        if (mVerticesSet)
+        {
+            mVerticesPtr[0]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            mVerticesPtr[1]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            mVerticesPtr[2]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+            mVerticesPtr[3]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
+        }
 
         calculateTargets();
     }

@@ -11,7 +11,7 @@ namespace common {
         mParticles.resize(count);
         mParticlesCount = count;
         mParticlesBirth = count;
-        mBirthRate = 100.0f;
+        mBirthRate = 10.0f;
         mBirthAccumulator = 0.0f;
         mRepeat = true;
 

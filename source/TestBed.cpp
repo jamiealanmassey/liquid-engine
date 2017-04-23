@@ -112,14 +112,14 @@ int main()
     });
 
     sf::Texture texture2;
-    if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/smoke.png"))
+    if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/test2.png"))
         return 2;
 
-    /*liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 50);
+    liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 500);
     liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ConfigurationParser());
-    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 50);
+    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 500);
     emitter->setPosition(950.0f, 500.0f);
-    emitter->setRepeat(false);
+    emitter->setRepeat(true);
     renderer->addRenderable(particleBatch);
     scene->addEntity(emitter);
 
@@ -131,7 +131,29 @@ int main()
 
             return true;
         }
-    );*/
+    );
+
+    // QUADTREE TEST
+    std::vector<liquid::common::Entity*> entities;
+    entities.resize(50);
+    for (uint32_t i = 0; i < 50; i++)
+    {
+        float posX = liquid::utilities::Random::instance().randomRange(100.0f, 500.0f);
+        float posY = liquid::utilities::Random::instance().randomRange(100.0f, 500.0f);
+
+        entities[i] = new liquid::common::Entity();
+        entities[i]->setPosition(posX, posY);
+    }
+    
+    liquid::spatial::QuadNode* node = new liquid::spatial::QuadNode(4, true);
+    node->setCentre({ 300.0f, 300.0f });
+    node->setSize({ 600.0f, 600.0f });
+    
+    for (int32_t i = 0; i < 20; i++)
+        node->insertEntity(entities[i]);
+
+    for (int32_t i = 0; i < 10; i++)
+        node->removeEntity(entities[i]);
 
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });

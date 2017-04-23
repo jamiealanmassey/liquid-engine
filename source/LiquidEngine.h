@@ -59,6 +59,9 @@
 #include "navigation/NavNode.h"
 #include "navigation/NavPath.h"
 
+#include "spatial/QuadTree.h"
+#include "spatial/Spatial.h"
+
 #include "tweener/EasingFuncs.h"
 #include "tweener/EasingFunction.h"
 #include "tweener/ITweener.h"
