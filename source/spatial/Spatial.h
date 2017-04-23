@@ -16,11 +16,11 @@ public:
     virtual void dispose() = 0;
     virtual void update() = 0;
 
-    virtual void trackEntity(common::Entity* entityPtr) = 0;
-    virtual void untrackEntity(common::Entity* entityPtr) = 0;
+    virtual void insertEntity(common::Entity* entityPtr) = 0;
+    virtual void removeEntity(common::Entity* entityPtr) = 0;
 
-    virtual const std::vector<common::Entity*>& query(std::array<float, 4> region) const = 0;
-    virtual const std::vector<common::Entity*>& query(std::array<float, 4> region, int32_t type) const = 0;
+    virtual std::vector<common::Entity*> query(std::array<float, 4> region) = 0;
+    virtual std::vector<common::Entity*> query(std::array<float, 4> region, int32_t type) = 0;
 
     const int32_t getSpatialType() const;
 

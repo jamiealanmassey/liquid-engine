@@ -59,6 +59,7 @@
 #include "navigation/NavNode.h"
 #include "navigation/NavPath.h"
 
+#include "spatial/QuadNode.h"
 #include "spatial/QuadTree.h"
 #include "spatial/Spatial.h"
 
