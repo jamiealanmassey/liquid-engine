@@ -4,6 +4,7 @@ make 2D game development a little easier.
 
 # Optional Dependencies
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  
+PugiXML (http://pugixml.org/) (add PUGIXML to Preprocessor definitions)  
 
 # Roadmap
 &#x25a0; Particles  

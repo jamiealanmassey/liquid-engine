@@ -121,6 +121,7 @@ int main()
     liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 500);
     emitter->setPosition(950.0f, 500.0f);
     emitter->setRepeat(true);
+    particleBatch->setBlendMode(sf::BlendAdd);
     renderer->addRenderable(particleBatch);
     scene->addEntity(emitter);
 

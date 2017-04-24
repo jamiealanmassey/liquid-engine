@@ -38,6 +38,16 @@ public:
       */
     std::array<utilities::Vertex2*, 4> nextVertices() override;
 
+    /** \brief Sets the BlendMode of the whole SFMLRenderableBatch
+      * \param mode Mode to set the BlendMode to
+      */
+    void setBlendMode(sf::BlendMode mode);
+
+    /** \brief Sets the Shader of the whole SFMLRenderableBatch
+      * \param shader Shader to bind to the SFMLRenderableBatch
+      */
+    void setShader(const sf::Shader shader);
+
     /// \return The size of the texture used in drawing
     sf::Vector2u getTextureSize() const;
 
@@ -45,7 +55,8 @@ private:
     sf::Vertex convertFromVertex2(utilities::Vertex2* vert);
 
 protected:
-    const sf::Texture& mTexture;  ///< Texture to use for this SpriteBatch
+    const sf::Texture& mTexture;      ///< Texture to use for this SpriteBatch
+    sf::RenderStates   mRenderStates; ///< RenderStates of the RenderableBatch
 };
 
 #endif // _SFMLRENDERABLEBATCH_H

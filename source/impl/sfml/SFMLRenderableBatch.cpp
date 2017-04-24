@@ -9,6 +9,7 @@ namespace impl {
         graphics::RenderableBatch(defaultCapacity),
         mTexture(texture)
     {
+        mRenderStates.texture = &mTexture;
     }
 
     SFMLRenderableBatch::~SFMLRenderableBatch()
@@ -16,16 +17,13 @@ namespace impl {
 
     void SFMLRenderableBatch::draw(graphics::Renderer* renderer)
     {
-        sf::RenderStates states;
-        states.texture = &mTexture;
-        
         std::vector<sf::Vertex> converted(mVertices.size());
         for (uint32_t i = 0; i < mVertices.size(); i++)
             converted[i] = convertFromVertex2(mVertices[i]);
 
         SFMLRenderer* sfml = static_cast<SFMLRenderer*>(renderer);
         sf::RenderWindow* window = sfml->getRenderWindow();
-        window->draw(converted.data(), mBatchCount * 4, sf::Quads, states);
+        window->draw(converted.data(), mBatchCount * 4, sf::Quads, mRenderStates);
     }
 
     std::array<utilities::Vertex2*, 4> SFMLRenderableBatch::nextVertices()
@@ -38,6 +36,16 @@ namespace impl {
         verts[2]->setTexCoord(size.x, size.y);
         verts[3]->setTexCoord(0.0f, size.y);
         return verts;
+    }
+
+    void SFMLRenderableBatch::setBlendMode(sf::BlendMode mode)
+    {
+        mRenderStates.blendMode = mode;
+    }
+
+    void SFMLRenderableBatch::setShader(const sf::Shader shader)
+    {
+        mRenderStates.shader = &shader;
     }
 
     sf::Vector2u SFMLRenderableBatch::getTextureSize() const
