@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "PostProcessor.h"
 
 namespace liquid {
 namespace graphics {
@@ -28,6 +29,7 @@ namespace graphics {
 
     void Renderer::addPostProcessor(PostProcessor* postProcessor)
     {
+        postProcessor->setRendererPtr(this);
         mPostProcessors.push_back(postProcessor);
     }
 
@@ -40,7 +42,14 @@ namespace graphics {
 
     void Renderer::removePostProcessor(std::string postProcessorName)
     {
-        // TODO
+        std::list<PostProcessor*>::iterator it =
+        std::find_if(mPostProcessors.begin(), mPostProcessors.end(),
+        [&name = postProcessorName](const PostProcessor* proc) 
+        {
+            return (proc->getName() == name);
+        });
+
+        mPostProcessors.erase(it);
     }
 
     void Renderer::removeAllPostProcessors()
@@ -64,7 +73,16 @@ namespace graphics {
 
     PostProcessor* Renderer::getPostProcessor(std::string postProcessorName)
     {
-        // TODO
+        std::list<PostProcessor*>::iterator it =
+            std::find_if(mPostProcessors.begin(), mPostProcessors.end(),
+                [&name = postProcessorName](const PostProcessor* proc)
+        {
+            return (proc->getName() == name);
+        });
+
+        if (it != mPostProcessors.end())
+            return (*it);
+        
         return nullptr;
     }
 
