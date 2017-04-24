@@ -1,17 +1,14 @@
-#include <string>
+#include "Parser.h"
 #include <fstream>
-#include <vector>
 #include <sstream>
 #include <iterator>
-#include <map>
-#include <algorithm>
 
 namespace liquid { namespace data {
-#ifndef _CONFIGURATIONPARSER_H
-#define _CONFIGURATIONPARSER_H
+#ifndef _PARSERCONFIG_H
+#define _PARSERCONFIG_H
 
 /**
- * \class ConfigurationParser
+ * \class ParserConfig
  *
  * \ingroup Data
  * \brief Parses generic configuration files into usable data
@@ -22,14 +19,14 @@ namespace liquid { namespace data {
  *
  */
 
-class ConfigurationParser
+class ParserConfig : public Parser
 {
 public:
     /// ConfigurationParser Constructor
-    ConfigurationParser();
+    ParserConfig();
 
     /// ConfigurationParser Destructor
-    ~ConfigurationParser();
+    ~ParserConfig();
 
     /** \brief Parses the given file into paired <string, string> data
       * \param file Name of the file appended to the path of the file, relative to game executable
@@ -39,7 +36,7 @@ public:
       * that vector is then passed to ConfigurationParser::compileData(lines) which
       * puts the data into mData as <key, value> pairs.
       */
-    virtual bool parseFile(std::string file);
+    virtual void parseFile(std::string file) override;
 
     /** \brief Parses the given string into paired <string, string> data
       * \param str std::string which contains information about configuration values
@@ -49,38 +46,7 @@ public:
       * that vector is then passed to ConfigurationParser::compileData(lines) which
       * puts the data into mData as <key, value> pairs.
       */
-    virtual bool parseString(std::string str);
-
-    /** \brief Gets the value with the given name as an std::string
-      * \param name Name of the value (key) you wish to access
-      * \return Returns the value, default: ""
-      */
-    std::string getValueAsString(std::string name) const;
-
-    /** \brief Gets the value with the given name as a int32_t
-      * \param name Name of the value (key) you wish to access
-      * \return Returns the value, default: 0
-      */
-    int32_t getValueAsInteger32(std::string name) const;
-
-    /** \brief Gets the value with the given name as a float
-      * \param name Name of the value (key) you wish to access
-      * \return Returns the value, default: 0.0f
-      */
-    float getValueAsFloat(std::string name) const;
-
-    /** \brief Gets the value with the given name as a boolean
-      * \param name Name of the value (key) you wish to access
-      * \return Returns the value, default: false
-      */
-    bool getValueAsBoolean(std::string name) const;
-
-    /** \brief Gets the total count of data stored in this Parser
-      * \return The count of data stored as a int32_t
-      */
-    uint32_t getDataCount() const;
-
-    const std::map<std::string, std::string>& getData() const;
+    virtual void parseString(std::string str) override;
 
 protected:
     /** \brief Compiles the given collection of lines into a std::map
@@ -91,9 +57,6 @@ protected:
       * value after whitespace is the value of the key.
       */
     void compileData(std::vector<std::string> lines);
-
-protected:
-    std::map<std::string, std::string> mData; ///< Stored key-pair values of the configuration variables
 };
 
 #endif // _CONFIGURATIONPARSER_H

@@ -3,7 +3,7 @@
 namespace liquid {
 namespace data {
 
-    ParticleData::ParticleData(ConfigurationParser parser)
+    ParticleData::ParticleData(ParserConfig parser)
     {
         // TODO: Remove this hardcode
         std::string defaultParticle =
@@ -43,53 +43,54 @@ namespace data {
             "\n";
 
         parser.parseString(defaultParticle);
+        ParserNode* node = parser.getParserNode(0);
 
-        mVelocityX[PARTICLE_VALUE] = parser.getValueAsFloat("velocityX");
-        mVelocityX[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("velocityXMin");
-        mVelocityX[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("velocityXMax");
-        mVelocityX[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("velocityXTarget");
+        mVelocityX[PARTICLE_VALUE] = node->getValueAsFloat("velocityX");
+        mVelocityX[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("velocityXMin");
+        mVelocityX[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("velocityXMax");
+        mVelocityX[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("velocityXTarget");
 
-        mVelocityY[PARTICLE_VALUE] = parser.getValueAsFloat("velocityY");
-        mVelocityY[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("velocityYMin");
-        mVelocityY[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("velocityYMax");
-        mVelocityY[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("velocityYTarget");
+        mVelocityY[PARTICLE_VALUE] = node->getValueAsFloat("velocityY");
+        mVelocityY[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("velocityYMin");
+        mVelocityY[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("velocityYMax");
+        mVelocityY[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("velocityYTarget");
 
-        mColourR[PARTICLE_VALUE] = parser.getValueAsFloat("colourR");
-        mColourR[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("colourRMin");
-        mColourR[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("colourRMax");
-        mColourR[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("colourRTarget");
+        mColourR[PARTICLE_VALUE] = node->getValueAsFloat("colourR");
+        mColourR[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourRMin");
+        mColourR[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourRMax");
+        mColourR[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourRTarget");
 
-        mColourG[PARTICLE_VALUE] = parser.getValueAsFloat("colourG");
-        mColourG[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("colourGMin");
-        mColourG[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("colourGMax");
-        mColourG[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("colourGTarget");
+        mColourG[PARTICLE_VALUE] = node->getValueAsFloat("colourG");
+        mColourG[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourGMin");
+        mColourG[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourGMax");
+        mColourG[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourGTarget");
 
-        mColourB[PARTICLE_VALUE] = parser.getValueAsFloat("colourB");
-        mColourB[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("colourBMin");
-        mColourB[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("colourBMax");
-        mColourB[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("colourBTarget");
+        mColourB[PARTICLE_VALUE] = node->getValueAsFloat("colourB");
+        mColourB[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourBMin");
+        mColourB[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourBMax");
+        mColourB[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourBTarget");
 
-        mColourA[PARTICLE_VALUE] = parser.getValueAsFloat("colourA");
-        mColourA[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("colourAMin");
-        mColourA[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("colourAMax");
-        mColourA[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("colourATarget");
+        mColourA[PARTICLE_VALUE] = node->getValueAsFloat("colourA");
+        mColourA[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourAMin");
+        mColourA[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourAMax");
+        mColourA[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourATarget");
 
-        mSizeX[PARTICLE_VALUE] = parser.getValueAsFloat("sizeX");
-        mSizeX[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("sizeXMin");
-        mSizeX[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("sizeXMax");
-        mSizeX[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("sizeXTarget");
+        mSizeX[PARTICLE_VALUE] = node->getValueAsFloat("sizeX");
+        mSizeX[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("sizeXMin");
+        mSizeX[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("sizeXMax");
+        mSizeX[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("sizeXTarget");
 
-        mSizeY[PARTICLE_VALUE] = parser.getValueAsFloat("sizeY");
-        mSizeY[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("sizeYMin");
-        mSizeY[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("sizeYMax");
-        mSizeY[PARTICLE_TARGET_VALUE] = parser.getValueAsFloat("sizeYTarget");
+        mSizeY[PARTICLE_VALUE] = node->getValueAsFloat("sizeY");
+        mSizeY[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("sizeYMin");
+        mSizeY[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("sizeYMax");
+        mSizeY[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("sizeYTarget");
 
-        mLifeSpan[PARTICLE_VALUE] = parser.getValueAsFloat("lifespan");
-        mLifeSpan[PARTICLE_VARIANCE_MIN] = parser.getValueAsFloat("lifespanMin");
-        mLifeSpan[PARTICLE_VARIANCE_MAX] = parser.getValueAsFloat("lifespanMax");
+        mLifeSpan[PARTICLE_VALUE] = node->getValueAsFloat("lifespan");
+        mLifeSpan[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("lifespanMin");
+        mLifeSpan[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("lifespanMax");
 
-        mTexture = parser.getValueAsString("texture");
-        mEaseFunction = parser.getValueAsString("easingFunc");
+        mTexture = node->getValueAsString("texture");
+        mEaseFunction = node->getValueAsString("easingFunc");
     }
     
     ParticleData::~ParticleData()

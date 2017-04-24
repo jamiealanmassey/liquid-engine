@@ -33,6 +33,8 @@ namespace impl {
         for (auto object : mRenderables)
             object->draw(this);
 
+        Renderer::draw();
+
         mRenderWindow->display();
         std::string dt = std::to_string(1000.0f / utilities::DELTA);
         mRenderWindow->setTitle("Window - " + dt);

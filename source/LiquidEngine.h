@@ -30,8 +30,11 @@
 #include "common/ParticleEmitter.h"
 #include "common/ResourceManager.h"
 
+#include "data/parser/Parser.h"
+#include "data/parser/ParserConfig.h"
+#include "data/parser/ParserNode.h"
+#include "data/parser/ParserXML.h"
 #include "data/Bindings.h"
-#include "data/ConfigurationParser.h"
 #include "data/Directories.h"
 #include "data/ParticleData.h"
 #include "data/Settings.h"

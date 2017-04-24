@@ -1,4 +1,4 @@
-#include "ConfigurationParser.h"
+#include "parser/ParserConfig.h"
 #include <array>
 
 namespace liquid { namespace data {
@@ -32,7 +32,7 @@ public:
     /** \brief ParticleData Constructor
       * \param parser Parser to gather data for this structure 
       */
-    ParticleData(ConfigurationParser parser);
+    ParticleData(ParserConfig parser);
 
     /// ParticleData Destructor
     ~ParticleData();
@@ -84,7 +84,7 @@ protected:
     std::string  mEaseFunction;  ///< Name of the easing function
 
 protected:
-    ConfigurationParser mParser; ///< Parser
+    ParserConfig mParser; ///< Parser
 };
 
 #endif // _PARTICLEDATA_H

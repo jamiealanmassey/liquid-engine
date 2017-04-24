@@ -25,7 +25,7 @@ namespace data {
     Settings::~Settings()
     {}
 
-    bool Settings::parseFile(std::string file)
+    void Settings::parseFile(std::string file)
     {
         if (std::experimental::filesystem::exists(file) == false)
         {
@@ -34,20 +34,14 @@ namespace data {
             fileStream.close();
         }
 
-        if (ConfigurationParser::parseFile(file) == false)
-            return false;
-
+        ParserConfig::parseFile(file);
         assignSettings();
-        return true;
     }
 
-    bool Settings::parseString(std::string str)
+    void Settings::parseString(std::string str)
     {
-        if (ConfigurationParser::parseString(str) == false)
-            return false;
-
+        ParserConfig::parseString(str);
         assignSettings();
-        return true;
     }
 
     int32_t Settings::getFrameLimit() const
@@ -107,17 +101,17 @@ namespace data {
 
     void Settings::assignSettings()
     {
-        mFrameLimit = getValueAsInteger32("frame_limit");
-        mScreenWidth = getValueAsInteger32("screen_width");
-        mScreenHeight = getValueAsInteger32("screen_height");
-        mFullscreen = getValueAsBoolean("fullscreen");
-        mParticlesEnabled = getValueAsBoolean("particles_enabled");
-        mEnableVSync = getValueAsBoolean("enable_vsync");
-        mGUIScale = getValueAsFloat("gui_scale");
-        mVolumeMaster = getValueAsFloat("master");
-        mVolumeMusic = getValueAsFloat("music");
-        mVolumeAmbiance = getValueAsFloat("ambiance");
-        mVolumeDialogue = getValueAsFloat("dialogue");
+        mFrameLimit = mParserNodes[0]->getValueAsInteger32("frame_limit");
+        mScreenWidth = mParserNodes[0]->getValueAsInteger32("screen_width");
+        mScreenHeight = mParserNodes[0]->getValueAsInteger32("screen_height");
+        mFullscreen = mParserNodes[0]->getValueAsBoolean("fullscreen");
+        mParticlesEnabled = mParserNodes[0]->getValueAsBoolean("particles_enabled");
+        mEnableVSync = mParserNodes[0]->getValueAsBoolean("enable_vsync");
+        mGUIScale = mParserNodes[0]->getValueAsFloat("gui_scale");
+        mVolumeMaster = mParserNodes[0]->getValueAsFloat("master");
+        mVolumeMusic = mParserNodes[0]->getValueAsFloat("music");
+        mVolumeAmbiance = mParserNodes[0]->getValueAsFloat("ambiance");
+        mVolumeDialogue = mParserNodes[0]->getValueAsFloat("dialogue");
     }
 
 }}

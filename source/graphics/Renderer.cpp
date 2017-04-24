@@ -25,7 +25,13 @@ namespace graphics {
     }
 
     void Renderer::draw()
-    {}
+    {
+        for (auto proc : mPostProcessors)
+        {
+            proc->update();
+            proc->process();
+        }
+    }
 
     void Renderer::addPostProcessor(PostProcessor* postProcessor)
     {

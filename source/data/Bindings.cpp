@@ -4,7 +4,7 @@ namespace liquid {
 namespace data {
 
     Bindings::Bindings() :
-        ConfigurationParser()
+        ParserConfig()
     {
         mFuncCallbackConvert = std::bind(&Bindings::defaultConvertFunc, this, std::placeholders::_1);
         mDefaultBindings =
@@ -24,10 +24,10 @@ namespace data {
     Bindings::~Bindings()
     {}
 
-    bool Bindings::parseFile(std::string file)
+    void Bindings::parseFile(std::string file)
     {
         if (mFuncCallbackConvert == nullptr)
-            return false;
+            return;
 
         if (std::experimental::filesystem::exists(file) == false)
         {
@@ -36,29 +36,23 @@ namespace data {
             fileStream.close();
         }
 
-        if (ConfigurationParser::parseFile(file) == false)
-            return false;
-
+        ParserConfig::parseFile(file);
         mBindingsData.clear();
-        for (auto it : mData)
-            mBindingsData[it.first] = mFuncCallbackConvert(it.second);
 
-        return true;
+        for (auto it : mParserNodes[0]->getData())
+            mBindingsData[it.first] = mFuncCallbackConvert(it.second);
     }
 
-    bool Bindings::parseString(std::string str)
+    void Bindings::parseString(std::string str)
     {
         if (mFuncCallbackConvert == nullptr)
-            return false;
+            return;
 
-        if (ConfigurationParser::parseString(str) == false)
-            return false;
-
+        ParserConfig::parseString(str);
         mBindingsData.clear();
-        for (auto it : mData)
-            mBindingsData[it.first] = mFuncCallbackConvert(it.second);
 
-        return true;
+        for (auto it : mParserNodes[0]->getData())
+            mBindingsData[it.first] = mFuncCallbackConvert(it.second);
     }
 
     uint32_t Bindings::getBindingValue(std::string name)

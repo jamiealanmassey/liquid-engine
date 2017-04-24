@@ -1,5 +1,5 @@
 #include <experimental/filesystem>
-#include "ConfigurationParser.h"
+#include "parser/ParserConfig.h"
 
 namespace liquid { namespace data {
 #ifndef _SETTINGS_H
@@ -17,7 +17,7 @@ namespace liquid { namespace data {
  *
  */
 
-class Settings : public ConfigurationParser
+class Settings : public ParserConfig
 {
 public:
     /// Settings Constructor
@@ -36,7 +36,7 @@ public:
       * settings, otherwise you can retrieve them directly by using the functions
       * provided by ConfigurationParser to access them.
       */
-    virtual bool parseFile(std::string file) override;
+    virtual void parseFile(std::string file) override;
 
     /** \brief Parses a file and assign Settings to values
       * \param file File to be parsed
@@ -51,7 +51,7 @@ public:
       * Note: The std::string needs to be formatted correctly with whitespace
       * between bindings names + values and each line ended with \n
       */
-    virtual bool parseString(std::string str) override;
+    virtual void parseString(std::string str) override;
 
     /// \return Frame Limit capped to represented Integer
     int32_t getFrameLimit() const;

@@ -1,0 +1,128 @@
+#include "ParserNode.h"
+
+namespace liquid {
+namespace data {
+
+    ParserNode::ParserNode()
+    {
+        mParentNode = nullptr;
+        mChildNode = nullptr;
+        mName = "";
+    }
+
+    ParserNode::ParserNode(ParserNode* parentNode)
+    {
+        mParentNode = parentNode;
+        mChildNode = nullptr;
+        mName = "";
+    }
+
+    ParserNode::ParserNode(ParserNode* parentNode, std::string name)
+    {
+        mParentNode = parentNode;
+        mChildNode = nullptr;
+        mName = name;
+    }
+
+    ParserNode::~ParserNode()
+    {}
+
+    bool ParserNode::insertData(std::string key, std::string value)
+    {
+        if (mData.find(key) == mData.end())
+        {
+            mData[key] = value;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool ParserNode::removeData(std::string key)
+    {
+        if (mData.find(key) != mData.end())
+        {
+            mData.erase(key);
+            return true;
+        }
+
+        return false;
+    }
+
+    void ParserNode::setParentNode(ParserNode* node)
+    {
+        mParentNode = node;
+
+        if (mParentNode != nullptr)
+            mParentNode->setChildNode(this);
+    }
+
+    void ParserNode::setChildNode(ParserNode* node)
+    {
+        mChildNode = node;
+    }
+
+    const std::string ParserNode::getValueAsString(std::string key)
+    {
+        return getDataValue(key);
+    }
+
+    const int32_t ParserNode::getValueAsInteger32(std::string key)
+    {
+        std::string value = getDataValue(key);
+        if (value == "")
+            return 0;
+        else
+            return std::stoi(value);
+    }
+
+    const float ParserNode::getValueAsFloat(std::string key)
+    {
+        std::string value = getDataValue(key);
+        if (value == "")
+            return 0.0f;
+        else
+            return std::stof(value);
+    }
+
+    const double ParserNode::getValueAsDouble(std::string key)
+    {
+        std::string value = getDataValue(key);
+        if (value == "")
+            return 0.0;
+        else
+            return std::stod(value);
+    }
+
+    const bool ParserNode::getValueAsBoolean(std::string key)
+    {
+        std::string value = getDataValue(key);
+        std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+
+        return (value == "1" || value == "true");
+    }
+
+    const uint32_t ParserNode::getDataCount() const
+    {
+        return mData.size();
+    }
+
+    const ParserNode::NodeData& ParserNode::getData() const
+    {
+        return mData;
+    }
+
+    const std::string ParserNode::getName() const
+    {
+        return mName;
+    }
+
+    const std::string ParserNode::getDataValue(std::string key)
+    {
+        if (mData.find(key) != mData.end())
+            return mData[key];
+
+        return "";
+    }
+
+}}

@@ -13,15 +13,16 @@ int main()
     configTest += "volume 100\n";
     configTest += "name configTest";
 
-    liquid::data::ConfigurationParser* parser = new liquid::data::ConfigurationParser;
-    parser->parseString(configTest);
+    liquid::data::ParserConfig parser;
+    parser.parseString(configTest);
+    liquid::data::ParserNode* node = parser.getParserNode(0);
 
-    std::cout << "fullscreen: " << parser->getValueAsBoolean("fullscreen") << "\n";
-    std::cout << "fullscreen2: " << parser->getValueAsBoolean("fullscreen2") << "\n";
-    std::cout << "fullscreen3: " << parser->getValueAsBoolean("fullscreen3") << "\n";
-    std::cout << "fullscreen4: " << parser->getValueAsBoolean("fullscreen4") << "\n";
-    std::cout << "volume: " << parser->getValueAsFloat("volume") << "\n";
-    std::cout << "name: " << parser->getValueAsString("fullscreen") << "\n";
+    std::cout << "fullscreen: " << node->getValueAsBoolean("fullscreen") << "\n";
+    std::cout << "fullscreen2: " << node->getValueAsBoolean("fullscreen2") << "\n";
+    std::cout << "fullscreen3: " << node->getValueAsBoolean("fullscreen3") << "\n";
+    std::cout << "fullscreen4: " << node->getValueAsBoolean("fullscreen4") << "\n";
+    std::cout << "volume: " << node->getValueAsFloat("volume") << "\n";
+    std::cout << "name: " << node->getValueAsString("fullscreen") << "\n";
     std::cout << "Done.\n\n";
 
     liquid::data::Bindings* bindings = new liquid::data::Bindings;
@@ -116,7 +117,7 @@ int main()
         return 2;
 
     liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 500);
-    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ConfigurationParser());
+    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ParserConfig());
     liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 500);
     emitter->setPosition(950.0f, 500.0f);
     emitter->setRepeat(true);

@@ -2,7 +2,7 @@
 #include <functional>
 #include <fstream>
 #include <experimental/filesystem>
-#include "ConfigurationParser.h"
+#include "parser/ParserConfig.h"
 
 namespace liquid { namespace data {
 #ifndef _BINDINGS_H
@@ -20,7 +20,7 @@ namespace liquid { namespace data {
  *
  */
 
-class Bindings : public ConfigurationParser
+class Bindings : public ParserConfig
 {
 public:
     /// Bindings Constructor
@@ -38,7 +38,7 @@ public:
       * callback to map the string input into an integer value that represents
       * the key/button
       */
-    virtual bool parseFile(std::string file) override;
+    virtual void parseFile(std::string file) override;
 
     /** \brief Loads Bindings from a std::strings
       * \param file Formatted std::string to be parsed
@@ -52,7 +52,7 @@ public:
       * Note: The std::string needs to be formatted correctly with whitespace
       * between bindings names + values and each line ended with \n
       */
-    virtual bool parseString(std::string str) override;
+    virtual void parseString(std::string str) override;
 
     /** \brief Retrieve the value of the specified Binding name
       * \param name Name of the value you want to retrieve
