@@ -3,7 +3,7 @@ Liquid Engine is an Open-Source framework written in C++0x with modular componen
 make 2D game development a little easier. 
 
 # Dependencies
-PugiXML (http://pugixml.org/) (add PUGIXML to Preprocessor definitions)  
+PugiXML (http://pugixml.org/)  
 
 # Optional Dependencies
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  

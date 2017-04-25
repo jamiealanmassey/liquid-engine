@@ -3,7 +3,7 @@
 namespace liquid {
 namespace data {
 
-    ParticleData::ParticleData(ParserConfig parser)
+    ParticleData::ParticleData(parser::ParserConfig parser)
     {
         // TODO: Remove this hardcode
         std::string defaultParticle =
@@ -43,7 +43,7 @@ namespace data {
             "\n";
 
         parser.parseString(defaultParticle);
-        ParserNode* node = parser.getParserNode(0);
+        parser::ParserNode* node = parser.getParserNode(0);
 
         mVelocityX[PARTICLE_VALUE] = node->getValueAsFloat("velocityX");
         mVelocityX[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("velocityXMin");

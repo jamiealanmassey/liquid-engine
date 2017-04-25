@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <list>
 
-namespace liquid { namespace data {
+namespace liquid { namespace parser {
 #ifndef _PARSENODE_H
 #define _PARSENODE_H
 
@@ -70,6 +70,9 @@ public:
       */
     virtual void removeChildNode(ParserNode* node);
 
+    /** \brief Sets the name of the ParserNode
+      * \param name Name to be set as a std::string
+      */
     void setName(std::string name);
 
     /** \brief Gets the value with the given name as an std::string

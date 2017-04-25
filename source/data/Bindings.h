@@ -2,7 +2,7 @@
 #include <functional>
 #include <fstream>
 #include <experimental/filesystem>
-#include "parser/ParserConfig.h"
+#include "../parser/ParserConfig.h"
 
 namespace liquid { namespace data {
 #ifndef _BINDINGS_H
@@ -20,7 +20,7 @@ namespace liquid { namespace data {
  *
  */
 
-class Bindings : public ParserConfig
+class Bindings : public parser::ParserConfig
 {
 public:
     /// Bindings Constructor

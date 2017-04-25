@@ -1,7 +1,7 @@
 #include "ParserNode.h"
 
 namespace liquid {
-namespace data {
+namespace parser {
 
     ParserNode::ParserNode()
     {

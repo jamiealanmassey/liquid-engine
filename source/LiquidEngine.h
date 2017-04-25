@@ -30,10 +30,6 @@
 #include "common/ParticleEmitter.h"
 #include "common/ResourceManager.h"
 
-#include "data/parser/Parser.h"
-#include "data/parser/ParserConfig.h"
-#include "data/parser/ParserNode.h"
-#include "data/parser/ParserXML.h"
 #include "data/Bindings.h"
 #include "data/Directories.h"
 #include "data/ParticleData.h"
@@ -61,6 +57,11 @@
 #include "navigation/NavGraph.h"
 #include "navigation/NavNode.h"
 #include "navigation/NavPath.h"
+
+#include "parser/Parser.h"
+#include "parser/ParserConfig.h"
+#include "parser/ParserNode.h"
+#include "parser/ParserXML.h"
 
 #include "spatial/QuadNode.h"
 #include "spatial/QuadTree.h"

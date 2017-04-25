@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 
-namespace liquid { namespace data {
+namespace liquid { namespace parser {
 #ifndef _PARSERCONFIG_H
 #define _PARSERCONFIG_H
 

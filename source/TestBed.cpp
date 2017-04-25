@@ -13,9 +13,9 @@ int main()
     configTest += "volume 100\n";
     configTest += "name configTest";
 
-    liquid::data::ParserConfig parser;
+    liquid::parser::ParserConfig parser;
     parser.parseString(configTest);
-    liquid::data::ParserNode* node = parser.getParserNode(0);
+    liquid::parser::ParserNode* node = parser.getParserNode(0);
 
     std::cout << "fullscreen: " << node->getValueAsBoolean("fullscreen") << "\n";
     std::cout << "fullscreen2: " << node->getValueAsBoolean("fullscreen2") << "\n";
@@ -117,7 +117,7 @@ int main()
         return 2;
 
     liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 500);
-    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::data::ParserConfig());
+    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::parser::ParserConfig());
     liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 500);
     emitter->setPosition(950.0f, 500.0f);
     emitter->setRepeat(true);
@@ -160,7 +160,7 @@ int main()
     std::vector<liquid::common::Entity*> query = quadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
 
     // PARSEXML TEST
-    liquid::data::ParserXML* xmlParser = new liquid::data::ParserXML;
+    liquid::parser::ParserXML* xmlParser = new liquid::parser::ParserXML;
     xmlParser->parseFile("level.xml");
     xmlParser->dumpFile();
 
