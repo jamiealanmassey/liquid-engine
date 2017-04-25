@@ -1,21 +1,22 @@
 #include <map>
 #include <string>
 #include <algorithm>
+#include <list>
 
 namespace liquid { namespace data {
 #ifndef _PARSENODE_H
 #define _PARSENODE_H
 
 /** \class ParserNode
-  *
-  * \ingroup Data
-  * \brief Defines a structure of data in a node based system for the Parser class; stores mapped values
-  *
-  * \author Jamie Massey
-  * \version 1.0
-  * \date 24/04/2017
-  *
-  */
+ *
+ * \ingroup Data
+ * \brief Defines a structure of data in a node based system for the Parser class; stores mapped values
+ *
+ * \author Jamie Massey
+ * \version 1.0
+ * \date 24/04/2017
+ *
+ */
 
 class ParserNode
 {
@@ -59,10 +60,17 @@ public:
       */
     virtual void setParentNode(ParserNode* node);
 
-    /** \brief Sets the child of this ParserNode
+    /** \brief Inserts a child to this ParserNode
       * \param node Pointer to the child ParserNode
       */
-    virtual void setChildNode(ParserNode* node);
+    virtual void insertChildNode(ParserNode* node);
+
+    /** \brief Removes a child to this ParserNode
+      * \param node Pointer to the child ParserNode
+      */
+    virtual void removeChildNode(ParserNode* node);
+
+    void setName(std::string name);
 
     /** \brief Gets the value with the given name as an std::string
       * \param name Name of the value (key) you wish to access
@@ -107,6 +115,9 @@ public:
     /// \return Gets the Name of this ParserNode
     const std::string getName() const;
 
+    /// \return Gets the std::list that stores all the child ParserNode objects
+    std::list<ParserNode*> getChildren() const;
+
 protected:
     /** \brief Uses the input key to retrieve the std::string value as a std::string
       * \param key Key to use to find the value
@@ -115,10 +126,10 @@ protected:
     const std::string getDataValue(std::string key);
 
 protected:
-    ParserNode* mParentNode; ///< Parent to this ParserNode
-    ParserNode* mChildNode;  ///< Child of this ParserNode
-    NodeData    mData;       ///< The data stored in this ParserNode
-    std::string mName;       ///< Name of this node
+    ParserNode*            mParentNode; ///< Parent to this ParserNode
+    NodeData               mData;       ///< The data stored in this ParserNode
+    std::string            mName;       ///< Name of this node
+    std::list<ParserNode*> mChildNodes; ///< Child of this ParserNode
 };
 
 #endif // _PARSENODE_H

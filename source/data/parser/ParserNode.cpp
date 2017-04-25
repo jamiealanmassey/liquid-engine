@@ -6,21 +6,18 @@ namespace data {
     ParserNode::ParserNode()
     {
         mParentNode = nullptr;
-        mChildNode = nullptr;
         mName = "";
     }
 
     ParserNode::ParserNode(ParserNode* parentNode)
     {
         mParentNode = parentNode;
-        mChildNode = nullptr;
         mName = "";
     }
 
     ParserNode::ParserNode(ParserNode* parentNode, std::string name)
     {
         mParentNode = parentNode;
-        mChildNode = nullptr;
         mName = name;
     }
 
@@ -52,14 +49,28 @@ namespace data {
     void ParserNode::setParentNode(ParserNode* node)
     {
         mParentNode = node;
-
-        if (mParentNode != nullptr)
-            mParentNode->setChildNode(this);
     }
 
-    void ParserNode::setChildNode(ParserNode* node)
+    void ParserNode::insertChildNode(ParserNode* node)
     {
-        mChildNode = node;
+        mChildNodes.push_back(node);
+    }
+
+    void ParserNode::removeChildNode(ParserNode* node)
+    {
+        std::list<ParserNode*>::iterator it =
+        std::find(mChildNodes.begin(), mChildNodes.end(), node);
+
+        if (it != mChildNodes.end())
+        {
+            (*it)->setParentNode(nullptr);
+            mChildNodes.erase(it);
+        }
+    }
+
+    void ParserNode::setName(std::string name)
+    {
+        mName = name;
     }
 
     const std::string ParserNode::getValueAsString(std::string key)
@@ -115,6 +126,11 @@ namespace data {
     const std::string ParserNode::getName() const
     {
         return mName;
+    }
+
+    std::list<ParserNode*> ParserNode::getChildren() const
+    {
+        return mChildNodes;
     }
 
     const std::string ParserNode::getDataValue(std::string key)

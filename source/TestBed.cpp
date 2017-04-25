@@ -159,6 +159,11 @@ int main()
     quadTree->pruneDeadBranches();
     std::vector<liquid::common::Entity*> query = quadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
 
+    // PARSEXML TEST
+    liquid::data::ParserXML* xmlParser = new liquid::data::ParserXML;
+    xmlParser->parseFile("level.xml");
+    xmlParser->dumpFile();
+
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });
     liquid::utilities::Vertex2* vert6 = new liquid::utilities::Vertex2({ 256.0f, 256.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 256.0f });
