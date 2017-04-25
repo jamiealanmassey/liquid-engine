@@ -8,7 +8,7 @@ namespace liquid { namespace parser {
 
 /** \class ParserXML
  *
- * \ingroup Data
+ * \ingroup Parser
  * \brief De-constructs a pugi::xml_document into a Parser class as ParserNode objects
  *
  * \author Jamie Massey

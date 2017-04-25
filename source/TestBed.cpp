@@ -172,6 +172,14 @@ int main()
     liquid::data::TextureAtlas* atlas = new liquid::data::TextureAtlas(atlasParser);
     atlas->compile();
 
+    liquid::parser::ParserNodeSearch nodeSearch(atlasParser.getRootParserNode());
+    std::list<liquid::parser::ParserNode*> names = nodeSearch.findParserNodes("name");
+    
+    nodeSearch.traverseChild("region");
+    nodeSearch.traverseChild("name");
+
+    liquid::parser::ParserNode* curNode = nodeSearch.getCurrentNode();
+
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });
     liquid::utilities::Vertex2* vert6 = new liquid::utilities::Vertex2({ 256.0f, 256.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 256.0f });

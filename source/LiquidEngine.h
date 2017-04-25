@@ -9,6 +9,7 @@
   * \defgroup Graphics
   * \defgroup Impl
   * \defgroup Navigation
+  * \defgroup Parser
   * \defgroup Spatial
   * \defgroup Tweener
   * \defgroup UI
@@ -62,6 +63,7 @@
 #include "parser/Parser.h"
 #include "parser/ParserConfig.h"
 #include "parser/ParserNode.h"
+#include "parser/ParserNodeSearch.h"
 #include "parser/ParserXML.h"
 
 #include "spatial/QuadNode.h"

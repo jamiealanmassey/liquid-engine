@@ -13,8 +13,10 @@ namespace data {
 
     void TextureAtlas::compile()
     {
-        std::list<parser::ParserNode*> nodes = mParser.getParserNodes("region");
-        for (auto node : nodes)
+        parser::ParserNodeSearch nodes(mParser.getRootParserNode());
+        std::list<parser::ParserNode*> regionNodes = nodes.findParserNodes("region");
+
+        for (auto node : regionNodes)
         {
             std::string name = node->getChildNode("name")->getValueAsString("name");
             float coord1 = node->getChildNode("coord1")->getValueAsFloat("coord1");
@@ -34,6 +36,11 @@ namespace data {
     void TextureAtlas::flush()
     {
         mTextureAtlas.clear();
+    }
+
+    void TextureAtlas::setParser(parser::Parser& parser)
+    {
+        mParser = parser;
     }
 
     TextureAtlas::TextureRegion TextureAtlas::getTextureRegion(std::string name)

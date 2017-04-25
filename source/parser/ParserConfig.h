@@ -10,7 +10,7 @@ namespace liquid { namespace parser {
 /**
  * \class ParserConfig
  *
- * \ingroup Data
+ * \ingroup Parser
  * \brief Parses generic configuration files into usable data
  *
  * \author Jamie Massey

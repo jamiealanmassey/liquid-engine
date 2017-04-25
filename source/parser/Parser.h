@@ -8,7 +8,7 @@ namespace liquid { namespace parser {
 
 /** \class Parser
  *
- * \ingroup Data
+ * \ingroup Parser
  * \brief Uses the ParserNode class to store and parse a collection of linked ParserNode objects as a tree
  *
  * \author Jamie Massey
@@ -36,20 +36,8 @@ public:
       */
     virtual void parseString(std::string str);
 
-    /** \brief Gets the ParserNode with the given name
-      * \param name Name of the ParserNode represented as a std::string
-      * \return Gets the found ParserNode, nullptr if not found
-      */
-    ParserNode* getParserNode(std::string name);
-
-    std::list<ParserNode*> getParserNodes(std::string name);
-
     /// \return Gets the Root ParserNode for this Parser
     ParserNode* getRootParserNode();
-
-protected:
-    ParserNode* findParserNodeByName(std::string name, ParserNode* node);
-    void findParserNodes(std::string name, ParserNode* node, std::list<ParserNode*>& nodes);
 
 protected:
     ParserNode* mRootParserNode; ///< Root ParserNode for the Parser Tree

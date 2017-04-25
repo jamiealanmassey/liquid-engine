@@ -9,7 +9,7 @@ namespace liquid { namespace parser {
 
 /** \class ParserNode
  *
- * \ingroup Data
+ * \ingroup Parser
  * \brief Defines a structure of data in a node based system for the Parser class; stores mapped values
  *
  * \author Jamie Massey
@@ -115,9 +115,16 @@ public:
       */
     const NodeData& getData() const;
 
+    ///< \return Parent node of this ParserNode
+    ParserNode* getParentNode() const;
+
     /// \return Gets the Name of this ParserNode
     const std::string getName() const;
 
+    /** \brief Retrieves the first child ParserNode with this name
+      * \param name Name to search represented as a std::string
+      * \return Found ParserNode, nullptr if none found
+      */
     ParserNode* getChildNode(std::string name);
 
     /// \return Gets the std::list that stores all the child ParserNode objects
