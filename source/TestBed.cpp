@@ -15,7 +15,7 @@ int main()
 
     liquid::parser::ParserConfig parser;
     parser.parseString(configTest);
-    liquid::parser::ParserNode* node = parser.getParserNode(0);
+    liquid::parser::ParserNode* node = parser.getRootParserNode();
 
     std::cout << "fullscreen: " << node->getValueAsBoolean("fullscreen") << "\n";
     std::cout << "fullscreen2: " << node->getValueAsBoolean("fullscreen2") << "\n";
@@ -164,8 +164,13 @@ int main()
 
     // PARSEXML TEST
     liquid::parser::ParserXML* xmlParser = new liquid::parser::ParserXML;
-    xmlParser->parseFile("particle.xml");
+    xmlParser->parseFile("atlas.xml");
     xmlParser->dumpXMLTreeToFile();
+
+    liquid::parser::ParserXML atlasParser;
+    atlasParser.parseFile("atlas.xml");
+    liquid::data::TextureAtlas* atlas = new liquid::data::TextureAtlas(atlasParser);
+    atlas->compile();
 
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });

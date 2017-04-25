@@ -28,9 +28,7 @@ namespace parser {
         std::list<std::string> data;
         std::ofstream stream;
         stream.open("xml_dump_tree.txt");
-
-        ParserNode* node = mParserNodes[0];
-        dumpNextNode(data, node, 0);
+        dumpNextNode(data, mRootParserNode, 0);
 
         for (auto dataLine : data)
             stream << dataLine;
@@ -38,11 +36,10 @@ namespace parser {
         stream.close();
     }
 
-    std::list<std::string> ParserXML::dumpXMLTreeToString()
+    std::list<std::string> ParserXML::dumpXMLTreeToList()
     {
         std::list<std::string> data;
-        ParserNode* node = mParserNodes[0];
-        dumpNextNode(data, node, 0);
+        dumpNextNode(data, mRootParserNode, 0);
         return data;
     }
 
@@ -110,7 +107,7 @@ namespace parser {
     {
         ParserNode* rootNode = new ParserNode;
         parseNextNode(rootNode, document.root().first_child());
-        mParserNodes.push_back(rootNode);
+        mRootParserNode = rootNode;
     }
 
 }}

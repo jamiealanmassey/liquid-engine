@@ -20,33 +20,49 @@ namespace parser {
 
     }
 
-    ParserNode* Parser::getParserNode(std::string name) const
+    ParserNode* Parser::getParserNode(std::string name)
     {
-        for (uint32_t i = 0; i < mParserNodes.size(); i++)
+        return findParserNodeByName(name, mRootParserNode);
+    }
+
+    std::list<ParserNode*> Parser::getParserNodes(std::string name)
+    {
+        std::list<ParserNode*> nodes;
+        findParserNodes(name, mRootParserNode, nodes);
+        return nodes;
+    }
+
+    ParserNode* Parser::getRootParserNode()
+    {
+        return mRootParserNode;
+    }
+
+    ParserNode* Parser::findParserNodeByName(std::string name, ParserNode* node)
+    {
+        if (node->getName() == name)
+            return node;
+
+        std::list<ParserNode*> children = node->getChildren();
+        ParserNode* nodeSearch = nullptr;
+
+        for (auto child : children)
         {
-            if (mParserNodes[i]->getName() == name)
-                return mParserNodes[i];
+            nodeSearch = findParserNodeByName(name, child);
+
+            if (nodeSearch != nullptr)
+                return nodeSearch;
         }
 
         return nullptr;
     }
 
-    ParserNode* Parser::getParserNode(int32_t index) const
+    void Parser::findParserNodes(std::string name, ParserNode* node, std::list<ParserNode*>& nodes)
     {
-        if (index >= 0 && index < mParserNodes.size())
-            return mParserNodes[index];
+        if (node->getName() == name)
+            nodes.push_back(node);
 
-        return nullptr;
-    }
-
-    const int32_t Parser::getParseNodeCount() const
-    {
-        return mParserNodes.size();
-    }
-
-    const std::vector<ParserNode*>& Parser::getParserNodes() const
-    {
-        return mParserNodes;
+        for (auto child : node->getChildren())
+            findParserNodes(name, child, nodes);
     }
 
 }}

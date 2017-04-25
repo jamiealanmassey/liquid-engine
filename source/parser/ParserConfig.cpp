@@ -65,12 +65,11 @@ namespace parser {
             {
                 std::string key = tokens[0];
                 std::string value = tokens[1];
-
                 node->insertData(key, value);
             }
         }
 
-        mParserNodes.push_back(node);
+        mRootParserNode = node;
     }
 
 }}

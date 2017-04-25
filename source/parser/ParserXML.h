@@ -40,7 +40,7 @@ public:
     void dumpXMLTreeToFile();
 
     /// \brief Dumps the Parser Tree to a collection of strings
-    std::list<std::string> dumpXMLTreeToString();
+    std::list<std::string> dumpXMLTreeToList();
 
 protected:
     /** \brief Dumps each node recursively layer by layer

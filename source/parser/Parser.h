@@ -40,22 +40,19 @@ public:
       * \param name Name of the ParserNode represented as a std::string
       * \return Gets the found ParserNode, nullptr if not found
       */
-    ParserNode* getParserNode(std::string name) const;
+    ParserNode* getParserNode(std::string name);
 
-    /** \brief Gets the ParserNode with the given index
-      * \param index Index of the ParserNode represented as an int32_t
-      * \return Gets the found ParserNode, nullptr if not found
-      */
-    ParserNode* getParserNode(int32_t index) const;
+    std::list<ParserNode*> getParserNodes(std::string name);
 
-    /// \return Gets the number of ParserNodes stored in this Parser
-    const int32_t getParseNodeCount() const;
-
-    /// \return Gets all the ParserNode objects as a std::vector
-    const std::vector<ParserNode*>& getParserNodes() const;
+    /// \return Gets the Root ParserNode for this Parser
+    ParserNode* getRootParserNode();
 
 protected:
-    std::vector<ParserNode*> mParserNodes; ///< Collection of ParserNode objects
+    ParserNode* findParserNodeByName(std::string name, ParserNode* node);
+    void findParserNodes(std::string name, ParserNode* node, std::list<ParserNode*>& nodes);
+
+protected:
+    ParserNode* mRootParserNode; ///< Root ParserNode for the Parser Tree
 };
 
 #endif // _PARSER_H

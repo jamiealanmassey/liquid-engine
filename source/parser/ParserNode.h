@@ -118,6 +118,8 @@ public:
     /// \return Gets the Name of this ParserNode
     const std::string getName() const;
 
+    ParserNode* getChildNode(std::string name);
+
     /// \return Gets the std::list that stores all the child ParserNode objects
     std::list<ParserNode*> getChildren() const;
 

@@ -39,7 +39,7 @@ namespace data {
         ParserConfig::parseFile(file);
         mBindingsData.clear();
 
-        for (auto it : mParserNodes[0]->getData())
+        for (auto it : mRootParserNode->getData())
             mBindingsData[it.first] = mFuncCallbackConvert(it.second);
     }
 
@@ -51,7 +51,7 @@ namespace data {
         ParserConfig::parseString(str);
         mBindingsData.clear();
 
-        for (auto it : mParserNodes[0]->getData())
+        for (auto it : mRootParserNode->getData())
             mBindingsData[it.first] = mFuncCallbackConvert(it.second);
     }
 

@@ -123,6 +123,21 @@ namespace parser {
         return mData;
     }
 
+    ParserNode* ParserNode::getChildNode(std::string name)
+    {
+        std::list<ParserNode*>::iterator it =
+        std::find_if(mChildNodes.begin(), mChildNodes.end(),
+            [&nm = name](const ParserNode* node)
+        {
+            return (node->getName() == nm);
+        });
+
+        if (it != mChildNodes.end())
+            return (*it);
+        
+        return nullptr;
+    }
+
     const std::string ParserNode::getName() const
     {
         return mName;

@@ -34,6 +34,7 @@
 #include "data/Directories.h"
 #include "data/ParticleData.h"
 #include "data/Settings.h"
+#include "data/TextureAtlas.h"
 
 #include "events/EventDispatcher.h"
 #include "events/EventManager.h"

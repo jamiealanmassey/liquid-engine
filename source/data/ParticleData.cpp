@@ -5,7 +5,7 @@ namespace data {
 
     ParticleData::ParticleData(parser::Parser parser)
     {
-        parser::ParserNode* node = parser.getParserNode(0);
+        parser::ParserNode* node = parser.getRootParserNode();
 
         mVelocityX[PARTICLE_VALUE] = node->getValueAsFloat("velocityXValue");
         mVelocityX[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("velocityXMin");

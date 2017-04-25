@@ -101,17 +101,17 @@ namespace data {
 
     void Settings::assignSettings()
     {
-        mFrameLimit = mParserNodes[0]->getValueAsInteger32("frame_limit");
-        mScreenWidth = mParserNodes[0]->getValueAsInteger32("screen_width");
-        mScreenHeight = mParserNodes[0]->getValueAsInteger32("screen_height");
-        mFullscreen = mParserNodes[0]->getValueAsBoolean("fullscreen");
-        mParticlesEnabled = mParserNodes[0]->getValueAsBoolean("particles_enabled");
-        mEnableVSync = mParserNodes[0]->getValueAsBoolean("enable_vsync");
-        mGUIScale = mParserNodes[0]->getValueAsFloat("gui_scale");
-        mVolumeMaster = mParserNodes[0]->getValueAsFloat("master");
-        mVolumeMusic = mParserNodes[0]->getValueAsFloat("music");
-        mVolumeAmbiance = mParserNodes[0]->getValueAsFloat("ambiance");
-        mVolumeDialogue = mParserNodes[0]->getValueAsFloat("dialogue");
+        mFrameLimit = mRootParserNode->getValueAsInteger32("frame_limit");
+        mScreenWidth = mRootParserNode->getValueAsInteger32("screen_width");
+        mScreenHeight = mRootParserNode->getValueAsInteger32("screen_height");
+        mFullscreen = mRootParserNode->getValueAsBoolean("fullscreen");
+        mParticlesEnabled = mRootParserNode->getValueAsBoolean("particles_enabled");
+        mEnableVSync = mRootParserNode->getValueAsBoolean("enable_vsync");
+        mGUIScale = mRootParserNode->getValueAsFloat("gui_scale");
+        mVolumeMaster = mRootParserNode->getValueAsFloat("master");
+        mVolumeMusic = mRootParserNode->getValueAsFloat("music");
+        mVolumeAmbiance = mRootParserNode->getValueAsFloat("ambiance");
+        mVolumeDialogue = mRootParserNode->getValueAsFloat("dialogue");
     }
 
 }}
