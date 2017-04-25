@@ -116,8 +116,11 @@ int main()
     if (!texture2.loadFromFile("C:/Development/Liquid-Engine/solution/Debug/test2.png"))
         return 2;
 
+    liquid::parser::ParserConfig particleParser;
+    particleParser.parseString(liquid::data::ParticleData::mDefaultParticle);
+
     liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture2, 500);
-    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(liquid::parser::ParserConfig());
+    liquid::data::ParticleData* particleData = new liquid::data::ParticleData(particleParser);
     liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 500);
     emitter->setPosition(950.0f, 500.0f);
     emitter->setRepeat(true);
@@ -161,8 +164,8 @@ int main()
 
     // PARSEXML TEST
     liquid::parser::ParserXML* xmlParser = new liquid::parser::ParserXML;
-    xmlParser->parseFile("level.xml");
-    xmlParser->dumpFile();
+    xmlParser->parseFile("particle.xml");
+    xmlParser->dumpXMLTreeToFile();
 
     /*liquid::utilities::Vertex2* vert4 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 0.0f, 0.0f });
     liquid::utilities::Vertex2* vert5 = new liquid::utilities::Vertex2({ 256.0f, 20.0f }, { 255.0f, 255.0f, 255.0f, 255.0f }, { 256.0f, 0.0f });

@@ -11,24 +11,77 @@ namespace parser {
 
     void ParserXML::parseFile(std::string file)
     {
-        pugi::xml_document doc;
-        if (doc.load_file(file.c_str()) == 0)
-            return;
-
-        ParserNode* rootNode = new ParserNode;
-        parseNextNode(rootNode, doc.root().first_child());
-        mParserNodes.push_back(rootNode);
+        pugi::xml_document document;
+        document.load_file(file.c_str());
+        parseXMLTree(document);
     }
 
     void ParserXML::parseString(std::string str)
     {
-        pugi::xml_document doc;
-        if (doc.load_string(str.c_str()) == 0)
-            return;
+        pugi::xml_document document;
+        document.load_string(str.c_str());
+        parseXMLTree(document);
+    }
 
-        ParserNode* rootNode = new ParserNode;
-        parseNextNode(rootNode, doc.root().first_child());
-        mParserNodes.push_back(rootNode);
+    void ParserXML::dumpXMLTreeToFile()
+    {
+        std::list<std::string> data;
+        std::ofstream stream;
+        stream.open("xml_dump_tree.txt");
+
+        ParserNode* node = mParserNodes[0];
+        dumpNextNode(data, node, 0);
+
+        for (auto dataLine : data)
+            stream << dataLine;
+
+        stream.close();
+    }
+
+    std::list<std::string> ParserXML::dumpXMLTreeToString()
+    {
+        std::list<std::string> data;
+        ParserNode* node = mParserNodes[0];
+        dumpNextNode(data, node, 0);
+        return data;
+    }
+
+    void ParserXML::dumpNextNode(std::list<std::string>& data, ParserNode* node, int32_t depth)
+    {
+        std::string line = "";
+        for (uint32_t i = 0; i < depth; i++)
+            line += "\t";
+
+        line += "[" + node->getName() + "]";
+
+        if (node->getData().empty() == false && node->getData().begin()->second != "")
+            line += " : " + node->getData().begin()->second + "\n";
+        else
+            line += "\n";
+
+        data.push_back(line);
+
+        if (node->getChildren().size() > 0)
+        {
+            for (auto child : node->getChildren())
+                dumpNextNode(data, child, depth + 1);
+        }
+
+        /*for (uint32_t i = 0; i < depth; i++)
+            stream << "\t";
+
+        stream << "[" << node->getName() << "]";
+
+        if (node->getData().empty() == false && node->getData().begin()->second != "")
+            stream << " : " << node->getData().begin()->second << "\n";
+        else
+            stream << "\n";
+
+        if (node->getChildren().size() > 0)
+        {
+            for (auto child : node->getChildren())
+                dumpNextNode(stream, child, depth + 1);
+        }*/
     }
 
     void ParserXML::parseNextNode(ParserNode* parserNode, pugi::xml_node xmlNode)
@@ -53,32 +106,11 @@ namespace parser {
         }
     }
 
-    void outputNextNode(std::ofstream& stream, ParserNode* node, int32_t depth)
+    void ParserXML::parseXMLTree(const pugi::xml_document& document)
     {
-        for (uint32_t i = 0; i < depth; i++)
-            stream << "\t";
-
-        stream << "[" << node->getName() << "]";
-
-        if (node->getData().empty() == false && node->getData().begin()->second != "")
-            stream << " : " << node->getData().begin()->second << "\n";
-        else
-            stream << "\n";
-
-        if (node->getChildren().size() > 0)
-        {
-            for (auto child : node->getChildren())
-                outputNextNode(stream, child, depth + 1);
-        }
-    }
-
-    void ParserXML::dumpFile()
-    {
-        std::ofstream stream;
-        stream.open("xml_dump_tree.txt");
-        ParserNode* node = mParserNodes[0];
-        outputNextNode(stream, node, 0);
-        stream.close();
+        ParserNode* rootNode = new ParserNode;
+        parseNextNode(rootNode, document.root().first_child());
+        mParserNodes.push_back(rootNode);
     }
 
 }}

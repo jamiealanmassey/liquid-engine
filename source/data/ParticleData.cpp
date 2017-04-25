@@ -3,89 +3,51 @@
 namespace liquid {
 namespace data {
 
-    ParticleData::ParticleData(parser::ParserConfig parser)
+    ParticleData::ParticleData(parser::Parser parser)
     {
-        // TODO: Remove this hardcode
-        std::string defaultParticle =
-            "velocityX 0.0\n"
-            "velocityXMin -0.5\n"
-            "velocityXMax 0.5\n"
-            "velocityXTarget 0.0\n"
-            "\n"
-            "velocityY 0.0\n"
-            "velocityYMin -0.5\n"
-            "velocityYMax 0.5\n"
-            "velocityYTarget 0.0\n"
-            "\n"
-            "colourR 50.0\n"
-            "colourRMin 0.0\n"
-            "colourRMax 0.0\n"
-            "colourRTarget 255.0\n"
-            "\n"
-            "colourG 255.0\n"
-            "colourGMin 0.0\n"
-            "colourGMax 0.0\n"
-            "colourGTarget 50.0\n"
-            "\n"
-            "colourB 50.0\n"
-            "colourBMin 0.0\n"
-            "colourBMax 0.0\n"
-            "colourBTarget 255.0\n"
-            "\n"
-            "colourA 255.0\n"
-            "colourAMin 0.0\n"
-            "colourAMax 0.0\n"
-            "colourATarget 0.0\n"
-            "\n"
-            "lifespan 1500.0\n"
-            "lifespanMin 0.0\n"
-            "lifespanMax 0.0\n"
-            "\n";
-
-        parser.parseString(defaultParticle);
         parser::ParserNode* node = parser.getParserNode(0);
 
-        mVelocityX[PARTICLE_VALUE] = node->getValueAsFloat("velocityX");
+        mVelocityX[PARTICLE_VALUE] = node->getValueAsFloat("velocityXValue");
         mVelocityX[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("velocityXMin");
         mVelocityX[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("velocityXMax");
         mVelocityX[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("velocityXTarget");
 
-        mVelocityY[PARTICLE_VALUE] = node->getValueAsFloat("velocityY");
+        mVelocityY[PARTICLE_VALUE] = node->getValueAsFloat("velocityYValue");
         mVelocityY[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("velocityYMin");
         mVelocityY[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("velocityYMax");
         mVelocityY[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("velocityYTarget");
 
-        mColourR[PARTICLE_VALUE] = node->getValueAsFloat("colourR");
+        mColourR[PARTICLE_VALUE] = node->getValueAsFloat("colourRValue");
         mColourR[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourRMin");
         mColourR[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourRMax");
         mColourR[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourRTarget");
 
-        mColourG[PARTICLE_VALUE] = node->getValueAsFloat("colourG");
+        mColourG[PARTICLE_VALUE] = node->getValueAsFloat("colourGValue");
         mColourG[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourGMin");
         mColourG[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourGMax");
         mColourG[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourGTarget");
 
-        mColourB[PARTICLE_VALUE] = node->getValueAsFloat("colourB");
+        mColourB[PARTICLE_VALUE] = node->getValueAsFloat("colourBValue");
         mColourB[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourBMin");
         mColourB[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourBMax");
         mColourB[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourBTarget");
 
-        mColourA[PARTICLE_VALUE] = node->getValueAsFloat("colourA");
+        mColourA[PARTICLE_VALUE] = node->getValueAsFloat("colourAValue");
         mColourA[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("colourAMin");
         mColourA[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("colourAMax");
         mColourA[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("colourATarget");
 
-        mSizeX[PARTICLE_VALUE] = node->getValueAsFloat("sizeX");
+        mSizeX[PARTICLE_VALUE] = node->getValueAsFloat("sizeXValue");
         mSizeX[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("sizeXMin");
         mSizeX[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("sizeXMax");
         mSizeX[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("sizeXTarget");
 
-        mSizeY[PARTICLE_VALUE] = node->getValueAsFloat("sizeY");
+        mSizeY[PARTICLE_VALUE] = node->getValueAsFloat("sizeYValue");
         mSizeY[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("sizeYMin");
         mSizeY[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("sizeYMax");
         mSizeY[PARTICLE_TARGET_VALUE] = node->getValueAsFloat("sizeYTarget");
 
-        mLifeSpan[PARTICLE_VALUE] = node->getValueAsFloat("lifespan");
+        mLifeSpan[PARTICLE_VALUE] = node->getValueAsFloat("lifespanValue");
         mLifeSpan[PARTICLE_VARIANCE_MIN] = node->getValueAsFloat("lifespanMin");
         mLifeSpan[PARTICLE_VARIANCE_MAX] = node->getValueAsFloat("lifespanMax");
 
@@ -150,5 +112,85 @@ namespace data {
     {
         return mEaseFunction;
     }
+
+    const std::string ParticleData::mDefaultParticle =
+        "velocityXValue 0.0\n"
+        "velocityXMin -0.5\n"
+        "velocityXMax 0.5\n"
+        "velocityXTarget 0.0\n"
+        "\n"
+        "velocityYValue 0.0\n"
+        "velocityYMin -0.5\n"
+        "velocityYMax 0.5\n"
+        "velocityYTarget 0.0\n"
+        "\n"
+        "colourRValue 50.0\n"
+        "colourRMin 0.0\n"
+        "colourRMax 0.0\n"
+        "colourRTarget 255.0\n"
+        "\n"
+        "colourGValue 255.0\n"
+        "colourGMin 0.0\n"
+        "colourGMax 0.0\n"
+        "colourGTarget 50.0\n"
+        "\n"
+        "colourBValue 50.0\n"
+        "colourBMin 0.0\n"
+        "colourBMax 0.0\n"
+        "colourBTarget 255.0\n"
+        "\n"
+        "colourAValue 255.0\n"
+        "colourAMin 0.0\n"
+        "colourAMax 0.0\n"
+        "colourATarget 0.0\n"
+        "\n"
+        "lifespanValue 1500.0\n"
+        "lifespanMin 0.0\n"
+        "lifespanMax 0.0\n";
+
+    const std::string ParticleData::mDefaultParticleXML =
+        "<particle name = \"particle\">\n"
+        "<attribute name = \"velocityX\">\n"
+        "<data name = \"velocityXValue\">0.0</data>\n"
+        "<data name = \"velocityXMin\">-0.5</data>\n"
+        "<data name = \"velocityXMax\">0.5</data>\n"
+        "<data name = \"velocityXTarget\">0.0</data>\n"
+        "</attribute>\n"
+        "<attribute name = \"velocityY\">\n"
+        "<data name = \"velocityYValue\">0.0</data>\n"
+        "<data name = \"velocityYMin\">-0.5</data>\n"
+        "<data name = \"velocityYMax\">0.5</data>\n"
+        "<data name = \"velocityYTarget\">0.0</data>\n"
+        "</attribute>\n"
+        "<attribute name = \"colourR\">\n"
+        "<data name = \"colourRValue\">50.0</data>\n"
+        "<data name = \"colourRMin\">0.0</data>\n"
+        "<data name = \"colourRMax\">0.0</data>\n"
+        "<data name = \"colourRTarget\">255.0</data>\n"
+        "</attribute>\n"
+        "<attribute name = \"colourG\">\n"
+        "<data name = \"colourGValue\">255.0</data>\n"
+        "<data name = \"colourGMin\">0.0</data>\n"
+        "<data name = \"colourGMax\">0.0</data>\n"
+        "<data name = \"colourGTarget\">50.0</data>\n"
+        "</attribute>\n"
+        "<attribute name = \"colourB\">\n"
+        "<data name = \"colourBValue\">50.0</data>\n"
+        "<data name = \"colourBMin\">0.0</data>\n"
+        "<data name = \"colourBMax\">0.0</data>\n"
+        "<data name = \"colourBTarget\">255.0</data>\n"
+        "</attribute>\n"
+        "<attribute name = \"colourA\">\n"
+        "<data name = \"colourAValue\">255.0</data>\n"
+        "<data name = \"colourAMin\">0.0</data>\n"
+        "<data name = \"colourAMax\">0.0</data>\n"
+        "<data name = \"colourATarget\">0.0</data>\n"
+        "</attribute>\n"
+        "<attribute name = \"lifespan\">\n"
+        "<data name = \"lifespanValue\">1500.0</data>\n"
+        "<data name = \"lifespanMin\">0.0</data>\n"
+        "<data name = \"lifespanMax\">0.0</data>\n"
+        "</attribute>\n"
+        "</particle>\n";
 
 }}

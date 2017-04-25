@@ -37,9 +37,19 @@ public:
     virtual void parseString(std::string str) override;
 
     /// \brief Dumps the Parser Tree to a plain text file
-    void dumpFile();
+    void dumpXMLTreeToFile();
+
+    /// \brief Dumps the Parser Tree to a collection of strings
+    std::list<std::string> dumpXMLTreeToString();
 
 protected:
+    /** \brief Dumps each node recursively layer by layer
+      * \param stream Filestream to write node to
+      * \param node ParserNode to use for data output
+      * \param depth Current depth of the recursion
+      */
+    void dumpNextNode(std::list<std::string>& data, ParserNode* node, int32_t depth);
+
     /** \brief Constructs a ParserNode tree for the Parser with pugiXML
       * \param parserNode The next parserNode to give values to
       * \param xmlNode The next pugi::xml_node in the DOM-tree
@@ -50,6 +60,11 @@ protected:
       * ParserNode
       */
     void parseNextNode(ParserNode* parserNode, pugi::xml_node xmlNode);
+
+    /** \brief Parse through an XML Tree using the given document
+      * \param document XML Document loaded via PugiXML
+      */
+    void parseXMLTree(const pugi::xml_document& document);
 };
 
 #endif // _PARSERXML_H
