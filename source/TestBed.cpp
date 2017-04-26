@@ -26,12 +26,24 @@ int main()
 
     // ADD TEST CALLS HERE
     Tests tests;
-    sf::Texture texture, texture2;
+    sf::Texture texture, texture2, texture3;
     texture.loadFromFile("test.png");
     texture2.loadFromFile("test2.png");
-    
+    texture3.loadFromFile("dude_animation_sheet.png");
+
     //tests.batchedSFMLRendering(texture);
-    tests.particles(texture2);
+    //tests.particles(texture2);
+    tests.animation(texture3);
+
+    liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
+        [](const liquid::events::KeyboardEventData& evnt)->bool
+        {
+            if (evnt.mKeyCode == sf::Keyboard::Escape)
+                liquid::common::GameManager().instance().setGameRunning(false);
+
+            return true;
+        }
+    );
 
     liquid::common::GameManager::instance().execute();
     liquid::common::GameManager::instance().simulate();

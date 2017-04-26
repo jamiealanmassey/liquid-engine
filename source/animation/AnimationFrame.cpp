@@ -7,9 +7,9 @@ namespace animation {
     {
         data::TextureAtlas::TextureRegion region = atlas.getTextureRegion(atlasName);
         mTexCoord1 = region[0];
-        mTexCoord1 = region[1];
-        mTexCoord1 = region[2];
-        mTexCoord1 = region[3];
+        mTexCoord2 = region[1];
+        mTexCoord3 = region[2];
+        mTexCoord4 = region[3];
         mFrameDelay = frameDelay;
     }
 

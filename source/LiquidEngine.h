@@ -3,6 +3,7 @@
 
 /**
   * \defgroup AI
+  * \defgroup Animation
   * \defgroup Common
   * \defgroup Data
   * \defgroup Events
@@ -22,6 +23,11 @@
   * \date 04/04/2017
   *
   */
+
+#include "animation/AnimationDefs.h"
+#include "animation/AnimationFrame.h"
+#include "animation/AnimationParser.h"
+#include "animation/Animator.h"
 
 #include "common/Entity.h"
 #include "common/GameManager.h"

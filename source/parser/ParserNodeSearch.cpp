@@ -75,7 +75,13 @@ namespace parser {
             return node;
 
         for (auto child : node->getChildren())
-            getParserNode(child, name);
+        {
+            ParserNode* foundNode = getParserNode(child, name);
+            if (foundNode != nullptr)
+                return foundNode;
+        }
+
+        return nullptr;
     }
 
     std::list<ParserNode*> ParserNodeSearch::getParserNodes(ParserNode* node, std::string name)

@@ -6,6 +6,7 @@ namespace data {
     TextureAtlas::TextureAtlas(parser::Parser& parser)
     {
         mParser = parser;
+        compile();
     }
 
     TextureAtlas::~TextureAtlas()

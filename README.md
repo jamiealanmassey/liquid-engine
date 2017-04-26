@@ -28,7 +28,7 @@ Liquid
 |-- graphics  
 |-- impl  
 |-- lighting  
-|-- navigation 
+|-- navigation  
 |-- parser   
 |-- sound  
 |-- spatial  

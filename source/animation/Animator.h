@@ -1,6 +1,8 @@
 #include "../utilities/Vertex2.h"
 #include "../parser/Parser.h"
 #include "AnimationFrame.h"
+#include "AnimationDefs.h"
+#include "AnimationParser.h"
 
 namespace liquid { namespace animation {
 #ifndef _ANIMATOR_H
@@ -24,13 +26,9 @@ public:
     };
 
 public:
-    typedef std::vector<AnimationFrame> Animation;
-    typedef std::map<std::string, Animation> AnimationTable;
-    typedef std::map<int32_t, std::string> AnimationIndexer;
-
-public:
     // TODO: Pass and use AnimationParser
     Animator();
+    Animator(AnimationParser animationParser);
     ~Animator();
 
     void update();

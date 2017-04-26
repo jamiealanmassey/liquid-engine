@@ -4,12 +4,30 @@
 namespace liquid {
 namespace animation {
 
-    Animator::Animator(/*AnimationParser animationParser*/)
+    Animator::Animator()
     {
         mAnimationMode = eAnimationMode::ANIMATION_DEFAULT;
         mAnimationDirection = eAnimationDirection::DIRECTION_FORWARD;
         mDefaultAnimation = "";
         mCurrentAnimation = "";
+        mDefaultBeginFrame = -1;
+        mDefaultEndFrame = -1;
+        mCurrentFrame = 0;
+        mBeginFrame = 0;
+        mEndFrame = 0;
+    }
+
+    Animator::Animator(AnimationParser animationParser)
+    {
+        for (auto anim : animationParser.getAnimationTable())
+        {
+            insertAnimation(anim.first, anim.second);
+            mCurrentAnimation = anim.first;
+        }
+
+        mAnimationMode = eAnimationMode::ANIMATION_DEFAULT;
+        mAnimationDirection = eAnimationDirection::DIRECTION_FORWARD;
+        mDefaultAnimation = "";
         mDefaultBeginFrame = -1;
         mDefaultEndFrame = -1;
         mCurrentFrame = 0;
@@ -115,7 +133,7 @@ namespace animation {
         bool defaultBounds = (beginFrame == -1 && endFrame == -1);
         int32_t splitString = name.find_first_of(":");
         std::string animName = name.substr(0, splitString);
-        std::string animMode = name.substr(splitString);
+        std::string animMode;
 
         if (splitString != -1)
         {
@@ -182,7 +200,7 @@ namespace animation {
         return mVerticesSet;
     }
 
-    Animator::Animation& Animator::getAnimation(int32_t index)
+    Animation& Animator::getAnimation(int32_t index)
     {
         if (mAnimationIndexer.find(index) != mAnimationIndexer.end())
             return getAnimation(mAnimationIndexer[index]);
@@ -190,7 +208,7 @@ namespace animation {
         return Animation();
     }
 
-    Animator::Animation& Animator::getAnimation(std::string name)
+    Animation& Animator::getAnimation(std::string name)
     {
         if (mAnimationTable.find(name) != mAnimationTable.end())
             return mAnimationTable[name];
@@ -248,9 +266,9 @@ namespace animation {
         if (mVerticesSet == true)
         {
             mVerticesPtr[0]->setTexCoord(frame.getTexCoord1());
-            mVerticesPtr[0]->setTexCoord(frame.getTexCoord2());
-            mVerticesPtr[0]->setTexCoord(frame.getTexCoord3());
-            mVerticesPtr[0]->setTexCoord(frame.getTexCoord4());
+            mVerticesPtr[1]->setTexCoord(frame.getTexCoord2());
+            mVerticesPtr[2]->setTexCoord(frame.getTexCoord3());
+            mVerticesPtr[3]->setTexCoord(frame.getTexCoord4());
         }
     }
 

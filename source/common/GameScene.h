@@ -1,6 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include "Entity.h"
+#include "../animation/Animator.h"
 
 namespace liquid { namespace common {
 #ifndef _GAMESCENE_H
@@ -102,6 +103,8 @@ public:
     Entity* getEntityWithUID(std::string uid);
     // TODO: Closest to point?
 
+    void addAnimator(animation::Animator* animator);
+
     /** \brief Sets the Spatial Manager of the GameScene
       * \param spatial The Spatial Partitioning method as a class
       *
@@ -167,6 +170,7 @@ public:
     bool isAllowedPostProcesses() const;
 
 protected:
+    std::list<animation::Animator*> mAnimators;
     std::vector<Entity*> mEntities;       ///< Collection of Entities that exist in the Scene
     std::vector<Entity*> mEntitiesBuffer; ///< Collection buffer to slowly introduce new Entities
     std::string          mSceneName;      ///< String identifier for the Scene

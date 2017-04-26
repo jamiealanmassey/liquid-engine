@@ -43,7 +43,6 @@ namespace common {
         }
 
         mEntitiesBuffer.clear();
-        // TODO: Update renderer
 
         for (auto entity : mEntities)
         {
@@ -69,8 +68,8 @@ namespace common {
             }
         }
 
-        // TODO: Render from given Renderer
-
+        for (auto animator : mAnimators)
+            animator->update();
     }
 
     void GameScene::addEntity(Entity* entity)
@@ -105,6 +104,11 @@ namespace common {
         });
 
         return (*it);
+    }
+
+    void GameScene::addAnimator(animation::Animator* animator)
+    {
+        mAnimators.push_back(animator);
     }
 
     /*void GameScene::setSpatialManager(Spatial* spatial)

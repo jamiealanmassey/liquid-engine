@@ -35,18 +35,18 @@ public:
     /** \brief Set the position of this Vertex2
       * \param position Array of position in 2D-space (x,y)
       */
-    void setPosition(std::array<float, 2> position);
+    virtual void setPosition(std::array<float, 2> position);
 
     /** \brief Set the position of this Vertex2
       * \param x X-Coordinate of the Vertex2 in 2D space
       * \param y Y-Coordinate of the Vertex2 in 2D space
       */
-    void setPosition(float x, float y);
+    virtual void setPosition(float x, float y);
 
     /** \brief Set the colour of this Vertex2
       * \param colour Array of colour of this Vertex2 (r,g,b,a)
       */
-    void setColour(std::array<float, 4> colour);
+    virtual void setColour(std::array<float, 4> colour);
 
     /** \brief Set the colour of this Vertex2
       * \param r Red colour of this Vertex2
@@ -54,18 +54,18 @@ public:
       * \param b Blue colour of this Vertex2
       * \param a Alpha channel of this Vertex2
       */
-    void setColour(float r, float g, float b, float a);
+    virtual void setColour(float r, float g, float b, float a);
 
     /** \brief Set the texture coordinate of this Vertex2
       * \param texCoord Array of tex coordinate of this Vertex2 (x,y)
       */
-    void setTexCoord(std::array<float, 2> texCoord);
+    virtual void setTexCoord(std::array<float, 2> texCoord);
 
     /** \brief Set the position of the texture coordinate for this Vertex2
       * \param x X-Coordinate of the Vertex2 tex coord in 2D space
       * \param y Y-Coordinate of the Vertex2 tex coord in 2D space
       */
-    void setTexCoord(float x, float y);
+    virtual void setTexCoord(float x, float y);
 
     /// \return Position of this Vertex2
     const std::array<float, 2> getPosition() const;
