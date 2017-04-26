@@ -10,6 +10,7 @@ namespace impl {
         mTexture(texture)
     {
         mRenderStates.texture = &mTexture;
+        mRenderStates.blendMode = sf::BlendAlpha;
     }
 
     SFMLRenderableBatch::~SFMLRenderableBatch()

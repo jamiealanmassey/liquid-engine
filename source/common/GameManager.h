@@ -145,6 +145,12 @@ public:
       */
     void setRendererClass(graphics::Renderer* renderer);
 
+    /// \return Pointer to the EventManager class being used
+    events::EventManager* getEventManagerClass() const;
+
+    /// \return Pointer to the Renderer class being used
+    graphics::Renderer* getRendererClass() const;
+
     /** \brief Suspends the game based on passed value
       * \param suspend Boolean, true suspends the game, false resumes
       */

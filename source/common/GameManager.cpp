@@ -164,6 +164,16 @@ namespace common {
         mRenderer = renderer;
     }
 
+    events::EventManager* GameManager::getEventManagerClass() const
+    {
+        return mEventManager;
+    }
+
+    graphics::Renderer* GameManager::getRendererClass() const
+    {
+        return mRenderer;
+    }
+
     void GameManager::setGameSuspended(bool suspended)
     {
         mGameSuspended = suspended;

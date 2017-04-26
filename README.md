@@ -11,7 +11,6 @@ SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)
 # Roadmap
 &#x25a0; Particles  
 &#x25a0; Lighting System  
-&#x25a0; Navigation (A* Pathfinding)  
 &#x25a0; Basic Artifical Intelligence  
 &#x25a0; Modular UI  
 &#x25a0; Timeline Features (Cinematic sequencing of events)  
@@ -22,13 +21,16 @@ SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)
 # Project Module Structure
 Liquid  
 |-- ai  
+|-- animation  
 |-- common  
 |-- data  
 |-- events  
 |-- graphics  
 |-- impl  
 |-- lighting  
-|-- navigation  
+|-- navigation 
+|-- parser   
+|-- sound  
 |-- spatial  
 |-- timeline  
 |-- tweener  
