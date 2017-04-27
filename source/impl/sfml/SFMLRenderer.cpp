@@ -29,7 +29,9 @@ namespace impl {
 
     void SFMLRenderer::draw()
     {
+        updateCamera();
         mRenderWindow->clear(sf::Color::Black);
+
         for (auto object : mRenderables)
             object->draw(this);
 
@@ -40,9 +42,25 @@ namespace impl {
         mRenderWindow->setTitle("Window - " + dt);
     }
 
+    void SFMLRenderer::setCamera(graphics::ICamera* camera)
+    {
+        Renderer::setCamera(camera);
+        SFMLCamera* sfmlCamera = static_cast<SFMLCamera*>(camera);
+        mRenderWindow->setView(sfmlCamera->getSFMLView());
+    }
+
     sf::RenderWindow* SFMLRenderer::getRenderWindow() const
     {
         return mRenderWindow;
+    }
+
+    void SFMLRenderer::updateCamera() const
+    {
+        if (mCamera != nullptr)
+        {
+            SFMLCamera* sfmlCamera = static_cast<SFMLCamera*>(mCamera);
+            mRenderWindow->setView(sfmlCamera->getSFMLView());
+        }
     }
 
 }}

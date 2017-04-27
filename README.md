@@ -1,9 +1,10 @@
 # Liquid Engine
-Liquid Engine is an Open-Source framework written in C++0x with modular components to help
+Liquid Engine is an Open-Source framework written in C++11 with modular components to help
 make 2D game development a little easier. 
 
 # Dependencies
 PugiXML (http://pugixml.org/)  
+LuaBridge (https://github.com/vinniefalco/LuaBridge)  
 
 # Optional Dependencies
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  

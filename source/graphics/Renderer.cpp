@@ -26,11 +26,19 @@ namespace graphics {
 
     void Renderer::draw()
     {
+        if (mCamera != nullptr)
+            mCamera->update();
+
         for (auto proc : mPostProcessors)
         {
             proc->update();
             proc->process();
         }
+    }
+
+    void Renderer::setCamera(ICamera* camera)
+    {
+        mCamera = camera;
     }
 
     void Renderer::addPostProcessor(PostProcessor* postProcessor)
@@ -100,6 +108,11 @@ namespace graphics {
     std::list<IRenderable*>& Renderer::getRenderables()
     {
         return mRenderables;
+    }
+
+    ICamera* Renderer::getCamera()
+    {
+        return mCamera;
     }
 
 }}

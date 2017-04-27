@@ -50,11 +50,13 @@
 #include "events/MouseEventData.h"
 #include "events/WindowEventData.h"
 
+#include "graphics/ICamera.h"
 #include "graphics/IRenderable.h"
 #include "graphics/Renderable.h"
 #include "graphics/RenderableBatch.h"
 #include "graphics/Renderer.h"
 
+#include "impl/sfml/SFMLCamera.h"
 #include "impl/sfml/SFMLEventManager.h"
 #include "impl/sfml/SFMLRenderable.h"
 #include "impl/sfml/SFMLRenderableBatch.h"

@@ -1,8 +1,10 @@
 #ifdef SFML
 #include <SFML/Graphics.hpp>
 #include "SFMLRenderable.h"
+#include "SFMLCamera.h"
 #include "../../data/Settings.h"
 #include "../../graphics/Renderer.h"
+#include "../../graphics/ICamera.h"
 #include "../../common/GameScene.h"
 
 namespace liquid { namespace impl {
@@ -37,8 +39,13 @@ public:
     /// \brief Allows drawing to the sf::RenderWindow, call from GameScene
     virtual void draw() override;
 
+    virtual void setCamera(graphics::ICamera* camera) override;
+
     /// \return Pointer to the running sf::RenderWindow for this Renderer
     sf::RenderWindow* getRenderWindow() const;
+
+    /// \brief Updates the mRenderWindow with the current Camera
+    void updateCamera() const;
 
 protected:
     sf::RenderWindow* mRenderWindow; ///< Pointer to the stored sf::Renderwindow

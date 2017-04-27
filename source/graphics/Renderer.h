@@ -47,6 +47,8 @@ public:
     /// \brief Called every frame to draw everything to the Screen
     virtual void draw();
 
+    virtual void setCamera(ICamera* camera);
+
     /** \brief Adds a PostProcessor effect to the Renderer
       * \param postProcessor Pointer to post processor to add
       */
@@ -89,11 +91,13 @@ public:
       */
     std::list<IRenderable*>& getRenderables();
 
+    ICamera* getCamera();
+
 protected:
     std::list<IRenderable*>   mRenderables;     ///< Collection of Renderable objects to be drawn every frame
     std::list<PostProcessor*> mPostProcessors;  ///< Collection of PostProcessor objects to apply
     common::GameScene*        mGameSceneParent; ///< Pointer to the Parent common::GameScene
-    ICamera*                  mCamera;          ///< 
+    ICamera*                  mCamera;          ///< Camera of the current Scene
 };
 
 #endif // _RENDERER_H

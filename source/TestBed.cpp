@@ -24,6 +24,16 @@ int main()
     liquid::common::GameManager::instance().setRendererClass(renderer);
     liquid::common::GameManager::instance().addGameSceneBack(scene);
 
+    float screenWidth = settings->getScreenWidth();
+    float screenHeight = settings->getScreenHeight();
+
+    liquid::impl::SFMLCamera* camera = 
+        new liquid::impl::SFMLCamera(screenWidth / 2.0f, screenHeight / 2.0f,
+            screenWidth, screenHeight);
+
+    renderer->setCamera(camera);
+    camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
+
     // ADD TEST CALLS HERE
     Tests tests;
     sf::Texture texture, texture2, texture3;
@@ -33,17 +43,27 @@ int main()
 
     //tests.batchedSFMLRendering(texture);
     tests.particles(texture2);
-    tests.navigation();
+    //tests.navigation();
     //tests.animation(texture3);
 
     liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
-        [](const liquid::events::KeyboardEventData& evnt)->bool
-        {
-            if (evnt.mKeyCode == sf::Keyboard::Escape)
-                liquid::common::GameManager().instance().setGameRunning(false);
+        [&cam = camera](const liquid::events::KeyboardEventData& evnt)->bool
+            {
+                if (evnt.mKeyCode == sf::Keyboard::Escape)
+                    liquid::common::GameManager().instance().setGameRunning(false);
+                else if (evnt.mKeyCode == sf::Keyboard::A)
+                    cam->setCentre({ cam->getCentre()[0] - 10.0f, cam->getCentre()[1] });
+                else if (evnt.mKeyCode == sf::Keyboard::D)
+                    cam->setCentre({ cam->getCentre()[0] + 10.0f, cam->getCentre()[1] });
+                else if (evnt.mKeyCode == sf::Keyboard::W)
+                    cam->setCentre({ cam->getCentre()[0], cam->getCentre()[1] - 10.0f });
+                else if (evnt.mKeyCode == sf::Keyboard::S)
+                    cam->setCentre({ cam->getCentre()[0], cam->getCentre()[1] + 10.0f });
+                else if (evnt.mKeyCode == sf::Keyboard::Space)
+                    cam->shake(100.0f, 50.0f, liquid::graphics::ICamera::SHAKEAXIS_Y);
 
-            return true;
-        }
+                return true;
+            }
     );
 
     liquid::common::GameManager::instance().execute();
