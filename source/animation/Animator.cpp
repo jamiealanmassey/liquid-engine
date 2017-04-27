@@ -188,6 +188,8 @@ namespace animation {
     {
         mVerticesPtr = vertices;
         mVerticesSet = true;
+
+        updateFrame(getAnimation(mCurrentAnimation)[mCurrentFrame]);
     }
 
     const std::array<liquid::utilities::Vertex2*, 4>& Animator::getVerticesPtr() const
@@ -265,10 +267,20 @@ namespace animation {
     {
         if (mVerticesSet == true)
         {
+            float positionX = mVerticesPtr[0]->getPosition()[0];
+            float positionY = mVerticesPtr[0]->getPosition()[1];
+            float width = frame.getTexCoord2()[0] - frame.getTexCoord1()[0];
+            float height = frame.getTexCoord3()[1] - frame.getTexCoord2()[1];
+
             mVerticesPtr[0]->setTexCoord(frame.getTexCoord1());
             mVerticesPtr[1]->setTexCoord(frame.getTexCoord2());
             mVerticesPtr[2]->setTexCoord(frame.getTexCoord3());
             mVerticesPtr[3]->setTexCoord(frame.getTexCoord4());
+
+            mVerticesPtr[0]->setPosition(positionX, positionY);
+            mVerticesPtr[1]->setPosition(positionX + width, positionY);
+            mVerticesPtr[2]->setPosition(positionX + width, positionY + height);
+            mVerticesPtr[3]->setPosition(positionX, positionY + height);
         }
     }
 

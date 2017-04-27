@@ -11,6 +11,7 @@ namespace impl {
     {
         mRenderStates.texture = &mTexture;
         mRenderStates.blendMode = sf::BlendAlpha;
+        mSFMLVertices.resize(defaultCapacity * 4);
     }
 
     SFMLRenderableBatch::~SFMLRenderableBatch()
@@ -18,13 +19,18 @@ namespace impl {
 
     void SFMLRenderableBatch::draw(graphics::Renderer* renderer)
     {
-        std::vector<sf::Vertex> converted(mVertices.size());
         for (uint32_t i = 0; i < mVertices.size(); i++)
-            converted[i] = convertFromVertex2(mVertices[i]);
+        {
+            if (mVertices[i]->hasChanged() == true)
+            {
+                convertFromVertex2(i);
+                mVertices[i]->resetChanged();
+            }
+        }
 
         SFMLRenderer* sfml = static_cast<SFMLRenderer*>(renderer);
         sf::RenderWindow* window = sfml->getRenderWindow();
-        window->draw(converted.data(), mBatchCount * 4, sf::Quads, mRenderStates);
+        window->draw(mSFMLVertices.data(), mBatchCount * 4, sf::Quads, mRenderStates);
     }
 
     std::array<utilities::Vertex2*, 4> SFMLRenderableBatch::nextVertices()
@@ -36,6 +42,13 @@ namespace impl {
         verts[1]->setTexCoord(size.x, 0.0f);
         verts[2]->setTexCoord(size.x, size.y);
         verts[3]->setTexCoord(0.0f, size.y);
+
+        for (uint32_t i = 0; i < 4; i++)
+        {
+            mSFMLVertices[(mBatchCount - 1) + i].texCoords.x = verts[i]->getTexCoord()[0];
+            mSFMLVertices[(mBatchCount - 1) + i].texCoords.y = verts[i]->getTexCoord()[1];
+        }
+
         return verts;
     }
 
@@ -54,11 +67,24 @@ namespace impl {
         return mTexture.getSize();
     }
 
-    sf::Vertex SFMLRenderableBatch::convertFromVertex2(utilities::Vertex2* vert)
+    void SFMLRenderableBatch::convertFromVertex2(int32_t index)
     {
+        std::array<float, 2> position = mVertices[index]->getPosition();
+        std::array<float, 2> texCoords = mVertices[index]->getTexCoord();
+        std::array<float, 4> colour = mVertices[index]->getColour();
+
+        mSFMLVertices[index].position.x = position[0];
+        mSFMLVertices[index].position.y = position[1];
+        mSFMLVertices[index].color.r = colour[0];
+        mSFMLVertices[index].color.g = colour[1];
+        mSFMLVertices[index].color.b = colour[2];
+        mSFMLVertices[index].color.a = colour[3];
+        mSFMLVertices[index].texCoords.x = texCoords[0];
+        mSFMLVertices[index].texCoords.y = texCoords[1];
+
         // TODO: Move this somewhere where both SFMLRenderable and SFMLRenderableBatch can get to it
         //       instead of duplicating code
-        sf::Vertex vertex;
+        /*sf::Vertex vertex;
         std::array<float, 2> position = vert->getPosition();
         std::array<float, 2> texCoords = vert->getTexCoord();
         std::array<float, 4> colour = vert->getColour();
@@ -67,7 +93,7 @@ namespace impl {
         vertex.texCoords = sf::Vector2f(texCoords[0], texCoords[1]);
         vertex.color = sf::Color(colour[0], colour[1], colour[2], colour[3]);
 
-        return vertex;
+        return vertex;*/
     }
 
 }}

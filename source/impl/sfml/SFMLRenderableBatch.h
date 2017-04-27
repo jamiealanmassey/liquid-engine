@@ -52,10 +52,11 @@ public:
     sf::Vector2u getTextureSize() const;
 
 private:
-    sf::Vertex convertFromVertex2(utilities::Vertex2* vert);
+    void convertFromVertex2(int32_t index);
 
 protected:
     const sf::Texture& mTexture;      ///< Texture to use for this SpriteBatch
+    std::vector<sf::Vertex> mSFMLVertices; ///< SFML Vertices
     sf::RenderStates   mRenderStates; ///< RenderStates of the RenderableBatch
 };
 

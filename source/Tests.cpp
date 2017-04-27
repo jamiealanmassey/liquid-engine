@@ -222,65 +222,68 @@ void Tests::quadTree()
 
 void Tests::animation(sf::Texture& texture)
 {
-    // TODO: Add constructor that stops this needing to be a pointer
-    liquid::utilities::Vertex2* vert0 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 0,0 });
-    liquid::utilities::Vertex2* vert1 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 130,0 });
-    liquid::utilities::Vertex2* vert2 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 130,150 });
-    liquid::utilities::Vertex2* vert3 = new liquid::utilities::Vertex2({ 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 0,150 });
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 5);
 
-    liquid::impl::SFMLRenderable* playerRend = new liquid::impl::SFMLRenderable({ vert0, vert1, vert2, vert3 }, texture, 1.0f);
-    liquid::common::Entity* player = new liquid::common::Entity();
-    player->setVerticesPtr({ vert0, vert1, vert2, vert3 });
+    for (uint32_t i = 0; i < 5; i++)
+    {
+        std::array<liquid::utilities::Vertex2*, 4> vertices = batch->nextVertices();
+        liquid::common::Entity* player = new liquid::common::Entity();
+        player->setVerticesPtr(vertices);
 
-    liquid::parser::ParserXML animXMLParser;
-    liquid::parser::ParserXML atlasXMLParser;
-    animXMLParser.parseFile("animation.xml");
-    atlasXMLParser.parseFile("atlas.xml");
-    atlasXMLParser.dumpXMLTreeToFile();
+        liquid::parser::ParserXML animXMLParser;
+        liquid::parser::ParserXML atlasXMLParser;
+        animXMLParser.parseFile("animation.xml");
+        atlasXMLParser.parseFile("atlas.xml");
+        atlasXMLParser.dumpXMLTreeToFile();
 
-    liquid::data::TextureAtlas atlas(atlasXMLParser);
-    liquid::animation::AnimationParser animParser(animXMLParser, atlas);
-    liquid::animation::Animator* animator = new liquid::animation::Animator(animParser);
+        liquid::data::TextureAtlas atlas(atlasXMLParser);
+        liquid::animation::AnimationParser animParser(animXMLParser, atlas);
+        liquid::animation::Animator* animator = new liquid::animation::Animator(animParser);
 
-    /*liquid::animation::Animation animation;
+        /*liquid::animation::Animation animation;
 
-    animation.push_back(liquid::animation::AnimationFrame({ 0,0 }, { 130,0 }, { 130, 150 }, { 0,150 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 130,0 }, { 260,0 }, { 260, 150 }, { 130,150 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 260,0 }, { 390,0 }, { 390, 150 }, { 260,150 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 390,0 }, { 520,0 }, { 520, 150 }, { 390,150 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 520,0 }, { 650,0 }, { 650, 150 }, { 520,150 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 650,0 }, { 780,0 }, { 780, 150 }, { 650,150 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 780,0 }, { 910,0 }, { 910, 150 }, { 780,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 0,0 }, { 130,0 }, { 130, 150 }, { 0,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 130,0 }, { 260,0 }, { 260, 150 }, { 130,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 260,0 }, { 390,0 }, { 390, 150 }, { 260,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 390,0 }, { 520,0 }, { 520, 150 }, { 390,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 520,0 }, { 650,0 }, { 650, 150 }, { 520,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 650,0 }, { 780,0 }, { 780, 150 }, { 650,150 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 780,0 }, { 910,0 }, { 910, 150 }, { 780,150 }, 35.0f));
     
-    animation.push_back(liquid::animation::AnimationFrame({ 0,150 }, { 130,150 }, { 130, 300 }, { 0,300 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 130,150 }, { 260,150 }, { 260, 300 }, { 130,300 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 260,150 }, { 390,150 }, { 390, 300 }, { 260,300 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 390,150 }, { 520,150 }, { 520, 300 }, { 390,300 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 520,150 }, { 650,150 }, { 650, 300 }, { 520,300 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 650,150 }, { 780,150 }, { 780, 300 }, { 650,300 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 780,150 }, { 910,150 }, { 910, 300 }, { 780,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 0,150 }, { 130,150 }, { 130, 300 }, { 0,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 130,150 }, { 260,150 }, { 260, 300 }, { 130,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 260,150 }, { 390,150 }, { 390, 300 }, { 260,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 390,150 }, { 520,150 }, { 520, 300 }, { 390,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 520,150 }, { 650,150 }, { 650, 300 }, { 520,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 650,150 }, { 780,150 }, { 780, 300 }, { 650,300 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 780,150 }, { 910,150 }, { 910, 300 }, { 780,300 }, 35.0f));
 
-    animation.push_back(liquid::animation::AnimationFrame({ 0,300 }, { 130,300 }, { 130, 450 }, { 0,450 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 130,300 }, { 260,300 }, { 260, 450 }, { 130,450 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 260,300 }, { 390,300 }, { 390, 450 }, { 260,450 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 390,300 }, { 520,300 }, { 520, 450 }, { 390,450 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 520,300 }, { 650,300 }, { 650, 450 }, { 520,450 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 650,300 }, { 780,300 }, { 780, 450 }, { 650,450 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 780,300 }, { 910,300 }, { 910, 450 }, { 780,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 0,300 }, { 130,300 }, { 130, 450 }, { 0,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 130,300 }, { 260,300 }, { 260, 450 }, { 130,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 260,300 }, { 390,300 }, { 390, 450 }, { 260,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 390,300 }, { 520,300 }, { 520, 450 }, { 390,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 520,300 }, { 650,300 }, { 650, 450 }, { 520,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 650,300 }, { 780,300 }, { 780, 450 }, { 650,450 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 780,300 }, { 910,300 }, { 910, 450 }, { 780,450 }, 35.0f));
 
-    animation.push_back(liquid::animation::AnimationFrame({ 0,450 }, { 130,450 }, { 130, 600 }, { 0,600 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 130,450 }, { 260,450 }, { 260, 600 }, { 130,600 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 260,450 }, { 390,450 }, { 390, 600 }, { 260,600 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 390,450 }, { 520,450 }, { 520, 600 }, { 390,600 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 520,450 }, { 650,450 }, { 650, 600 }, { 520,600 }, 35.0f));
-    animation.push_back(liquid::animation::AnimationFrame({ 650,450 }, { 780,450 }, { 780, 600 }, { 650,600 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 0,450 }, { 130,450 }, { 130, 600 }, { 0,600 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 130,450 }, { 260,450 }, { 260, 600 }, { 130,600 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 260,450 }, { 390,450 }, { 390, 600 }, { 260,600 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 390,450 }, { 520,450 }, { 520, 600 }, { 390,600 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 520,450 }, { 650,450 }, { 650, 600 }, { 520,600 }, 35.0f));
+        animation.push_back(liquid::animation::AnimationFrame({ 650,450 }, { 780,450 }, { 780, 600 }, { 650,600 }, 35.0f));
 
-    animator->insertAnimation("run", animation);*/
-    animator->transformAnimation("run");
-    animator->setVerticesPtr({ vert0, vert1, vert2, vert3 });
+        animator->insertAnimation("run", animation);*/
+        animator->transformAnimation("run");
+        animator->setVerticesPtr(vertices);
 
-    liquid::common::GameManager::instance().peekGameSceneFront()->addEntity(player);
-    liquid::common::GameManager::instance().peekGameSceneFront()->addAnimator(animator);
-    liquid::common::GameManager::instance().getRendererClass()->addRenderable(playerRend);
-    player->setPosition(500.0f, 500.0f);
+        liquid::common::GameManager::instance().peekGameSceneFront()->addEntity(player);
+        liquid::common::GameManager::instance().peekGameSceneFront()->addAnimator(animator);
+
+        float positionX = liquid::utilities::Random::instance().randomRange(50.0f, 1850.0f);
+        float positionY = liquid::utilities::Random::instance().randomRange(50.0f, 950.0f);
+        player->setPosition(positionX, positionY);
+    }
+
+    liquid::common::GameManager::instance().getRendererClass()->addRenderable(batch);
 }

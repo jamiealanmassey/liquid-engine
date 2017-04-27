@@ -32,8 +32,9 @@ int main()
     texture3.loadFromFile("dude_animation_sheet.png");
 
     //tests.batchedSFMLRendering(texture);
-    //tests.particles(texture2);
-    tests.animation(texture3);
+    tests.particles(texture2);
+    tests.navigation();
+    //tests.animation(texture3);
 
     liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
         [](const liquid::events::KeyboardEventData& evnt)->bool

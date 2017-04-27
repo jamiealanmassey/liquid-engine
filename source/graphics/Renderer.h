@@ -3,6 +3,7 @@
 #include <list>
 #include "../common/GameScene.h"
 #include "IRenderable.h"
+#include "ICamera.h"
 
 namespace liquid { namespace graphics {
 #ifndef _RENDERER_H
@@ -92,6 +93,7 @@ protected:
     std::list<IRenderable*>   mRenderables;     ///< Collection of Renderable objects to be drawn every frame
     std::list<PostProcessor*> mPostProcessors;  ///< Collection of PostProcessor objects to apply
     common::GameScene*        mGameSceneParent; ///< Pointer to the Parent common::GameScene
+    ICamera*                  mCamera;          ///< 
 };
 
 #endif // _RENDERER_H

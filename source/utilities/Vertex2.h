@@ -67,6 +67,9 @@ public:
       */
     virtual void setTexCoord(float x, float y);
 
+    /// \brief Resets mChanged flag
+    void resetChanged();
+
     /// \return Position of this Vertex2
     const std::array<float, 2> getPosition() const;
 
@@ -76,10 +79,14 @@ public:
     /// \return Texture Coordinate of this Vertex2
     const std::array<float, 2> getTexCoord() const;
 
+    /// \return True if the Vertex was modified in any way, otherwise false
+    const bool hasChanged() const;
+
 protected:
     std::array<float, 2> mPosition; ///< The Position of this Vertex2 in 2D-space
     std::array<float, 4> mColour;   ///< The colour of this Vertex2
     std::array<float, 2> mTexCoord; ///< The position of the Texture Coordinate to use
+    bool                 mChanged;  ///< Flag denoting if the Vertex2 was modified
 };
 
 #endif // _VERTEX2_H
