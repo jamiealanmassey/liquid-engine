@@ -60,7 +60,7 @@ int main()
                 else if (evnt.mKeyCode == sf::Keyboard::S)
                     cam->setCentre({ cam->getCentre()[0], cam->getCentre()[1] + 10.0f });
                 else if (evnt.mKeyCode == sf::Keyboard::Space)
-                    cam->shake(100.0f, 50.0f, liquid::graphics::ICamera::SHAKEAXIS_Y);
+                    cam->shake(100.0f, 500.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
                 return true;
             }

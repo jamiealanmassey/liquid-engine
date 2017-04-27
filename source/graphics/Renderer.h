@@ -47,6 +47,9 @@ public:
     /// \brief Called every frame to draw everything to the Screen
     virtual void draw();
 
+    /** \brief Sets the Camera for this Renderer
+      * \param camera Camera to be assigned
+      */
     virtual void setCamera(ICamera* camera);
 
     /** \brief Adds a PostProcessor effect to the Renderer
@@ -91,6 +94,7 @@ public:
       */
     std::list<IRenderable*>& getRenderables();
 
+    /// \return Gets the current ICamera, nullptr if not set
     ICamera* getCamera();
 
 protected:
