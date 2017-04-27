@@ -44,7 +44,8 @@ int main()
     //tests.batchedSFMLRendering(texture);
     tests.particles(texture2);
     //tests.navigation();
-    //tests.animation(texture3);
+    tests.animation(texture3);
+    tests.lighting();
 
     liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
         [&cam = camera](const liquid::events::KeyboardEventData& evnt)->bool
@@ -60,7 +61,7 @@ int main()
                 else if (evnt.mKeyCode == sf::Keyboard::S)
                     cam->setCentre({ cam->getCentre()[0], cam->getCentre()[1] + 10.0f });
                 else if (evnt.mKeyCode == sf::Keyboard::Space)
-                    cam->shake(100.0f, 500.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
+                    cam->shake(100.0f, 50.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
                 return true;
             }

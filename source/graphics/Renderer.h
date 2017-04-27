@@ -2,6 +2,7 @@
 #include <map>
 #include <list>
 #include "../common/GameScene.h"
+#include "../graphics/LightingManager.h"
 #include "IRenderable.h"
 #include "ICamera.h"
 
@@ -73,6 +74,8 @@ public:
     /// \return Gets the position of the mouse relative to the Renderer
     virtual std::array<float, 2> getMousePosition();
 
+    void setLightingManager(graphics::LightingManager* lightingManager);
+
     /** \brief Get this Renderer's Parent common::GameScene
       * \return Pointer to the parent GameScene, nullptr if none
       */
@@ -94,14 +97,17 @@ public:
       */
     std::list<IRenderable*>& getRenderables();
 
+    graphics::LightingManager* getLightingManager();
+
     /// \return Gets the current ICamera, nullptr if not set
     ICamera* getCamera();
 
 protected:
-    std::list<IRenderable*>   mRenderables;     ///< Collection of Renderable objects to be drawn every frame
-    std::list<PostProcessor*> mPostProcessors;  ///< Collection of PostProcessor objects to apply
-    common::GameScene*        mGameSceneParent; ///< Pointer to the Parent common::GameScene
-    ICamera*                  mCamera;          ///< Camera of the current Scene
+    std::list<IRenderable*>    mRenderables;     ///< Collection of Renderable objects to be drawn every frame
+    std::list<PostProcessor*>  mPostProcessors;  ///< Collection of PostProcessor objects to apply
+    common::GameScene*         mGameSceneParent; ///< Pointer to the Parent common::GameScene
+    graphics::LightingManager* mLightingManager; ///< Pointer to the lighting::LightingManager
+    ICamera*                   mCamera;          ///< Camera of the current Scene
 };
 
 #endif // _RENDERER_H

@@ -1,5 +1,15 @@
 #include "Tests.h"
 
+void Tests::lighting()
+{
+    liquid::impl::SFMLLightingManager* manager = new liquid::impl::SFMLLightingManager(
+        liquid::common::GameManager::instance().getSettingsClass(), { 0.f, 0.f, 0.f, 0.f });
+
+    liquid::graphics::Light* light0 = new liquid::graphics::Light({ 900.0f, 500.0 }, { 255.f, 255.f, 255.f, 255.f }, .5f, 300.f);
+    liquid::common::GameManager::instance().getRendererClass()->setLightingManager(manager);
+    manager->insertLight(light0);
+}
+
 void Tests::batchedSFMLRendering(sf::Texture& texture)
 {
     liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();

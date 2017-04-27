@@ -29,6 +29,9 @@ namespace graphics {
         if (mCamera != nullptr)
             mCamera->update();
 
+        if (mLightingManager != nullptr)
+            mLightingManager->draw(this);
+
         for (auto proc : mPostProcessors)
         {
             proc->update();
@@ -80,6 +83,11 @@ namespace graphics {
         return std::array<float, 2>();
     }
 
+    void Renderer::setLightingManager(graphics::LightingManager* lightingManager)
+    {
+        mLightingManager = lightingManager;
+    }
+
     common::GameScene* Renderer::getGameSceneParent()
     {
         return mGameSceneParent;
@@ -108,6 +116,11 @@ namespace graphics {
     std::list<IRenderable*>& Renderer::getRenderables()
     {
         return mRenderables;
+    }
+
+    graphics::LightingManager* Renderer::getLightingManager()
+    {
+        return mLightingManager;
     }
 
     ICamera* Renderer::getCamera()

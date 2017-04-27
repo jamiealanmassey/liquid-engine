@@ -11,6 +11,7 @@ public:
     Tests() {}
     ~Tests() {}
 
+    void lighting();
     void animation(sf::Texture& texture);
     void batchedSFMLRendering(sf::Texture& texture);
     void particles(sf::Texture& texture);
