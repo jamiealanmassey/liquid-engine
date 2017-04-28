@@ -45,10 +45,14 @@ int main()
     sf::Texture uiTexture;
     uiTexture.loadFromFile("interface.png");
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 1);
-    std::array<std::string, 3> textureNames = { "ButtonDefault", "ButtonPressed", "ButtonDisabled" };
-    liquid::ui::Button* button = new liquid::ui::Button(0.f, 0.f, textureNames);
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 2);
+    liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
+    liquid::ui::ButtonToggled* toggle = new liquid::ui::ButtonToggled(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
+
     button->setVerticesPtr(batch->nextVertices());
+    toggle->setVerticesPtr(batch->nextVertices());
+
+    widgetMgr->insertWidget(toggle);
     widgetMgr->insertWidget(button);
     renderer->addRenderable(batch);
 
@@ -60,7 +64,7 @@ int main()
     texture3.loadFromFile("dude_animation_sheet.png");
 
     tests.particles(texture2); 
-    tests.animation(texture3);
+    //tests.animation(texture3);
     //tests.lighting();
     //tests.navigation();
     //tests.batchedSFMLRendering(texture);

@@ -176,13 +176,13 @@ namespace common {
         mVerticesSet = true;
         mVerticesPtr = vertices;
 
-        float width = mVerticesPtr[1]->getTexCoord()[0] - mVerticesPtr[0]->getTexCoord()[0];
-        float height = mVerticesPtr[2]->getTexCoord()[1] - mVerticesPtr[1]->getTexCoord()[1];
+        mWidth = mVerticesPtr[1]->getTexCoord()[0] - mVerticesPtr[0]->getTexCoord()[0];
+        mHeight = mVerticesPtr[2]->getTexCoord()[1] - mVerticesPtr[1]->getTexCoord()[1];
 
         mVerticesPtr[0]->setPosition(mPositionX, mPositionY);
-        mVerticesPtr[1]->setPosition(mPositionX + width, mPositionY);
-        mVerticesPtr[2]->setPosition(mPositionX + width, mPositionY + height);
-        mVerticesPtr[3]->setPosition(mPositionX, mPositionY + height);
+        mVerticesPtr[1]->setPosition(mPositionX + mWidth, mPositionY);
+        mVerticesPtr[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
+        mVerticesPtr[3]->setPosition(mPositionX, mPositionY + mHeight);
     }
 
     int32_t Entity::getEntityType() const

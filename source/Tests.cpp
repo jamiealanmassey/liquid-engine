@@ -237,23 +237,23 @@ void Tests::quadTree()
 
 void Tests::animation(sf::Texture& texture)
 {
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 5);
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 500);
+    liquid::parser::ParserXML animXMLParser;
+    liquid::parser::ParserXML atlasXMLParser;
 
-    for (uint32_t i = 0; i < 5; i++)
+    animXMLParser.parseFile("animation.xml");
+    atlasXMLParser.parseFile("atlas.xml");
+    atlasXMLParser.dumpXMLTreeToFile();
+
+    liquid::data::TextureAtlas atlas(atlasXMLParser);
+    liquid::animation::AnimationParser animParser(animXMLParser, atlas);
+
+    for (uint32_t i = 0; i < 500; i++)
     {
         std::array<liquid::utilities::Vertex2*, 4> vertices = batch->nextVertices();
         liquid::common::Entity* player = new liquid::common::Entity();
-        player->setVerticesPtr(vertices);
-
-        liquid::parser::ParserXML animXMLParser;
-        liquid::parser::ParserXML atlasXMLParser;
-        animXMLParser.parseFile("animation.xml");
-        atlasXMLParser.parseFile("atlas.xml");
-        atlasXMLParser.dumpXMLTreeToFile();
-
-        liquid::data::TextureAtlas atlas(atlasXMLParser);
-        liquid::animation::AnimationParser animParser(animXMLParser, atlas);
         liquid::animation::Animator* animator = new liquid::animation::Animator(animParser);
+        player->setVerticesPtr(vertices);
 
         /*liquid::animation::Animation animation;
 
@@ -295,8 +295,8 @@ void Tests::animation(sf::Texture& texture)
         liquid::common::GameManager::instance().peekGameSceneFront()->addEntity(player);
         liquid::common::GameManager::instance().peekGameSceneFront()->addAnimator(animator);
 
-        float positionX = liquid::utilities::Random::instance().randomRange(50.0f, 1850.0f);
-        float positionY = liquid::utilities::Random::instance().randomRange(50.0f, 950.0f);
+        float positionX = liquid::utilities::Random::instance().randomRange(0.0f, 1850.0f);
+        float positionY = liquid::utilities::Random::instance().randomRange(0.0f, 950.0f);
         player->setPosition(positionX, positionY);
     }
 

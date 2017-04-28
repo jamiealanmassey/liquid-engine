@@ -90,6 +90,7 @@
 #include "tweener/TweenerSequence.h"
 
 #include "ui/Button.h"
+#include "ui/ButtonToggled.h"
 #include "ui/Widget.h"
 #include "ui/WidgetManager.h"
 
