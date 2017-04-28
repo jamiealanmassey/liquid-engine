@@ -96,6 +96,8 @@ public:
       */
     virtual void addPosition(float x, float y);
 
+    virtual void setSize(float w, float h);
+
     // TODO: Abstract this out of this class if possible
     /*void makeBox2DBody(b2BodyDef definition);
     void makeBox2DFixture(b2FixtureDef fixture);

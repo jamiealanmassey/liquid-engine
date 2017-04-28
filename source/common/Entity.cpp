@@ -58,13 +58,10 @@ namespace common {
         
         if (mVerticesSet)
         {
-            float width = mVerticesPtr[1]->getTexCoord()[0] - mVerticesPtr[0]->getTexCoord()[0];
-            float height = mVerticesPtr[2]->getTexCoord()[1] - mVerticesPtr[1]->getTexCoord()[1];
-
             mVerticesPtr[0]->setPosition(x, y);
-            mVerticesPtr[1]->setPosition(x + width, y);
-            mVerticesPtr[2]->setPosition(x + width, y + height);
-            mVerticesPtr[3]->setPosition(x, y + height);
+            mVerticesPtr[1]->setPosition(x + mWidth, y);
+            mVerticesPtr[2]->setPosition(x + mWidth, y + mHeight);
+            mVerticesPtr[3]->setPosition(x, y + mHeight);
         }
 
         for (auto child : mChildren)
@@ -99,6 +96,20 @@ namespace common {
 
         if (mFuncCallbackAddPosition)
             mFuncCallbackAddPosition(mPositionX, mPositionY);
+    }
+
+    void Entity::setSize(float w, float h)
+    {
+        mWidth = w;
+        mHeight = h;
+
+        if (mVerticesSet)
+        {
+            mVerticesPtr[0]->setPosition(mPositionX, mPositionY);
+            mVerticesPtr[1]->setPosition(mPositionX + mWidth, mPositionY);
+            mVerticesPtr[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
+            mVerticesPtr[3]->setPosition(mPositionX, mPositionY + mHeight);
+        }
     }
     
     bool Entity::isPointInside(float x, float y) const

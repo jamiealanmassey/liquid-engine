@@ -14,7 +14,14 @@ int main()
     settings->parseString(settings->mDefaultSettings);
 
     // TODO: Make GameScene dependant on the RENDERER not the Renderer dependant on GAMESCENE
+    liquid::parser::ParserXML interfaceParser;
+    interfaceParser.parseFile("interfaceAtlas.xml");
+
+    liquid::data::TextureAtlas interfaceAtlas(interfaceParser);
+    liquid::ui::WidgetManager* widgetMgr = new liquid::ui::WidgetManager(interfaceAtlas);
     liquid::common::GameScene* scene = new liquid::common::GameScene();
+    scene->setWidgetManager(widgetMgr);
+    
     liquid::impl::SFMLRenderer* renderer = new liquid::impl::SFMLRenderer(scene, settings);
     liquid::impl::SFMLEventManager* eventMgr = new liquid::impl::SFMLEventManager(renderer);
 
@@ -34,6 +41,17 @@ int main()
     renderer->setCamera(camera);
     camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
+    // WIDGETS
+    sf::Texture uiTexture;
+    uiTexture.loadFromFile("interface.png");
+
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 1);
+    std::array<std::string, 3> textureNames = { "ButtonDefault", "ButtonPressed", "ButtonDisabled" };
+    liquid::ui::Button* button = new liquid::ui::Button(0.f, 0.f, textureNames);
+    button->setVerticesPtr(batch->nextVertices());
+    widgetMgr->insertWidget(button);
+    renderer->addRenderable(batch);
+
     // ADD TEST CALLS HERE
     Tests tests;
     sf::Texture texture, texture2, texture3;
@@ -41,11 +59,11 @@ int main()
     texture2.loadFromFile("test2.png");
     texture3.loadFromFile("dude_animation_sheet.png");
 
-    //tests.batchedSFMLRendering(texture);
-    tests.particles(texture2);
-    //tests.navigation();
+    tests.particles(texture2); 
     tests.animation(texture3);
-    tests.lighting();
+    //tests.lighting();
+    //tests.navigation();
+    //tests.batchedSFMLRendering(texture);
 
     liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
         [&cam = camera](const liquid::events::KeyboardEventData& evnt)->bool
@@ -61,7 +79,7 @@ int main()
                 else if (evnt.mKeyCode == sf::Keyboard::S)
                     cam->setCentre({ cam->getCentre()[0], cam->getCentre()[1] + 10.0f });
                 else if (evnt.mKeyCode == sf::Keyboard::Space)
-                    cam->shake(100.0f, 50.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
+                    cam->shake(100.0f, 25.f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
                 return true;
             }

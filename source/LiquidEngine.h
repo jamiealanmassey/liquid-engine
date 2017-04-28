@@ -4,6 +4,7 @@
 /**
   * \defgroup AI
   * \defgroup Animation
+  * \defgroup Audio
   * \defgroup Common
   * \defgroup Data
   * \defgroup Events
@@ -87,6 +88,10 @@
 #include "tweener/Tweener.h"
 #include "tweener/TweenerGroup.h"
 #include "tweener/TweenerSequence.h"
+
+#include "ui/Button.h"
+#include "ui/Widget.h"
+#include "ui/WidgetManager.h"
 
 #include "utilities/DeltaTime.h"
 #include "utilities/Random.h"

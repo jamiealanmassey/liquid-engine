@@ -57,6 +57,9 @@ namespace common {
         /*if (mSpatialManager)
             mSpatialManager->update();*/
 
+        if (mWidgetManager)
+            mWidgetManager->update();
+
         std::vector<Entity*>::iterator it;
         for (it = mEntities.begin(); it != mEntities.end(); ++it)
         {
@@ -111,6 +114,11 @@ namespace common {
         mAnimators.push_back(animator);
     }
 
+    void GameScene::setWidgetManager(ui::WidgetManager* widgetManager)
+    {
+        mWidgetManager = widgetManager;
+    }
+
     /*void GameScene::setSpatialManager(Spatial* spatial)
     {
         mSpatialManager = spatial;
@@ -145,6 +153,11 @@ namespace common {
     std::string GameScene::getSceneName() const
     {
         return mSceneName;
+    }
+
+    ui::WidgetManager* GameScene::getWidgetManager() const
+    {
+        return mWidgetManager;
     }
 
     /*Spatial* GameScene::getSpatialManager() const

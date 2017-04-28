@@ -25,12 +25,13 @@ public:
       * \param positionY Float representation of where pressed on Y-Axis
       * \param pressed Denotes if mouse was pressed down (true) or released (false)
       */
-    MouseEventData(int32_t mouseButton, float positionX, float positionY, bool pressed)
+    MouseEventData(int32_t mouseButton, float positionX, float positionY, bool pressed, bool moved)
     {
         mMouseButton = mouseButton;
         mPositionX = positionX;
         mPositionY = positionY;
         mPressed = pressed;
+        mMoved = moved;
     }
 
 public:
@@ -38,6 +39,7 @@ public:
     float   mPositionX;   ///< Position of the mouse X-Coordinate at time of the event
     float   mPositionY;   ///< Position of the mouse Y-Coordinate at time of the event
     bool    mPressed;     ///< Denotes if the mouse was pressed down (true) or released (false)
+    bool    mMoved;       ///< Denotes if the mouse was moved (true) or not (false)
 };
 
 #endif // _MOUSEEVENTDATA_H

@@ -34,17 +34,24 @@ namespace impl {
             }
             else if (nextEvent.type == sf::Event::MouseButtonPressed)
             {
+                sf::Vector2i mouse = sf::Mouse::getPosition(*mParentRenderer->getRenderWindow());
                 events::MouseEventData data((int32_t)nextEvent.mouseButton.button,
-                                                     nextEvent.mouseButton.x, 
-                                                     nextEvent.mouseButton.y, true);
+                    mouse.x, mouse.y, true, false);
 
                 events::EventDispatcher<events::MouseEventData>::triggerListeners(data);
             }
             else if (nextEvent.type == sf::Event::MouseButtonReleased)
             {
+                sf::Vector2i mouse = sf::Mouse::getPosition(*mParentRenderer->getRenderWindow());
                 events::MouseEventData data((int32_t)nextEvent.mouseButton.button,
-                                                     nextEvent.mouseButton.x,
-                                                     nextEvent.mouseButton.y, false);
+                    mouse.x, mouse.y, false, false);
+
+                events::EventDispatcher<events::MouseEventData>::triggerListeners(data);
+            }
+            else if (nextEvent.type == sf::Event::MouseMoved)
+            {
+                sf::Vector2i mouse = sf::Mouse::getPosition(*mParentRenderer->getRenderWindow());
+                events::MouseEventData data(0, mouse.x, mouse.y, false, true);
 
                 events::EventDispatcher<events::MouseEventData>::triggerListeners(data);
             }

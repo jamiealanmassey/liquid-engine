@@ -3,11 +3,16 @@
 void Tests::lighting()
 {
     liquid::impl::SFMLLightingManager* manager = new liquid::impl::SFMLLightingManager(
-        liquid::common::GameManager::instance().getSettingsClass(), { 0.f, 0.f, 0.f, 0.f });
+        liquid::common::GameManager::instance().getSettingsClass(), { 0.f, 0.f, 0.f, 50.f });
 
-    liquid::graphics::Light* light0 = new liquid::graphics::Light({ 900.0f, 500.0 }, { 255.f, 255.f, 255.f, 255.f }, .5f, 300.f);
+    liquid::graphics::Light* light0 = new liquid::graphics::Light({ 600.0f, 500.0 }, { 255.f, 50.f, 50.f, 255.f }, .5f, 600.f);
+    liquid::graphics::Light* light1 = new liquid::graphics::Light({ 1200.0f, 500.0 }, { 50.f, 255.f, 50.f, 255.f }, .5f, 600.f);
+    liquid::graphics::Light* light2 = new liquid::graphics::Light({ 900.0f, 800.0 }, { 50.f, 50.f, 255.f, 255.f }, .5f, 600.f);
     liquid::common::GameManager::instance().getRendererClass()->setLightingManager(manager);
+    
     manager->insertLight(light0);
+    manager->insertLight(light1);
+    manager->insertLight(light2);
 }
 
 void Tests::batchedSFMLRendering(sf::Texture& texture)

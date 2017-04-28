@@ -1,3 +1,5 @@
+#include <map>
+
 namespace liquid { namespace events {
 #ifndef _EVENTDISPATCHER_H
 #define _EVENTDISPATCHER_H

@@ -23,15 +23,14 @@ SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)
 Liquid  
 |-- ai  
 |-- animation  
+|-- audio  
 |-- common  
 |-- data  
 |-- events  
 |-- graphics  
 |-- impl  
-|-- lighting  
 |-- navigation  
 |-- parser   
-|-- sound  
 |-- spatial  
 |-- timeline  
 |-- tweener  
