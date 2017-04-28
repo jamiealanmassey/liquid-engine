@@ -15,7 +15,6 @@ namespace ui {
 
     void Button::initialise()
     {
-        // TODO: also do this when vertices are set
         if (mVerticesSet)
         {
             data::TextureAtlas& atlas = mParentWidgetManager->getTextureAtlas();
@@ -33,33 +32,6 @@ namespace ui {
         }
     }
 
-    void Button::update()
-    {
-
-    }
-
-    void Button::setPressed(bool flag)
-    {
-        Widget::setPressed(flag);
-        data::TextureAtlas& atlas = mParentWidgetManager->getTextureAtlas();
-        data::TextureAtlas::TextureRegion region;
-
-        if (mPresssed == true)
-            region = atlas.getTextureRegion(mTextureNames[1]);
-        else
-            region = atlas.getTextureRegion(mTextureNames[0]);
-
-        mVerticesPtr[0]->setTexCoord(region[0]);
-        mVerticesPtr[1]->setTexCoord(region[1]);
-        mVerticesPtr[2]->setTexCoord(region[2]);
-        mVerticesPtr[3]->setTexCoord(region[3]);
-    }
-
-    void Button::setEntered(bool flag)
-    {
-        Widget::setEntered(flag);
-    }
-
     void Button::setPosition(float x, float y)
     {
         Widget::setPosition(x, y);
@@ -72,8 +44,27 @@ namespace ui {
         // TODO: Centre the text
     }
 
-    void Button::handleMousePressed(int32_t button, float x, float y) {}
-    void Button::handleMouseReleased(int32_t button, float x, float y) {}
+    void Button::updateTexture(uint32_t index)
+    {
+        data::TextureAtlas& atlas = mParentWidgetManager->getTextureAtlas();
+        data::TextureAtlas::TextureRegion region = atlas.getTextureRegion(mTextureNames[index]);
+
+        mVerticesPtr[0]->setTexCoord(region[0]);
+        mVerticesPtr[1]->setTexCoord(region[1]);
+        mVerticesPtr[2]->setTexCoord(region[2]);
+        mVerticesPtr[3]->setTexCoord(region[3]);
+    }
+
+    void Button::handleMousePressed(int32_t button, float x, float y)
+    {
+        updateTexture(1);
+    }
+
+    void Button::handleMouseReleased(int32_t button, float x, float y)
+    {
+        updateTexture(0);
+    }
+
     void Button::handleMouseMoved(float x, float y) {}
     void Button::handleKeyboardPressed(int32_t key) {}
     void Button::handleKeyboardReleased(int32_t key) {}

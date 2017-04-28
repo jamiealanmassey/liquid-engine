@@ -45,13 +45,35 @@ int main()
     sf::Texture uiTexture;
     uiTexture.loadFromFile("interface.png");
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 2);
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 5);
     liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
-    liquid::ui::ButtonToggled* toggle = new liquid::ui::ButtonToggled(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
+    liquid::ui::Toggle* toggle = new liquid::ui::Toggle(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
+    
+    liquid::ui::Toggle* checkbox0 = new liquid::ui::Toggle(20.0f, 135.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 155.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::ControlList* list = new liquid::ui::ControlList(20.0f, 135.0f, { "", "" });
 
+    list->insertElement(checkbox0);
+    list->insertElement(checkbox1);
+    list->insertElement(checkbox2);
+    list->setSize(20.0f, 60.0f);
+    list->setControlType(liquid::ui::ControlList::CONTROLTYPE_SINGLE);
+
+    checkbox0->setCanEnter(false);
+    checkbox1->setCanEnter(false);
+    checkbox2->setCanEnter(false);
+
+    checkbox0->setVerticesPtr(batch->nextVertices());
+    checkbox1->setVerticesPtr(batch->nextVertices());
+    checkbox2->setVerticesPtr(batch->nextVertices());
     button->setVerticesPtr(batch->nextVertices());
     toggle->setVerticesPtr(batch->nextVertices());
 
+    widgetMgr->insertWidget(checkbox0);
+    widgetMgr->insertWidget(checkbox1);
+    widgetMgr->insertWidget(checkbox2);
+    widgetMgr->insertWidget(list);
     widgetMgr->insertWidget(toggle);
     widgetMgr->insertWidget(button);
     renderer->addRenderable(batch);

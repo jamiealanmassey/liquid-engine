@@ -1,38 +1,33 @@
-#include "ButtonToggled.h"
+#include "Toggle.h"
 #include "WidgetManager.h"
 
 namespace liquid {
 namespace ui {
 
-    ButtonToggled::ButtonToggled(float x, float y, std::array<std::string, 3> textureNames) :
+    Toggle::Toggle(float x, float y, std::array<std::string, 3> textureNames) :
         Button(x, y, textureNames)
     {
         mToggled = false;
     }
 
-    ButtonToggled::~ButtonToggled()
+    Toggle::~Toggle()
     {}
 
-    void ButtonToggled::setPressed(bool flag)
+    const bool Toggle::isToggled() const
     {
-        Widget::setPressed(flag);
+        return mToggled;
+    }
 
-        if (flag == false)
-            return;
-
+    void Toggle::toggle(bool flag)
+    {
+        mToggled = flag;
         data::TextureAtlas& atlas = mParentWidgetManager->getTextureAtlas();
         data::TextureAtlas::TextureRegion region;
 
         if (mToggled == true)
-        {
-            region = atlas.getTextureRegion(mTextureNames[0]);
-            mToggled = false;
-        }
-        else
-        {
             region = atlas.getTextureRegion(mTextureNames[1]);
-            mToggled = true;
-        }
+        else
+            region = atlas.getTextureRegion(mTextureNames[0]);
 
         mVerticesPtr[0]->setTexCoord(region[0]);
         mVerticesPtr[1]->setTexCoord(region[1]);
@@ -40,9 +35,13 @@ namespace ui {
         mVerticesPtr[3]->setTexCoord(region[3]);
     }
 
-    const bool ButtonToggled::isToggled() const
+    void Toggle::handleMousePressed(int32_t button, float x, float y)
     {
-        return mToggled;
+        toggle(!mToggled);
+    }
+
+    void Toggle::handleMouseReleased(int32_t button, float x, float y)
+    {
     }
 
 }}

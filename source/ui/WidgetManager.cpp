@@ -51,10 +51,6 @@ namespace ui {
             mEnteredWidget->setEntered(false);
             mEnteredWidget = nullptr;
         }
-        else if (mEnteredWidget)
-        {
-
-        }
 
         std::vector<Widget*> entered;
         std::vector<Widget*>::reverse_iterator it;
@@ -116,13 +112,13 @@ namespace ui {
         {
             if (eventData.mMouseButton == 1)
             {
-                buttonPressedCheck(mEnteredWidget, 0);
-                buttonPressedCheck(mFocusedWidget, 0);
+                buttonPressedCheck(mEnteredWidget);
+                buttonPressedCheck(mFocusedWidget);
             }
         }
     }
 
-    void WidgetManager::buttonPressedCheck(Widget* widget, int32_t mouseButton)
+    void WidgetManager::buttonPressedCheck(Widget* widget)
     {
         if (widget != nullptr && widget->isPressed())
             widget->setPressed(false);
@@ -162,6 +158,26 @@ namespace ui {
         return selection;
     }
 
+    std::vector<Widget*> WidgetManager::getWidgets()
+    {
+        return mWidgets;
+    }
+
+    data::TextureAtlas& WidgetManager::getTextureAtlas()
+    {
+        return mTextureAtlas;
+    }
+
+    Widget* WidgetManager::getEnteredWidget()
+    {
+        return mEnteredWidget;
+    }
+
+    Widget* WidgetManager::getFocusedWidget()
+    {
+        return mFocusedWidget;
+    }
+
     bool WidgetManager::handleKeyboardEvent(const events::KeyboardEventData& eventData)
     {
         for (uint32_t i = 0; i < mWidgets.size(); i++)
@@ -199,11 +215,6 @@ namespace ui {
         }
         
         return true;
-    }
-
-    data::TextureAtlas& WidgetManager::getTextureAtlas()
-    {
-        return mTextureAtlas;
     }
 
 }}
