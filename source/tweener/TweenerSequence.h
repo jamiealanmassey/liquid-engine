@@ -43,7 +43,7 @@ public:
     /** \brief Override called every step for updating
       * \return Deltatime of this step
       */
-    double update() override;
+    float update() override;
 
     /** \brief Override for checking if the sequence of tweeners has finished
       * \return True if tweeners are done, otherwise False

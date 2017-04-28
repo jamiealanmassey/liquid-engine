@@ -24,7 +24,7 @@ namespace tweener {
         return mTweeners.empty();
     }
 
-    double TweenerGroup::update()
+    float TweenerGroup::update()
     {
         for (auto tweener : mTweeners)
             tweener.update();

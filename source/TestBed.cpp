@@ -86,7 +86,7 @@ int main()
     texture3.loadFromFile("dude_animation_sheet.png");
 
     tests.particles(texture2); 
-    //tests.animation(texture3);
+    tests.animation(texture3);
     //tests.lighting();
     //tests.navigation();
     //tests.batchedSFMLRendering(texture);

@@ -9,7 +9,7 @@ namespace tweener {
     ITweener::~ITweener()
     {}
 
-    double ITweener::update()
+    float ITweener::update()
     {
         return 0.0f;
     }

@@ -15,7 +15,7 @@ namespace tweener {
         mUpdateFunc = nullptr;
     }
 
-    Tweener::Tweener(double value, double target, double duration, EasingFunction easingFunc) :
+    Tweener::Tweener(float value, float target, float duration, EasingFunction easingFunc) :
         ITweener()
     {
         mElapsed = 0;
@@ -27,7 +27,7 @@ namespace tweener {
         mUpdateFunc = nullptr;
     }
 
-    Tweener::Tweener(double value, double target, double duration, EasingFunction easingFunc, UpdateFunc updateFunc) :
+    Tweener::Tweener(float value, float target, float duration, EasingFunction easingFunc, UpdateFunc updateFunc) :
         ITweener()
     {
         mElapsed = 0;
@@ -42,7 +42,7 @@ namespace tweener {
     Tweener::~Tweener()
     {}
 
-    double Tweener::update()
+    float Tweener::update()
     {
         float dt = utilities::DELTA;
         if (mElapsed >= mDuration)
@@ -76,17 +76,17 @@ namespace tweener {
         mValue = mInitial;
     }
 
-    void Tweener::setInitial(double value)
+    void Tweener::setInitial(float value)
     {
         mInitial = value;
     }
 
-    void Tweener::setTarget(double value)
+    void Tweener::setTarget(float value)
     {
         mTarget = value;
     }
 
-    void Tweener::setDuration(double value)
+    void Tweener::setDuration(float value)
     {
         mDuration = value;
     }
@@ -101,34 +101,34 @@ namespace tweener {
         mEasingFunc = func;
     }
 
-    double Tweener::calculateValue()
+    float Tweener::calculateValue()
     {
-        double x = mEasingFunc.ease(mElapsed / mDuration);
-        double r = mInitial + x * (mTarget - mInitial);
+        float x = mEasingFunc.ease(mElapsed / mDuration);
+        float r = mInitial + x * (mTarget - mInitial);
         return r;
     }
 
-    double Tweener::getValue()
+    float Tweener::getValue()
     {
         return mValue;
     }
 
-    double Tweener::getInitial() const
+    float Tweener::getInitial() const
     {
         return mInitial;
     }
 
-    double Tweener::getTarget() const
+    float Tweener::getTarget() const
     {
         return mTarget;
     }
 
-    double Tweener::getElapsed() const
+    float Tweener::getElapsed() const
     {
         return mElapsed;
     }
 
-    double Tweener::getDuration() const
+    float Tweener::getDuration() const
     {
         return mDuration;
     }

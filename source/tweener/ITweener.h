@@ -33,7 +33,7 @@ public:
     /** \brief Call this to step the Tweener forward (GAME MUST BE RUNNING)
       * \return Deltatime of this step
       */
-    virtual double update();
+    virtual float update();
 
     /** \brief Checks to see if the Tweener has finished
       * \return True if done, otherwise False

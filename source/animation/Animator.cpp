@@ -15,6 +15,7 @@ namespace animation {
         mCurrentFrame = 0;
         mBeginFrame = 0;
         mEndFrame = 0;
+        mFrameDelay = 0.f;
     }
 
     Animator::Animator(AnimationParser animationParser)
@@ -33,6 +34,7 @@ namespace animation {
         mCurrentFrame = 0;
         mBeginFrame = 0;
         mEndFrame = (mAnimationTable[mCurrentAnimation].size() - 1);
+        mFrameDelay = 0.f;
 
         updateFrame(getAnimation(0)[0]);
     }
@@ -42,14 +44,12 @@ namespace animation {
 
     void Animator::update()
     {
-        AnimationFrame& currentFrame = mAnimationTable[mCurrentAnimation][mCurrentFrame];
-
-        if (currentFrame.getFrameDelay() >= 0.0f)
+        if (mFrameDelay >= 0.0f)
             mAccumulator += utilities::DELTA;
 
-        if (mAccumulator >= currentFrame.getFrameDelay())
+        if (mAccumulator >= mFrameDelay)
         {
-            mAccumulator -= currentFrame.getFrameDelay();
+            mAccumulator -= mFrameDelay;
 
             if (mAnimationMode == eAnimationMode::ANIMATION_DEFAULT)
                 mCurrentFrame++;
@@ -265,6 +265,8 @@ namespace animation {
 
     void Animator::updateFrame(AnimationFrame frame)
     {
+        mFrameDelay = frame.getFrameDelay();
+
         if (mVerticesSet == true)
         {
             float positionX = mVerticesPtr[0]->getPosition()[0];

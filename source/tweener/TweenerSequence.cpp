@@ -24,7 +24,7 @@ namespace tweener {
         return mTweeners.empty();
     }
 
-    double TweenerSequence::update()
+    float TweenerSequence::update()
     {
         if (mTweeners.empty() == false)
             return mTweeners.front().update();

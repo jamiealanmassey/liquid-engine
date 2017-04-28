@@ -170,6 +170,7 @@ protected:
     int32_t             mEndFrame;           ///< Ending frame of the current Animation
     int32_t             mCurrentFrame;       ///< Current frame index of the Animation
     float               mAccumulator;        ///< Accumulating time for the Animator in milliseconds
+    float               mFrameDelay;         ///< Current frame's delay time
 
 protected:
     std::array<liquid::utilities::Vertex2*, 4> mVerticesPtr; ///< Pointer to array of vertices, usually for transforming Renderable data

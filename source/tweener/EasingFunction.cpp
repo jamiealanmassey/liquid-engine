@@ -9,7 +9,7 @@ namespace tweener {
         mType = eEasingType::EASINGTYPE_IN;
     }
 
-    EasingFunction::EasingFunction(std::function<double(double)> func, EasingFunction::eEasingType type)
+    EasingFunction::EasingFunction(std::function<float(float)> func, EasingFunction::eEasingType type)
     {
         mEasingFunc = func;
         mType = type;
@@ -18,7 +18,7 @@ namespace tweener {
     EasingFunction::~EasingFunction()
     {}
 
-    double EasingFunction::ease(double t)
+    float EasingFunction::ease(float t)
     {
         if (mType == eEasingType::EASINGTYPE_IN)
             return in(t);
@@ -26,24 +26,26 @@ namespace tweener {
             return out(t);
         else if (mType == eEasingType::EASINGTYPE_INOUT)
             return inout(t);
+        else
+            return 0.f;
     }
 
-    double EasingFunction::in(double t)
+    float EasingFunction::in(float t)
     {
         return mEasingFunc(t);
     }
 
-    double EasingFunction::out(double t)
+    float EasingFunction::out(float t)
     {
-        return 1.0 - in(1.0 - t);
+        return 1.0f - in(1.0f - t);
     }
 
-    double EasingFunction::inout(double t)
+    float EasingFunction::inout(float t)
     {
-        if (t < 0.5)
-            return in(2.0 * t) / 2.0;
+        if (t < 0.5f)
+            return in(2.0f * t) / 2.0f;
         else
-            return 0.5 + out(2.0 * t - 1.0) / 2.0;
+            return 0.5f + out(2.0f * t - 1.0f) / 2.0f;
     }
 
 }}

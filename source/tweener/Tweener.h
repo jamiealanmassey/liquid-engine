@@ -22,7 +22,7 @@ class Tweener : public ITweener
 {
 public: 
     /// Defines a Function Callback for updates
-    typedef std::function<void(double)> UpdateFunc;
+    typedef std::function<void(float)> UpdateFunc;
 
 public:
     /// Tweener Constructor
@@ -35,7 +35,7 @@ public:
       * \param easingFunc The EasingFunction to use during steps
       * \param updateFunc Update Function called every step
       */
-    Tweener(double value, double target, double duration, EasingFunction easingFunc, UpdateFunc updateFunc);
+    Tweener(float value, float target, float duration, EasingFunction easingFunc, UpdateFunc updateFunc);
 
     /** \brief Tweener Constructor
       * \param value The initial value of this Tweener
@@ -43,7 +43,7 @@ public:
       * \param duration Duration you want the Tweener to run in milliseconds (ms)
       * \param easingFunc The EasingFunction to use during steps
       */
-    Tweener(double value, double target, double duration, EasingFunction easingFunc);
+    Tweener(float value, float target, float duration, EasingFunction easingFunc);
 
     /// Tweener Destructr
     ~Tweener();
@@ -51,7 +51,7 @@ public:
     /** \brief Overrides the update function, calculates the next value from the time-slice
       * \return Delta time of this step
       */
-    virtual double update() override;
+    virtual float update() override;
 
     /** \brief Overrides the ITweener::isFinished function, ends when time has elapsed the duration
       * \return True if the Tweener has finished, otherwise False
@@ -64,17 +64,17 @@ public:
     /** \brief Sets the initial value of the Tweener
       * \param value Value to assign
       */
-    void setInitial(double value);
+    void setInitial(float value);
 
     /** \brief Sets the target value of the Tweener
       * \param value Value to assign
       */
-    void setTarget(double value);
+    void setTarget(float value);
 
     /** \brief Sets the duration value of the Tweener
       * \param value Value to assign
       */
-    void setDuration(double value);
+    void setDuration(float value);
 
     /** \brief Sets the UpdateFunc to use, called every step
       * \param func Function Pointer to assign
@@ -89,29 +89,29 @@ public:
     /** \brief Calculates the next value of the Tweener from the timeslice
       * \return The next value from the Tweener
       */
-    double calculateValue();
+    float calculateValue();
 
     /// \return Gets the stored value
-    double getValue();
+    float getValue();
 
     /// \return Gets the initial stored value
-    double getInitial() const;
+    float getInitial() const;
 
     /// \return Gets the stored target value
-    double getTarget() const;
+    float getTarget() const;
 
     /// \return Gets the elapsed time value
-    double getElapsed() const;
+    float getElapsed() const;
 
     /// \return Gets the duration of the Tweener
-    double getDuration() const;
+    float getDuration() const;
 
 protected:
-    double mElapsed;  ///< The elapsed time
-    double mInitial;  ///< The initial value given to the tweener
-    double mTarget;   ///< The final value that the tweener should land at, the 'target'
-    double mDuration; ///< Duration that the tweener has been running
-    double mValue;    ///< Actual value of Tweener
+    float mElapsed;  ///< The elapsed time
+    float mInitial;  ///< The initial value given to the tweener
+    float mTarget;   ///< The final value that the tweener should land at, the 'target'
+    float mDuration; ///< Duration that the tweener has been running
+    float mValue;    ///< Actual value of Tweener
     
 protected:
     UpdateFunc     mUpdateFunc; ///< Function callback called everytime this tweener is updated

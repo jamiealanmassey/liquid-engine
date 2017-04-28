@@ -35,7 +35,7 @@ public:
       * \param func Function pointer for the Easing Function to use
       * \param type Type of Easing to use
       */
-    EasingFunction(std::function<double(double)> func, eEasingType type = eEasingType::EASINGTYPE_IN);
+    EasingFunction(std::function<float(float)> func, eEasingType type = eEasingType::EASINGTYPE_IN);
 
     /// EasingFunction Destructor
     ~EasingFunction();
@@ -44,21 +44,21 @@ public:
       * \param t Current time slice (0 - 1)
       * \return Result of the easing function given the time-point
       */
-    double ease(double t);
+    float ease(float t);
 
 private:
     /// Special wrapper to be called for EASINGTYPE_IN
-    double in(double t);
+    float in(float t);
 
     /// Special wrapper to be called for EASINGTYPE_OUT
-    double out(double t);
+    float out(float t);
 
     /// Special wrapper to be called for EASINGTYPE_IN
-    double inout(double t);
+    float inout(float t);
 
 protected:
-    std::function<double(double)> mEasingFunc; ///< Function callback to the easing method
-    eEasingType                   mType;       ///< Type of easing to use
+    std::function<float(float)> mEasingFunc; ///< Function callback to the easing method
+    eEasingType                 mType;       ///< Type of easing to use
 };
 
 #endif // _EASINGFUNC_H
