@@ -45,10 +45,12 @@ int main()
     sf::Texture uiTexture;
     uiTexture.loadFromFile("interface.png");
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 5);
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 7);
     liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
     liquid::ui::Toggle* toggle = new liquid::ui::Toggle(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
-    
+    liquid::ui::Slider* slider = new liquid::ui::Slider(240.f, 10.f);
+    liquid::ui::Widget* thumb = new liquid::ui::Widget(240.0f, 10.f);
+
     liquid::ui::Toggle* checkbox0 = new liquid::ui::Toggle(20.0f, 135.0f, { "CheckboxDefault", "CheckboxSelected" });
     liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 155.0f, { "CheckboxDefault", "CheckboxSelected" });
     liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
@@ -63,12 +65,15 @@ int main()
     checkbox0->setCanEnter(false);
     checkbox1->setCanEnter(false);
     checkbox2->setCanEnter(false);
+    thumb->setCanEnter(false);
 
     checkbox0->setVerticesPtr(batch->nextVertices());
     checkbox1->setVerticesPtr(batch->nextVertices());
     checkbox2->setVerticesPtr(batch->nextVertices());
     button->setVerticesPtr(batch->nextVertices());
     toggle->setVerticesPtr(batch->nextVertices());
+    slider->setVerticesPtr(batch->nextVertices());
+    thumb->setVerticesPtr(batch->nextVertices());
 
     widgetMgr->insertWidget(checkbox0);
     widgetMgr->insertWidget(checkbox1);
@@ -76,7 +81,13 @@ int main()
     widgetMgr->insertWidget(list);
     widgetMgr->insertWidget(toggle);
     widgetMgr->insertWidget(button);
+    widgetMgr->insertWidget(slider);
+    widgetMgr->insertWidget(thumb);
     renderer->addRenderable(batch);
+
+    slider->setSliderThumb(thumb);
+    slider->setTexture("SliderVertical");
+    thumb->setTexture("SliderVerticalThumb");
 
     // ADD TEST CALLS HERE
     Tests tests;
@@ -86,7 +97,7 @@ int main()
     texture3.loadFromFile("dude_animation_sheet.png");
 
     tests.particles(texture2); 
-    tests.animation(texture3);
+    //tests.animation(texture3);
     //tests.lighting();
     //tests.navigation();
     //tests.batchedSFMLRendering(texture);

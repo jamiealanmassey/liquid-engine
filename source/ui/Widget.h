@@ -1,4 +1,5 @@
 #include "../common/Entity.h"
+#include "../data/TextureAtlas.h"
 
 namespace liquid { namespace ui {
 #ifndef _WIDGET_H
@@ -120,6 +121,8 @@ public:
       */
     virtual void setFocused(bool flag);
 
+    void setTexture(std::string textureName);
+
     /** \brief Set the pointer for the parent WidgetManager
       * \param widgetManager Pointer to the parent WidgetManager of this Widget
       */
@@ -156,20 +159,20 @@ public:
     const bool isEntered() const;
 
 public:
-    /// \brief Pure virtual for when the mouse has been pressed
-    virtual void handleMousePressed(int32_t button, float x, float y) = 0;
+    /// \brief Virtual for when the mouse has been pressed
+    virtual void handleMousePressed(int32_t button, float x, float y);
 
-    /// \brief Pure virtual for when the mouse has been released
-    virtual void handleMouseReleased(int32_t button, float x, float y) = 0;
+    /// \brief Virtual for when the mouse has been released
+    virtual void handleMouseReleased(int32_t button, float x, float y);
 
-    /// \brief Pure virtual for when the mouse has been moved
-    virtual void handleMouseMoved(float x, float y) = 0;
+    /// \brief Virtual for when the mouse has been moved
+    virtual void handleMouseMoved(float x, float y);
 
-    /// \brief Pure virtual for when the keyboard has been pressed
-    virtual void handleKeyboardPressed(int32_t key) = 0;
+    /// \brief Virtual for when the keyboard has been pressed
+    virtual void handleKeyboardPressed(int32_t key);
 
-    /// \brief Pure virtual for when the keyboard has been pressed
-    virtual void handleKeyboardReleased(int32_t key) = 0;
+    /// \brief Virtual for when the keyboard has been pressed
+    virtual void handleKeyboardReleased(int32_t key);
 
 protected:
     bool                 mFocused;              ///< Denotes if the Widget is being focused

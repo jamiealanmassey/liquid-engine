@@ -91,6 +91,7 @@
 
 #include "ui/Button.h"
 #include "ui/ControlList.h"
+#include "ui/Slider.h"
 #include "ui/Toggle.h"
 #include "ui/Widget.h"
 #include "ui/WidgetManager.h"

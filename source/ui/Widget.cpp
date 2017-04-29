@@ -1,4 +1,5 @@
 #include "Widget.h"
+#include "WidgetManager.h"
 
 namespace liquid {
 namespace ui {
@@ -129,6 +130,22 @@ namespace ui {
         mFocused = flag;
     }
 
+    void Widget::setTexture(std::string textureName)
+    {
+        data::TextureAtlas& atlas = mParentWidgetManager->getTextureAtlas();
+        data::TextureAtlas::TextureRegion region;
+        region = atlas.getTextureRegion(textureName);
+
+        float width = region[1][0] - region[0][0];
+        float height = region[2][1] - region[1][1];
+
+        mVerticesPtr[0]->setTexCoord(region[0]);
+        mVerticesPtr[1]->setTexCoord(region[1]);
+        mVerticesPtr[2]->setTexCoord(region[2]);
+        mVerticesPtr[3]->setTexCoord(region[3]);
+        setSize(width, height);
+    }
+
     void Widget::setParentWidgetManager(WidgetManager* widgetManager)
     {
         mParentWidgetManager = widgetManager;
@@ -183,5 +200,11 @@ namespace ui {
     {
         return mEntered;
     }
+
+    void Widget::handleMousePressed(int32_t button, float x, float y) {}
+    void Widget::handleMouseReleased(int32_t button, float x, float y) {}
+    void Widget::handleMouseMoved(float x, float y) {}
+    void Widget::handleKeyboardPressed(int32_t key) {}
+    void Widget::handleKeyboardReleased(int32_t key) {}
 
 }}

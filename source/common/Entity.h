@@ -206,7 +206,7 @@ public:
       */
     GameScene* getParentGameScene() const;
 
-private:
+protected:
     /** \brief Adds a child to this Entity
       * \param child The child Entity to add
       *
