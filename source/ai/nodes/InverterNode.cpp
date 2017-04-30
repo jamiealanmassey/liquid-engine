@@ -15,6 +15,8 @@ namespace ai {
 
     void InverterNode::initialise()
     {
+        mNodeState = eBehaviourNodeState::NODESTATE_PROCESSING;
+
         if (mChildren.size() > 0)
             mChildren[0]->initialise();
         else

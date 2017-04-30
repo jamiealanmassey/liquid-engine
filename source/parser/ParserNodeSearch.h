@@ -67,6 +67,12 @@ public:
       */
     std::list<ParserNode*> findParserNodes(std::string name);
 
+    /** \brief Search for child nodes of this node with the given name
+      * \param name Name of the desired nodes represented as std::string
+      * \return Collection of ParserNode objects, empty if none found
+      */
+    std::list<ParserNode*> findParserNodesRelative(std::string name);
+
     /** \brief Search down from this node for all data with the given key
       * \param key Key of the key-pair value to search for in each object
       * \return Collection of std::string objects representing the found values, empty if none found

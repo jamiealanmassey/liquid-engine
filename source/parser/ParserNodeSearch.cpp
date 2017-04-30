@@ -64,6 +64,20 @@ namespace parser {
     {
         return getParserNodes(mCurrentNode, name);
     }
+
+    std::list<ParserNode*> ParserNodeSearch::findParserNodesRelative(std::string name)
+    {
+        std::list<ParserNode*> nodes;
+
+        for (auto child : mCurrentNode->getChildren())
+        {
+            if (child->getName() == name)
+                nodes.push_back(child);
+        }
+
+        return nodes;
+    }
+
     std::list<std::string> ParserNodeSearch::findAllData(std::string key)
     {
         return getAllData(mCurrentNode, key);

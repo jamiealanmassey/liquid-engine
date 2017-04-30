@@ -42,22 +42,31 @@ int main()
     camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
     // AI BEHAVIOURS
+    liquid::parser::ParserXML behaviourParserXML;
+    behaviourParserXML.parseFile("decisionTree.xml");
+    liquid::ai::BehaviourTreeParser behaviourParser(behaviourParserXML);
+
     liquid::ai::BehaviourTree* tree = new liquid::ai::BehaviourTree();
     liquid::ai::RepeaterNode* node0 = new liquid::ai::RepeaterNode();
     liquid::ai::SequenceNode* node1 = new liquid::ai::SequenceNode();
     liquid::ai::LeafNode* node2 = new liquid::ai::LeafNode();
-    liquid::ai::LeafNode* node3 = new liquid::ai::LeafNode();
+    liquid::ai::LeafNode* node4 = new liquid::ai::LeafNode();
+    liquid::ai::InverterNode* node3 = new liquid::ai::InverterNode();
 
     node0->insertChild(node1);
-    node0->setRepeaterLimit(2);
+    node0->setRepeaterLimit(0);
     node1->insertChild(node2);
-    node1->insertChild(node3);
+    node1->insertChild(node4);
+    //node3->insertChild(node4);
     tree->setNodeRoot(node0);
 
     node2->setFuncProcess([]()->uint32_t { return 1; });
-    node3->setFuncProcess([]()->uint32_t { return 1; });
+    node4->setFuncProcess([]()->uint32_t { return 2; });
 
-    while (tree->process() == false);
+    //tree->setNodeRoot(behaviourParser.getConstructedNode());
+
+    while (tree->getNodeState() == 0)
+        tree->process();
 
     // ADD TEST CALLS HERE
     Tests tests;

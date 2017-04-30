@@ -20,6 +20,8 @@ public:
     const uint32_t getRepeaterLimit() const;
     const uint32_t getRepeaterCount() const;
 
+    void resetNextNode(BehaviourNode* node);
+
 protected:
     uint32_t mRepeaterLimit;
     uint32_t mRepeaterCount;

@@ -34,6 +34,7 @@
 #include "ai/nodes/SucceederNode.h"
 #include "ai/BehaviourNode.h"
 #include "ai/BehaviourTree.h"
+#include "ai/BehaviourTreeParser.h"
 
 #include "animation/AnimationDefs.h"
 #include "animation/AnimationFrame.h"

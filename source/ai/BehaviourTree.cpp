@@ -3,19 +3,33 @@
 namespace liquid {
 namespace ai {
 
-    BehaviourTree::BehaviourTree()
+BehaviourTree::BehaviourTree() :
+        BehaviourNode()
     {
         mNodeRoot = nullptr;
         mNodeCurrent = nullptr;
+        mNodeType = eBehaviourNodeType::NODETYPE_COMPOSITE;
     }
 
     BehaviourTree::~BehaviourTree()
     {}
 
-    bool BehaviourTree::process()
+    void BehaviourTree::initialise()
     {
-        if (mNodeCurrent->getParentNode() == nullptr)
-            return true;
+        mNodeCurrent = mNodeRoot;
+        mNodeCurrent->initialise();
+
+        while (mNodeCurrent->nextNode())
+            mNodeCurrent = mNodeCurrent->nextNode();
+    }
+
+    void BehaviourTree::process()
+    {
+        if (mNodeCurrent->getParentNode() == nullptr && 
+            mNodeCurrent->getNodeState() != eBehaviourNodeState::NODESTATE_PROCESSING)
+        {
+            mNodeState = mNodeCurrent->getNodeState();
+        }
 
         BehaviourNode::eBehaviourNodeState state = mNodeCurrent->getNodeState();
         
@@ -27,20 +41,33 @@ namespace ai {
             if (next != nullptr && next->getNodeState() == BehaviourNode::NODESTATE_PROCESSING)
                 mNodeCurrent = next;
         }
-        else if (state != BehaviourNode::NODESTATE_PROCESSING)
-            mNodeCurrent = mNodeCurrent->getParentNode();
 
-        return false;
+        if (mNodeCurrent->getParentNode() &&
+            mNodeCurrent->getNodeState() != BehaviourNode::NODESTATE_PROCESSING)
+        {
+            mNodeCurrent = mNodeCurrent->getParentNode();
+        }
+    }
+
+    BehaviourNode* BehaviourTree::nextNode()
+    {
+        return mNodeCurrent;
     }
 
     void BehaviourTree::setNodeRoot(BehaviourNode* node)
     {
         mNodeRoot = node;
-        mNodeCurrent = node;
-        mNodeCurrent->initialise();
+        initialise();
+    }
 
-        while (mNodeCurrent->nextNode())
-            mNodeCurrent = mNodeCurrent->nextNode();
+    BehaviourNode* BehaviourTree::getNodeRoot()
+    {
+        return mNodeRoot;
+    }
+
+    BehaviourNode* BehaviourTree::getNodeCurrent()
+    {
+        return mNodeCurrent;
     }
 
 }}

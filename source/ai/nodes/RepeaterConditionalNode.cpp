@@ -14,8 +14,10 @@ namespace ai {
 
     void RepeaterConditionalNode::initialise()
     {
+        mNodeState = eBehaviourNodeState::NODESTATE_PROCESSING;
+
         if (mChildren.size() > 0)
-            return mChildren[0]->initialise();
+            mChildren[0]->initialise();
 
         mNodeState = eBehaviourNodeState::NODESTATE_FAILURE;
     }

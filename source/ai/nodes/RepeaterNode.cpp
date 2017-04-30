@@ -34,9 +34,12 @@ namespace ai {
             state == eBehaviourNodeState::NODESTATE_SUCCESSFUL)
         {
             if (mRepeaterLimit > 0 && mRepeaterCount == mRepeaterLimit)
-                mNodeState = eBehaviourNodeState::NODESTATE_SUCCESSFUL;
+                mNodeState = state;
             else if (mRepeaterLimit > 0)
                 mRepeaterCount++;
+                
+            if (mChildren.empty() == false)
+                mChildren[0]->initialise();
         }
     }
 
@@ -59,6 +62,14 @@ namespace ai {
     const uint32_t RepeaterNode::getRepeaterCount() const
     {
         return mRepeaterCount;
+    }
+
+    void RepeaterNode::resetNextNode(BehaviourNode* node)
+    {
+        node->initialise();
+
+        for (uint32_t i = 0; i < mChildren.size(); i++)
+            resetNextNode(mChildren[i]);
     }
 
 }}

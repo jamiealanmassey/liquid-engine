@@ -16,6 +16,8 @@ namespace ai {
 
     void LeafNode::initialise()
     {
+        mNodeState = eBehaviourNodeState::NODESTATE_PROCESSING;
+
         if (mFuncInitialise)
             mFuncInitialise();
     }

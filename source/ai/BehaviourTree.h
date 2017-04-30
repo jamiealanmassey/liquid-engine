@@ -4,15 +4,21 @@ namespace liquid { namespace ai {
 #ifndef _BEHAVIOURTREE_H
 #define _BEHAVIOURTREE_H
 
-class BehaviourTree
+class BehaviourTree : public BehaviourNode
 {
 public:
     BehaviourTree();
     ~BehaviourTree();
 
-    bool process();
+    virtual void initialise() override;
+    virtual void process() override;
     
+    virtual BehaviourNode* nextNode();
+
     void setNodeRoot(BehaviourNode* node);
+
+    BehaviourNode* getNodeRoot();
+    BehaviourNode* getNodeCurrent();
 
 protected:
     BehaviourNode* mNodeRoot;

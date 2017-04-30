@@ -17,6 +17,7 @@ namespace ai {
     void SequenceNode::initialise()
     {
         mCurrentlyProcessing = 0;
+        mNodeState = eBehaviourNodeState::NODESTATE_PROCESSING;
 
         if (mChildren.size() > 0)
             mChildren[mCurrentlyProcessing]->initialise();
