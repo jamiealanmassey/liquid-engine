@@ -41,61 +41,33 @@ int main()
     renderer->setCamera(camera);
     camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
-    // WIDGETS
-    sf::Texture uiTexture;
-    uiTexture.loadFromFile("interface.png");
+    // AI BEHAVIOURS
+    liquid::ai::BehaviourTree* tree = new liquid::ai::BehaviourTree();
+    liquid::ai::RepeaterNode* node0 = new liquid::ai::RepeaterNode();
+    liquid::ai::SequenceNode* node1 = new liquid::ai::SequenceNode();
+    liquid::ai::LeafNode* node2 = new liquid::ai::LeafNode();
+    liquid::ai::LeafNode* node3 = new liquid::ai::LeafNode();
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(uiTexture, 7);
-    liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
-    liquid::ui::Toggle* toggle = new liquid::ui::Toggle(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
-    liquid::ui::Slider* slider = new liquid::ui::Slider(240.f, 10.f);
-    liquid::ui::Widget* thumb = new liquid::ui::Widget(240.0f, 10.f);
+    node0->insertChild(node1);
+    node0->setRepeaterLimit(2);
+    node1->insertChild(node2);
+    node1->insertChild(node3);
+    tree->setNodeRoot(node0);
 
-    liquid::ui::Toggle* checkbox0 = new liquid::ui::Toggle(20.0f, 135.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 155.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::ControlList* list = new liquid::ui::ControlList(20.0f, 135.0f, { "", "" });
+    node2->setFuncProcess([]()->uint32_t { return 1; });
+    node3->setFuncProcess([]()->uint32_t { return 1; });
 
-    list->insertElement(checkbox0);
-    list->insertElement(checkbox1);
-    list->insertElement(checkbox2);
-    list->setSize(20.0f, 60.0f);
-    list->setControlType(liquid::ui::ControlList::CONTROLTYPE_SINGLE);
-
-    checkbox0->setCanEnter(false);
-    checkbox1->setCanEnter(false);
-    checkbox2->setCanEnter(false);
-    thumb->setCanEnter(false);
-
-    checkbox0->setVerticesPtr(batch->nextVertices());
-    checkbox1->setVerticesPtr(batch->nextVertices());
-    checkbox2->setVerticesPtr(batch->nextVertices());
-    button->setVerticesPtr(batch->nextVertices());
-    toggle->setVerticesPtr(batch->nextVertices());
-    slider->setVerticesPtr(batch->nextVertices());
-    thumb->setVerticesPtr(batch->nextVertices());
-
-    widgetMgr->insertWidget(checkbox0);
-    widgetMgr->insertWidget(checkbox1);
-    widgetMgr->insertWidget(checkbox2);
-    widgetMgr->insertWidget(list);
-    widgetMgr->insertWidget(toggle);
-    widgetMgr->insertWidget(button);
-    widgetMgr->insertWidget(slider);
-    widgetMgr->insertWidget(thumb);
-    renderer->addRenderable(batch);
-
-    slider->setSliderThumb(thumb);
-    slider->setTexture("SliderVertical");
-    thumb->setTexture("SliderVerticalThumb");
+    while (tree->process() == false);
 
     // ADD TEST CALLS HERE
     Tests tests;
-    sf::Texture texture, texture2, texture3;
+    sf::Texture texture, texture2, texture3, uiTexture;
     texture.loadFromFile("test.png");
     texture2.loadFromFile("test2.png");
     texture3.loadFromFile("dude_animation_sheet.png");
+    uiTexture.loadFromFile("interface.png");
 
+    tests.interface(uiTexture);
     tests.particles(texture2); 
     //tests.animation(texture3);
     //tests.lighting();

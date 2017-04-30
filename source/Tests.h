@@ -19,6 +19,7 @@ public:
     void navigation();
     void parserXML();
     void quadTree();
+    void interface(sf::Texture& interfaceTexture);
 
 private:
     liquid::common::Entity* mEntity;

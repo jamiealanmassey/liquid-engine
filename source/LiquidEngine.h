@@ -25,6 +25,16 @@
   *
   */
 
+#include "ai/nodes/InverterNode.h"
+#include "ai/nodes/LeafNode.h"
+#include "ai/nodes/RepeaterConditionalNode.h"
+#include "ai/nodes/RepeaterNode.h"
+#include "ai/nodes/SelectorNode.h"
+#include "ai/nodes/SequenceNode.h"
+#include "ai/nodes/SucceederNode.h"
+#include "ai/BehaviourNode.h"
+#include "ai/BehaviourTree.h"
+
 #include "animation/AnimationDefs.h"
 #include "animation/AnimationFrame.h"
 #include "animation/AnimationParser.h"

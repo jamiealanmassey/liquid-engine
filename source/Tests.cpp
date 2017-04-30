@@ -302,3 +302,54 @@ void Tests::animation(sf::Texture& texture)
 
     liquid::common::GameManager::instance().getRendererClass()->addRenderable(batch);
 }
+
+void Tests::interface(sf::Texture& interfaceTexture)
+{
+    liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
+    liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
+    liquid::ui::WidgetManager* widgetMgr = scene->getWidgetManager();
+
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(interfaceTexture, 7);
+    liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
+    liquid::ui::Toggle* toggle = new liquid::ui::Toggle(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
+    liquid::ui::Slider* slider = new liquid::ui::Slider(240.f, 10.f);
+    liquid::ui::Widget* thumb = new liquid::ui::Widget(240.0f, 10.f);
+
+    liquid::ui::Toggle* checkbox0 = new liquid::ui::Toggle(20.0f, 135.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 155.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::ControlList* list = new liquid::ui::ControlList(20.0f, 135.0f, { "", "" });
+
+    list->insertElement(checkbox0);
+    list->insertElement(checkbox1);
+    list->insertElement(checkbox2);
+    list->setSize(20.0f, 60.0f);
+    list->setControlType(liquid::ui::ControlList::CONTROLTYPE_SINGLE);
+
+    checkbox0->setCanEnter(false);
+    checkbox1->setCanEnter(false);
+    checkbox2->setCanEnter(false);
+    thumb->setCanEnter(false);
+
+    checkbox0->setVerticesPtr(batch->nextVertices());
+    checkbox1->setVerticesPtr(batch->nextVertices());
+    checkbox2->setVerticesPtr(batch->nextVertices());
+    button->setVerticesPtr(batch->nextVertices());
+    toggle->setVerticesPtr(batch->nextVertices());
+    slider->setVerticesPtr(batch->nextVertices());
+    thumb->setVerticesPtr(batch->nextVertices());
+
+    widgetMgr->insertWidget(checkbox0);
+    widgetMgr->insertWidget(checkbox1);
+    widgetMgr->insertWidget(checkbox2);
+    widgetMgr->insertWidget(list);
+    widgetMgr->insertWidget(toggle);
+    widgetMgr->insertWidget(button);
+    widgetMgr->insertWidget(slider);
+    widgetMgr->insertWidget(thumb);
+    renderer->addRenderable(batch);
+
+    slider->setSliderThumb(thumb);
+    slider->setTexture("SliderVertical");
+    thumb->setTexture("SliderVerticalThumb");
+}
