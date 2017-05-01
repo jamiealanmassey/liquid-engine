@@ -64,12 +64,4 @@ namespace ai {
         return mRepeaterCount;
     }
 
-    void RepeaterNode::resetNextNode(BehaviourNode* node)
-    {
-        node->initialise();
-
-        for (uint32_t i = 0; i < mChildren.size(); i++)
-            resetNextNode(mChildren[i]);
-    }
-
 }}
