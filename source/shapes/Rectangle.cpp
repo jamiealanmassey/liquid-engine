@@ -34,28 +34,24 @@ namespace shape {
         float sizeX = (targetRectangle[2] / 2.0f) + (mRectangle[2] / 2.0f);
         float sizeY = (targetRectangle[3] / 2.0f) + (mRectangle[3] / 2.0f);
 
-        return (sizeX <= distanceX && sizeY <= distanceY);
+        return (distanceX <= sizeX && distanceY <= sizeY);
     }
 
     bool Rectangle::intersection(Circle& circle)
     {
-        std::array<float, 3> targetCircle = circle.getCircle();
+        if (intersection({ circle.getCircle()[0], circle.getCircle()[1] }))
+            return true;
 
-        float distanceX = std::fabsf(targetCircle[0] - mRectangle[0]);
-        float distanceY = std::fabsf(targetCircle[1] - mRectangle[1]);
         float halfSizeX = mRectangle[2] / 2.0f;
         float halfSizeY = mRectangle[3] / 2.0f;
 
-        if (distanceX > (halfSizeX + targetCircle[2]))
-            return false;
-        
-        if (distanceY > (halfSizeY + targetCircle[2]))
-            return false;
+        LineSegment line0(mRectangle[0] - halfSizeX, mRectangle[1] - halfSizeY, mRectangle[0] + halfSizeX, mRectangle[1] - halfSizeY);
+        LineSegment line1(mRectangle[0] + halfSizeX, mRectangle[1] - halfSizeY, mRectangle[0] + halfSizeX, mRectangle[1] + halfSizeY);
+        LineSegment line2(mRectangle[0] + halfSizeX, mRectangle[1] + halfSizeY, mRectangle[0] - halfSizeX, mRectangle[1] + halfSizeY);
+        LineSegment line3(mRectangle[0] - halfSizeX, mRectangle[1] + halfSizeY, mRectangle[0] - halfSizeX, mRectangle[1] - halfSizeY);
 
-        float distanceSq = std::pow(distanceX - halfSizeX, 2) + 
-                           std::pow(distanceY - halfSizeY, 2);
-
-        return (distanceSq <= (std::pow(targetCircle[2], 2)));
+        return (circle.intersection(line0) || circle.intersection(line1) || 
+                circle.intersection(line2) || circle.intersection(line3));
     }
 
     bool Rectangle::intersection(LineSegment& line)

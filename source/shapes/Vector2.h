@@ -14,8 +14,8 @@ public:
     Vector2(float directionX, float directionY);
     ~Vector2();
 
-    void setDirectionX(float directionX);
-    void setDirectionY(float directionY);
+    void setVectorX(float vectorX);
+    void setVectorY(float vectorY);
     void setAngle(float angle);
     void setMagnitude(float magnitude);
 
@@ -33,8 +33,8 @@ public:
     Vector2& normalise();
     Vector2& lineNormal();
 
-    const float getDirectionX();
-    const float getDirectionY();
+    const float getVectorX();
+    const float getVectorY();
     const float getMagnitude();
     const float getAngle();
 
@@ -50,8 +50,8 @@ public:
     bool operator== (Vector2& vector);
 
 protected:
-    float mDirectionX;
-    float mDirectionY;
+    float mVectorX;
+    float mVectorY;
 };
 
 #define VECTOR2X Vector2(1.0f, 0.0f);

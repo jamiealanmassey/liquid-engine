@@ -68,6 +68,15 @@ int main()
     while (tree->getNodeState() == 0)
         tree->process();
 
+    // SHAPES
+    liquid::shape::Rectangle rectangle;
+    liquid::shape::Circle circle;
+    rectangle.setRectangle(50.0f, 50.0f, 100.0f, 50.0f);
+    circle.setCircle(50.0f, 50.0f, 20.0);
+
+    bool intersects0 = circle.intersection(rectangle);
+    bool intersects1 = rectangle.intersection(circle);
+
     // ADD TEST CALLS HERE
     Tests tests;
     sf::Texture texture, texture2, texture3, uiTexture;

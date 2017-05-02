@@ -24,15 +24,15 @@ namespace shape {
     void LineSegment::setLine(std::array<float, 4> segment)
     {
         mLineSegment = segment;
-        mDirection.setDirectionX(segment[2] - segment[0]);
-        mDirection.setDirectionY(segment[3] - segment[1]);
+        mDirection.setVectorX(segment[2] - segment[0]);
+        mDirection.setVectorY(segment[3] - segment[1]);
     }
 
     void LineSegment::setLine(float x1, float y1, float x2, float y2)
     {
         mLineSegment = { x1, y1, x2, y2 };
-        mDirection.setDirectionX(x2 - x1);
-        mDirection.setDirectionY(y2 - y1);
+        mDirection.setVectorX(x2 - x1);
+        mDirection.setVectorY(y2 - y1);
     }
 
     bool LineSegment::intersection(Rectangle& rectangle)

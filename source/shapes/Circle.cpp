@@ -46,31 +46,31 @@ namespace shape {
     bool Circle::intersection(LineSegment& line)
     {
         std::array<float, 4> targetLine = line.getLineSegment();
-        Vector2 lineDirection = line.getDirection();
 
-        Vector2 distance0(mCircle[0] - targetLine[0], mCircle[1] - targetLine[1]);
-        Vector2 distance1(mCircle[0] - targetLine[2], mCircle[1] - targetLine[3]);
+        float distanceX = targetLine[2] - targetLine[0];
+        float distanceY = targetLine[3] - targetLine[1];
+
+        float circleDistanceX = distanceX * (targetLine[0] - mCircle[0]);
+        float circleDistanceY = distanceY * (targetLine[1] - mCircle[1]);
         
-        float lineNormal = lineDirection.projection(lineDirection.lineNormal());
-        float lineProjX = lineDirection.projection(Vector2(1, 0));
+        float circleXSq = std::pow(targetLine[0] - mCircle[0], 2);
+        float circleYSq = std::pow(targetLine[1] - mCircle[1], 2);
 
-        Vector2 lineX = VECTOR2X;
-        lineX.setMagnitude(lineProjX);
+        float a = (distanceX * distanceX) + (distanceY * distanceY);
+        float b = 2.0f * (circleDistanceX + circleDistanceY);
+        float c = (circleXSq + circleYSq) - std::pow(mCircle[2], 2);
 
-        float dotProd0 = lineX.dotProduct(distance0);
-        float dotProd1 = lineX.dotProduct(distance1);
-        bool normalCheck = (std::fabsf(lineNormal) <= mCircle[2]);
-
-        return (normalCheck && dotProd0 > 0.f && dotProd1 < 0);
+        float det = (b*b) - 4.0f * a*c;
+        return !((a <= 0.0000001f) || det < 0.0f);
     }
 
     bool Circle::intersection(std::array<float, 2> point)
     {
         float distanceX = std::fabsf(mCircle[0] - point[0]);
         float distanceY = std::fabsf(mCircle[1] - point[1]);
-        float distanceSq = std::pow(distanceX, 2) + std::pow(distanceY, 2);
+        float distanceSq = std::sqrt(std::pow(distanceX, 2) + std::pow(distanceY, 2));
 
-        return (distanceSq <= std::pow(mCircle[2], 2));
+        return (distanceSq <= mCircle[2]);
     }
 
     const std::array<float, 3> Circle::getCircle() const
