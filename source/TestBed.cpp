@@ -69,13 +69,15 @@ int main()
         tree->process();
 
     // SHAPES
-    liquid::shape::Rectangle rectangle;
-    liquid::shape::Circle circle;
-    rectangle.setRectangle(50.0f, 50.0f, 100.0f, 50.0f);
-    circle.setCircle(50.0f, 50.0f, 20.0);
+    liquid::shape::Circle circle0;
+    liquid::shape::Circle circle1;
 
-    bool intersects0 = circle.intersection(rectangle);
-    bool intersects1 = rectangle.intersection(circle);
+    circle0.setCircle(50.0f, 50.0f, 20.0f);
+    circle1.setCircle(50.0f, 70.0f, 20.0f);
+
+    bool intersects0 = circle0.intersection(circle1);
+    bool intersects1 = circle1.intersection(circle0);
+    bool intersects2 = circle0.intersection({ 55.0f, 56.0f });
 
     // ADD TEST CALLS HERE
     Tests tests;

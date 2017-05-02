@@ -33,11 +33,14 @@ namespace shape {
     {
         std::array<float, 3> targetCircle = circle.getCircle();
 
+        float radius = mCircle[2] / 2.0f;
+        float radiusTarget = targetCircle[2] / 2.0f;
+
         float distanceX = std::fabsf(targetCircle[0] - mCircle[0]);
         float distanceY = std::fabsf(targetCircle[1] - mCircle[1]);
 
-        float distanceR0 = std::pow(std::fabsf(targetCircle[2] - mCircle[2]), 2);
-        float distanceR1 = std::pow(std::fabsf(targetCircle[2] + mCircle[2]), 2);
+        float distanceR0 = std::pow(std::fabsf(radiusTarget - radius), 2);
+        float distanceR1 = std::pow(std::fabsf(radiusTarget + radius), 2);
         float distanceSq = std::pow(distanceX, 2) + std::pow(distanceY, 2);
 
         return (distanceR0 <= distanceSq && distanceSq <= distanceR1);
@@ -47,6 +50,7 @@ namespace shape {
     {
         std::array<float, 4> targetLine = line.getLineSegment();
 
+        float radius = mCircle[2] / 2.0f;
         float distanceX = targetLine[2] - targetLine[0];
         float distanceY = targetLine[3] - targetLine[1];
 
@@ -58,7 +62,7 @@ namespace shape {
 
         float a = (distanceX * distanceX) + (distanceY * distanceY);
         float b = 2.0f * (circleDistanceX + circleDistanceY);
-        float c = (circleXSq + circleYSq) - std::pow(mCircle[2], 2);
+        float c = (circleXSq + circleYSq) - std::pow(radius, 2);
 
         float det = (b*b) - 4.0f * a*c;
         return !((a <= 0.0000001f) || det < 0.0f);
@@ -70,7 +74,7 @@ namespace shape {
         float distanceY = std::fabsf(mCircle[1] - point[1]);
         float distanceSq = std::sqrt(std::pow(distanceX, 2) + std::pow(distanceY, 2));
 
-        return (distanceSq <= mCircle[2]);
+        return (distanceSq <= (mCircle[2] / 2.0f));
     }
 
     const std::array<float, 3> Circle::getCircle() const
