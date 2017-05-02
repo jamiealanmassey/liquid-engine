@@ -54,7 +54,7 @@ int main()
     liquid::ai::InverterNode* node3 = new liquid::ai::InverterNode();
 
     node0->insertChild(node1);
-    node0->setRepeaterLimit(0);
+    node0->setRepeaterLimit(2);
     node1->insertChild(node2);
     node1->insertChild(node4);
     //node3->insertChild(node4);

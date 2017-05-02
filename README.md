@@ -10,7 +10,6 @@ LuaBridge (https://github.com/vinniefalco/LuaBridge)
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  
 
 # Roadmap
-&#x25a0; Particles  
 &#x25a0; Lighting System  
 &#x25a0; Basic Artifical Intelligence  
 &#x25a0; Modular UI  
@@ -18,6 +17,8 @@ SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)
 &#x25a0; Sound Subsystem  
 &#x25a0; Graphics Post-Processing  
 &#x25a0; Basic LUA Exposure  
+&#x25a0; Layering (both graphics & scenes, use for sorting entities(?))  
+&#x25a0; Rendering Optimisation (draw less and only what can be seen)  
 
 # Project Module Structure
 Liquid  
@@ -30,7 +31,8 @@ Liquid
 |-- graphics  
 |-- impl  
 |-- navigation  
-|-- parser   
+|-- parser  
+|-- shapes  
 |-- spatial  
 |-- timeline  
 |-- tweener  

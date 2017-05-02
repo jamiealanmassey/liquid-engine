@@ -5,7 +5,7 @@ namespace liquid { namespace ai {
 #define _REPEATERCONDITIONALNODE_H
 
 /**
- * \class RepeaterNodeConditional
+ * \class RepeaterConditionalNode
  *
  * \ingroup AI
  * \brief Similar to a RepeaterNode, except it will stop when the child BehaviourNode returns failure

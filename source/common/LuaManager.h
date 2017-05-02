@@ -1,11 +1,11 @@
 #include <string>
 
 namespace liquid { namespace common {
-#ifndef _LUAINSTANCE_H
-#define _LUAINSTANCE_H
+#ifndef _LUAMANAGER_H
+#define _LUAMANAGER_H
 
 /** 
- * \class LuaInstance
+ * \class LuaManager
  *
  * \ingroup Common
  * \brief Managing class to run and control LUA scripts via LuaBridge
@@ -17,11 +17,11 @@ namespace liquid { namespace common {
  */
 
 // TODO: Link and initialise LuaBridge
-class LuaInstance
+class LuaManager
 {
 public:
-    LuaInstance();
-    ~LuaInstance();
+    LuaManager();
+    ~LuaManager();
 
     void initialise();
     bool runScript(std::string scriptLoc);

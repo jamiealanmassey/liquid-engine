@@ -44,7 +44,7 @@
 #include "common/Entity.h"
 #include "common/GameManager.h"
 #include "common/GameScene.h"
-#include "common/LuaInstance.h"
+#include "common/LuaManager.h"
 #include "common/Particle.h"
 #include "common/ParticleEmitter.h"
 #include "common/ResourceManager.h"
@@ -88,6 +88,12 @@
 #include "parser/ParserNode.h"
 #include "parser/ParserNodeSearch.h"
 #include "parser/ParserXML.h"
+
+#include "shapes/Circle.h"
+#include "shapes/IShape.h"
+#include "shapes/LineSegment.h"
+#include "shapes/Rectangle.h"
+#include "shapes/Vector2.h"
 
 #include "spatial/QuadNode.h"
 #include "spatial/QuadTree.h"
