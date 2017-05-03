@@ -137,6 +137,74 @@ namespace shape {
         return std::atan2(mVectorX, mVectorY);
     }
 
+    Vector2& Vector2::operator= (const float scalar)
+    {
+        mVectorX = scalar;
+        mVectorY = scalar;
+        return *this;
+    }
+
+    Vector2& Vector2::operator- (const float scalar)
+    {
+        float vectorX = mVectorX - scalar;
+        float vectorY = mVectorY - scalar;
+        return Vector2(vectorX, vectorY);
+    }
+
+    Vector2& Vector2::operator+ (const float scalar)
+    {
+        float vectorX = mVectorX + scalar;
+        float vectorY = mVectorY + scalar;
+        return Vector2(vectorX, vectorY);
+    }
+
+    Vector2& Vector2::operator* (const float scalar)
+    {
+        float vectorX = mVectorX * scalar;
+        float vectorY = mVectorY * scalar;
+        return Vector2(vectorX, vectorY);
+    }
+
+    Vector2& Vector2::operator/ (const float scalar)
+    {
+        float vectorX = mVectorX / scalar;
+        float vectorY = mVectorY / scalar;
+        return Vector2(vectorX, vectorY);
+    }
+
+    Vector2& Vector2::operator+= (const float scalar)
+    {
+        mVectorX += scalar;
+        mVectorY += scalar;
+        return *this;
+    }
+
+    Vector2& Vector2::operator-= (const float scalar)
+    {
+        mVectorX -= scalar;
+        mVectorY -= scalar;
+        return *this;
+    }
+
+    Vector2& Vector2::operator*= (const float scalar)
+    {
+        mVectorX *= scalar;
+        mVectorY *= scalar;
+        return *this;
+    }
+
+    Vector2& Vector2::operator/= (const float scalar)
+    {
+        mVectorX /= scalar;
+        mVectorY /= scalar;
+        return *this;
+    }
+
+    bool Vector2::operator== (const float scalar)
+    {
+        return (mVectorX == scalar && mVectorY == scalar);
+    }
+
     Vector2& Vector2::operator= (Vector2& vector)
     {
         mVectorX = vector.getVectorX();

@@ -47,6 +47,11 @@ namespace ai {
         mMaxVelocity = maxVelocity;
     }
 
+    void Agent::setTargetAgent(Agent* targetAgent)
+    {
+        mTargetAgent = targetAgent;
+    }
+
     void Agent::setEntityPtr(common::Entity* entityPtr)
     {
         mEntityPtr = entityPtr;
@@ -70,6 +75,11 @@ namespace ai {
     const float Agent::getMaxVelocity() const
     {
         return mMaxVelocity;
+    }
+
+    Agent* Agent::getTargetAgent() const
+    {
+        return mTargetAgent;
     }
 
     shape::Vector2& Agent::getVelocity() const

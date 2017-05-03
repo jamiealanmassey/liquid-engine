@@ -11,7 +11,7 @@ public:
     SteeringBehaviour() {}
     ~SteeringBehaviour() {}
 
-    virtual shape::Vector2& getSteeringForce(Agent& agent, shape::Vector2& targetPosition, shape::Vector2& targetDirection) = 0;
+    virtual shape::Vector2& getSteeringForce(Agent& agent) = 0;
 };
 
 #endif // _STEERINGBEHAVIOUR_H

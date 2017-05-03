@@ -24,6 +24,7 @@ public:
     void setVisionDistance(float visionDist);
     void setVisionCone(shape::Vector2& v1, shape::Vector2& v2);
     void setMaxVelocity(float maxVelocity);
+    void setTargetAgent(Agent* targetAgent);
     void setEntityPtr(common::Entity* entityPtr);
 
     const float getVelocityX() const;
@@ -31,6 +32,7 @@ public:
     const float getVisionDistance() const;
     const float getMaxVelocity() const;
     
+    Agent* getTargetAgent() const;
     shape::Vector2& getVelocity() const;
     common::Entity* getEntityPtr() const;
 
@@ -39,6 +41,7 @@ protected:
     float* mVelocityY;
     float mVisionDistance;
     float mMaxVelocity;
+    Agent* mTargetAgent;
     shape::Vector2 mVisionCone[2];
     common::Entity* mEntityPtr;
 };

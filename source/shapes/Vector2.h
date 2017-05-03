@@ -38,6 +38,17 @@ public:
     const float getMagnitude();
     const float getAngle();
 
+    Vector2& operator= (const float scalar);
+    Vector2& operator- (const float scalar);
+    Vector2& operator+ (const float scalar);
+    Vector2& operator* (const float scalar);
+    Vector2& operator/ (const float scalar);
+    Vector2& operator+= (const float scalar);
+    Vector2& operator-= (const float scalar);
+    Vector2& operator*= (const float scalar);
+    Vector2& operator/= (const float scalar);
+    bool operator== (const float scalar);
+
     Vector2& operator= (Vector2& vector);
     Vector2& operator- (Vector2& vector);
     Vector2& operator+ (Vector2& vector);

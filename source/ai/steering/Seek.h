@@ -10,7 +10,7 @@ public:
     Seek();
     ~Seek();
 
-    shape::Vector2& getSteeringForce(Agent& agent, shape::Vector2& targetPosition, shape::Vector2& targetDirection) override;
+    shape::Vector2& getSteeringForce(Agent& agent) override;
 };
 
 #endif // _SEEK_H
