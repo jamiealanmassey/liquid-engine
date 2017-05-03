@@ -20,6 +20,7 @@ public:
     void parserXML();
     void quadTree();
     void interface(sf::Texture& interfaceTexture);
+    void ai(sf::Texture& texture);
 
 private:
     liquid::common::Entity* mEntity;

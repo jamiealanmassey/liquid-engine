@@ -14,6 +14,9 @@ namespace liquid { namespace ai {
 class Agent
 {
 public:
+    typedef std::function<void(float, float)> VelocityFunc;
+
+public:
     Agent();
     ~Agent();
 
@@ -29,6 +32,7 @@ public:
     void setVisionCone(shape::Vector2& v1, shape::Vector2& v2);
     void setMaxVelocity(float maxVelocity);
     void setEntityPtr(common::Entity* entityPtr);
+    void setVelocityFunc(VelocityFunc func);
 
     const float getVelocityX() const;
     const float getVelocityY() const;
@@ -36,8 +40,13 @@ public:
     const float getVisionDistance() const;
     const float getMaxVelocity() const;
     
-    shape::Vector2& getVelocity() const;
+    shape::Vector2 getVelocity() const;
     common::Entity* getEntityPtr() const;
+    SteeringManager* getSteeringManager() const;
+    BehaviourTree* getBehaviourTree() const;
+
+public:
+    shape::Vector2 target;
 
 protected:
     float mVelocityX;
@@ -50,6 +59,7 @@ protected:
     common::Entity* mEntityPtr;
     SteeringManager* mSteeringManager;
     BehaviourTree* mBehaviourTree;
+    VelocityFunc mVelocityFunc;
 };
 
 #endif // _AGENT_H

@@ -29,9 +29,9 @@ public:
     const float lineProduct(Vector2& other);
     const float projection(Vector2& other);
 
-    Vector2& rotate(float angle);
-    Vector2& normalise();
-    Vector2& lineNormal();
+    Vector2 rotate(float angle);
+    Vector2 normalise();
+    Vector2 lineNormal();
 
     float getVectorX() const;
     float getVectorY() const;
@@ -39,26 +39,26 @@ public:
     const float getMagnitude();
     const float getAngle();
 
-    Vector2& operator= (const float scalar);
-    Vector2& operator- (const float scalar);
-    Vector2& operator+ (const float scalar);
-    Vector2& operator* (const float scalar);
-    Vector2& operator/ (const float scalar);
-    Vector2& operator+= (const float scalar);
-    Vector2& operator-= (const float scalar);
-    Vector2& operator*= (const float scalar);
-    Vector2& operator/= (const float scalar);
+    Vector2 operator= (const float scalar);
+    Vector2 operator- (const float scalar);
+    Vector2 operator+ (const float scalar);
+    Vector2 operator* (const float scalar);
+    Vector2 operator/ (const float scalar);
+    Vector2 operator+= (const float scalar);
+    Vector2 operator-= (const float scalar);
+    Vector2 operator*= (const float scalar);
+    Vector2 operator/= (const float scalar);
     bool operator== (const float scalar);
 
-    Vector2& operator= (Vector2& vector);
-    Vector2& operator- (Vector2& vector);
-    Vector2& operator+ (Vector2& vector);
-    Vector2& operator* (Vector2& vector);
-    Vector2& operator/ (Vector2& vector);
-    Vector2& operator+= (Vector2& vector);
-    Vector2& operator-= (Vector2& vector);
-    Vector2& operator*= (Vector2& vector);
-    Vector2& operator/= (Vector2& vector);
+    Vector2 operator= (Vector2& vector);
+    Vector2 operator- (Vector2& vector);
+    Vector2 operator+ (Vector2& vector);
+    Vector2 operator* (Vector2& vector);
+    Vector2 operator/ (Vector2& vector);
+    Vector2 operator+= (Vector2& vector);
+    Vector2 operator-= (Vector2& vector);
+    Vector2 operator*= (Vector2& vector);
+    Vector2 operator/= (Vector2& vector);
     bool operator== (Vector2& vector);
 
 protected:

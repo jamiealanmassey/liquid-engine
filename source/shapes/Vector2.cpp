@@ -92,7 +92,7 @@ namespace shape {
         return dotProduct(other.normalise());
     }
 
-    Vector2& Vector2::rotate(float angle)
+    Vector2 Vector2::rotate(float angle)
     {
         float cos = std::cos(angle);
         float sin = std::sin(angle);
@@ -103,7 +103,7 @@ namespace shape {
         return Vector2(rotatedX, rotatedY);
     }
 
-    Vector2& Vector2::normalise()
+    Vector2 Vector2::normalise()
     {
         float magnitude = getMagnitude();
         float normalX = mVectorX / magnitude;
@@ -112,7 +112,7 @@ namespace shape {
         return Vector2(normalX, normalY);
     }
 
-    Vector2& Vector2::lineNormal()
+    Vector2 Vector2::lineNormal()
     {
         return rotate(PI * -0.5f);
     }
@@ -137,63 +137,63 @@ namespace shape {
         return std::atan2(mVectorX, mVectorY);
     }
 
-    Vector2& Vector2::operator= (const float scalar)
+    Vector2 Vector2::operator= (const float scalar)
     {
         mVectorX = scalar;
         mVectorY = scalar;
         return *this;
     }
 
-    Vector2& Vector2::operator- (const float scalar)
+    Vector2 Vector2::operator- (const float scalar)
     {
         float vectorX = mVectorX - scalar;
         float vectorY = mVectorY - scalar;
         return Vector2(vectorX, vectorY);
     }
 
-    Vector2& Vector2::operator+ (const float scalar)
+    Vector2 Vector2::operator+ (const float scalar)
     {
         float vectorX = mVectorX + scalar;
         float vectorY = mVectorY + scalar;
         return Vector2(vectorX, vectorY);
     }
 
-    Vector2& Vector2::operator* (const float scalar)
+    Vector2 Vector2::operator* (const float scalar)
     {
         float vectorX = mVectorX * scalar;
         float vectorY = mVectorY * scalar;
         return Vector2(vectorX, vectorY);
     }
 
-    Vector2& Vector2::operator/ (const float scalar)
+    Vector2 Vector2::operator/ (const float scalar)
     {
         float vectorX = mVectorX / scalar;
         float vectorY = mVectorY / scalar;
         return Vector2(vectorX, vectorY);
     }
 
-    Vector2& Vector2::operator+= (const float scalar)
+    Vector2 Vector2::operator+= (const float scalar)
     {
         mVectorX += scalar;
         mVectorY += scalar;
         return *this;
     }
 
-    Vector2& Vector2::operator-= (const float scalar)
+    Vector2 Vector2::operator-= (const float scalar)
     {
         mVectorX -= scalar;
         mVectorY -= scalar;
         return *this;
     }
 
-    Vector2& Vector2::operator*= (const float scalar)
+    Vector2 Vector2::operator*= (const float scalar)
     {
         mVectorX *= scalar;
         mVectorY *= scalar;
         return *this;
     }
 
-    Vector2& Vector2::operator/= (const float scalar)
+    Vector2 Vector2::operator/= (const float scalar)
     {
         mVectorX /= scalar;
         mVectorY /= scalar;
@@ -205,63 +205,63 @@ namespace shape {
         return (mVectorX == scalar && mVectorY == scalar);
     }
 
-    Vector2& Vector2::operator= (Vector2& vector)
+    Vector2 Vector2::operator= (Vector2& vector)
     {
         mVectorX = vector.getVectorX();
         mVectorY = vector.getVectorY();
         return *this;
     }
 
-    Vector2& Vector2::operator- (Vector2& vector)
+    Vector2 Vector2::operator- (Vector2& vector)
     {
         float directionX = mVectorX - vector.getVectorX();
         float directionY = mVectorY - vector.getVectorY();
         return Vector2(directionX, directionY);
     }
 
-    Vector2& Vector2::operator+ (Vector2& vector)
+    Vector2 Vector2::operator+ (Vector2& vector)
     {
         float directionX = mVectorX + vector.getVectorX();
         float directionY = mVectorY + vector.getVectorY();
         return Vector2(directionX, directionY);
     }
 
-    Vector2& Vector2::operator* (Vector2& vector)
+    Vector2 Vector2::operator* (Vector2& vector)
     {
         float directionX = mVectorX * vector.getVectorX();
         float directionY = mVectorY * vector.getVectorY();
         return Vector2(directionX, directionY);
     }
 
-    Vector2& Vector2::operator/ (Vector2& vector)
+    Vector2 Vector2::operator/ (Vector2& vector)
     {
         float directionX = mVectorX / vector.getVectorX();
         float directionY = mVectorY / vector.getVectorY();
         return Vector2(directionX, directionY);
     }
 
-    Vector2& Vector2::operator+= (Vector2& vector)
+    Vector2 Vector2::operator+= (Vector2& vector)
     {
         mVectorX += vector.getVectorX();
         mVectorY += vector.getVectorY();
         return *this;
     }
 
-    Vector2& Vector2::operator-= (Vector2& vector)
+    Vector2 Vector2::operator-= (Vector2& vector)
     {
         mVectorX -= vector.getVectorX();
         mVectorY -= vector.getVectorY();
         return *this;
     }
 
-    Vector2& Vector2::operator*= (Vector2& vector)
+    Vector2 Vector2::operator*= (Vector2& vector)
     {
         mVectorX *= vector.getVectorX();
         mVectorY *= vector.getVectorY();
         return *this;
     }
 
-    Vector2& Vector2::operator/= (Vector2& vector)
+    Vector2 Vector2::operator/= (Vector2& vector)
     {
         mVectorX /= vector.getVectorX();
         mVectorY /= vector.getVectorY();

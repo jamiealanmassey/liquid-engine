@@ -5,6 +5,7 @@ namespace common {
     
     Entity::Entity()
     {
+        mFuncCallbackUpdate = nullptr;
         mFuncCallbackSetPosition = nullptr;
         mFuncCallbackAddPosition = nullptr;
         mFuncCallbackKilled = nullptr;
@@ -17,6 +18,7 @@ namespace common {
         mUniqueID = "Invalid";
         mParentEntity = nullptr;
         mParentGameScene = nullptr;
+        mAIAgent = nullptr;
         mVerticesSet = false;
     }
     
@@ -27,15 +29,10 @@ namespace common {
     
     void Entity::initialise()
     {
-        
     }
     
     void Entity::updatePre()
     {
-        // TODO: DO THIS IN MANAGER, NOT HERE
-        //if (m_EntityState != eEntityState::ENTITYSTATE_ALIVE)
-            //return;
-        
         // TODO: Box2D Body?
         
         
@@ -43,12 +40,14 @@ namespace common {
     
     void Entity::update()
     {
-        
+        if (mFuncCallbackUpdate != nullptr)
+            mFuncCallbackUpdate(this);
     }
     
     void Entity::updatePost()
     {
-        
+        if (mAIAgent != nullptr)
+            mAIAgent->update();
     }
     
     void Entity::setPosition(float x, float y)
@@ -159,6 +158,15 @@ namespace common {
         mParentEntity = entity;
         mParentEntity->addChild(this);
     }
+
+    void Entity::createAIAgent()
+    {
+        if (mAIAgent)
+            delete mAIAgent;
+
+        mAIAgent = new ai::Agent();
+        mAIAgent->setEntityPtr(this);
+    }
     
     void Entity::setEntityType(int32_t type)
     {
@@ -223,6 +231,11 @@ namespace common {
     GameScene* Entity::getParentGameScene() const
     {
         return mParentGameScene;
+    }
+
+    ai::Agent* Entity::getAIAgent() const
+    {
+        return mAIAgent;
     }
     
     void Entity::addChild(Entity* entity)

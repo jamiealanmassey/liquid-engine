@@ -32,9 +32,11 @@
 #include "ai/nodes/SelectorNode.h"
 #include "ai/nodes/SequenceNode.h"
 #include "ai/nodes/SucceederNode.h"
+#include "ai/Agent.h"
 #include "ai/BehaviourNode.h"
 #include "ai/BehaviourTree.h"
 #include "ai/BehaviourTreeParser.h"
+#include "ai/SteeringManager.h"
 
 #include "animation/AnimationDefs.h"
 #include "animation/AnimationFrame.h"

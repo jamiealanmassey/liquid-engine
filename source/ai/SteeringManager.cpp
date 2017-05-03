@@ -24,19 +24,22 @@ namespace ai {
     void SteeringManager::update()
     {
         shape::Vector2 velocity = mParentAgent->getVelocity();
-
         mSteeringForce = truncate(mSteeringForce, mMaxForce);
         mSteeringForce.scale(1 / mParentAgent->getMass());
 
         velocity += mSteeringForce;
         velocity = truncate(velocity, mParentAgent->getMaxVelocity());
+
         mSteeringVelocity = velocity;
+        mSteeringForce = shape::VECTOR20;
     }
 
     void SteeringManager::reset()
     {
         mSteeringForce = shape::VECTOR20;
         mSteeringVelocity = shape::VECTOR20;
+        mParentAgent->setVelocityX(0.f);
+        mParentAgent->setVelocityY(0.f);
     }
 
     shape::Vector2 SteeringManager::wander()
@@ -61,15 +64,19 @@ namespace ai {
 
     shape::Vector2 SteeringManager::seek(shape::Vector2& target, float slowingRadius)
     {
-        shape::Vector2 desired = (target - getPosition(mParentAgent)).normalise();
-        float distance = desired.getMagnitude();
+        shape::Vector2 desired, result;
+        float distance;
+
+        desired = target - getPosition(mParentAgent);
+        distance = desired.getMagnitude();
+        desired = desired.normalise();
 
         if (distance <= slowingRadius)
             desired.scale(mParentAgent->getMaxVelocity() * (distance / slowingRadius));
         else
             desired.scale(mParentAgent->getMaxVelocity());
 
-        shape::Vector2 result(desired - mParentAgent->getVelocity());
+        result = desired - mParentAgent->getVelocity();
         mSteeringForce += result;
         return result;
     }
@@ -120,8 +127,8 @@ namespace ai {
 
     shape::Vector2 SteeringManager::getPosition(Agent* agent)
     {
-        float positionX = mParentAgent->getEntityPtr()->getPositionX();
-        float positionY = mParentAgent->getEntityPtr()->getPositionY();
+        float positionX = agent->getEntityPtr()->getPositionX();
+        float positionY = agent->getEntityPtr()->getPositionY();
 
         return shape::Vector2(positionX, positionY);
     }

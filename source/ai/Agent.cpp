@@ -6,8 +6,10 @@ namespace ai {
 
     Agent::Agent()
     {
-        mVelocityX = 0.f;
-        mVelocityY = 0.f;
+        mVelocityX = 1.f;
+        mVelocityY = 1.f;
+        mMass = 1.f;
+        mMaxVelocity = 2.0f;
         mVisionDistance = 0.0f;
         mEntityPtr = nullptr;
         mSteeringManager = new SteeringManager(this);
@@ -29,6 +31,9 @@ namespace ai {
         shape::Vector2 velocity(mSteeringManager->getSteeringVelocity());
         mVelocityX = velocity.getVectorX();
         mVelocityY = velocity.getVectorY();
+
+        if (mVelocityFunc != nullptr)
+            mVelocityFunc(mVelocityX, mVelocityY);
     }
 
     void Agent::loadBehaviourTree(std::string xmlBehaviourTree)
@@ -79,6 +84,11 @@ namespace ai {
         mEntityPtr = entityPtr;
     }
 
+    void Agent::setVelocityFunc(Agent::VelocityFunc func)
+    {
+        mVelocityFunc = func;
+    }
+
     const float Agent::getVelocityX() const
     {
         return mVelocityX;
@@ -104,7 +114,7 @@ namespace ai {
         return mMaxVelocity;
     }
 
-    shape::Vector2& Agent::getVelocity() const
+    shape::Vector2 Agent::getVelocity() const
     {
         return shape::Vector2(mVelocityX, mVelocityY);
     }
@@ -112,6 +122,16 @@ namespace ai {
     common::Entity* Agent::getEntityPtr() const
     {
         return mEntityPtr;
+    }
+
+    SteeringManager* Agent::getSteeringManager() const
+    {
+        return mSteeringManager;
+    }
+
+    BehaviourTree* Agent::getBehaviourTree() const
+    {
+        return mBehaviourTree;
     }
 
 }}

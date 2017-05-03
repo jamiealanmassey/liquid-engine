@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include "../utilities/Vertex2.h"
+#include "../ai/Agent.h"
 
 namespace liquid { namespace common {
 #ifndef _ENTITY_H
@@ -142,6 +143,9 @@ public:
       */
     void setParentEntity(Entity* entity);
 
+    /// \brief Creates an AI Agent (ai::Agent) for this Entity
+    void createAIAgent();
+
     /** \brief Sets m_Type to the given type
       * \param type The type represented as a 32-bit integers
       */
@@ -206,6 +210,11 @@ public:
       */
     GameScene* getParentGameScene() const;
 
+    /** \brief Gets the ai::Agent linked with this Entity
+      * \return The ai::Agent, nullptr if none created
+      */
+    ai::Agent* getAIAgent() const;
+
 protected:
     /** \brief Adds a child to this Entity
       * \param child The child Entity to add
@@ -232,6 +241,7 @@ protected:
     void removeChild(Entity* child);
 
 public:
+    std::function<void(Entity*)>      mFuncCallbackUpdate;      ///< Function callback for when Entity is updated
     std::function<void(float, float)> mFuncCallbackSetPosition; ///< Function callback for when position is set
     std::function<void(float, float)> mFuncCallbackAddPosition; ///< Function callback for when position is added
     std::function<void()>             mFuncCallbackKilled;      ///< Function callback for when this Entity is destroyed
@@ -251,6 +261,7 @@ protected:
     std::list<int32_t>   mFrameEvents;     ///< Collection of integers that denotes what has happened
     Entity*              mParentEntity;    ///< Pointer to the parent entity of this entity
     GameScene*           mParentGameScene; ///< Pointer to the parent scene of this entity
+    ai::Agent*           mAIAgent;         ///< AI Agent that is linked with this Entity
 
 protected:
     std::array<liquid::utilities::Vertex2*, 4> mVerticesPtr; ///< Pointer to array of vertices, usually for transforming Renderable data
