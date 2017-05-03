@@ -1,4 +1,8 @@
 #include "Entity.h"
+#include "../shapes/Rectangle.h"
+#include "../shapes/Circle.h"
+#include "../shapes/LineSegment.h"
+#include "../graphics/ICamera.h"
 
 namespace liquid { namespace common {
 #ifndef _LUAFUNCS_H
@@ -23,6 +27,28 @@ public:
     static void luaAddChild(std::string entity, std::string child);
     static void luaRemoveChild(std::string entity, std::string child);
     
+    static void luaLoadBehaviourTree(std::string entity, std::string xmlBT);
+    static void luaSetMaxVelocity(std::string entity, float maxVelocity);
+    static float luaGetVelocityX(std::string entity);
+    static float luaGetVelocityY(std::string entity);
+    static float luaGetMaxVelocity(std::string entity);
+
+    static void luaWander(std::string entity);
+    static void luaSeek(std::string entity, float targetX, float targetY);
+    static void luaFlee(std::string entity, float targetX, float targetY);
+    static void luaEvade(std::string entity, std::string targetEntity);
+    static void luaPursue(std::string entity, std::string targetEntity);
+
+    static void luaSetCameraCentre(float x, float y);
+    static void luaSetCameraSize(float w, float h);
+    static void luaSetCameraRotation(float rotation);
+    static void luaShakeCamera(float duration, float radius, int32_t axis);
+
+    static shape::Rectangle luaCreateRectangle(float x, float y, float w, float h);
+    static shape::Circle luaCreateCircle(float x, float y, float radius);
+    static shape::LineSegment luaCreateLineSegment(float x1, float y1, float x2, float y2);
+
+    static float luaGetDeltaTime();
     static Entity* getEntity(std::string entity);
 };
 

@@ -393,11 +393,13 @@ void Tests::ai(sf::Texture& texture)
     entity0->setPosition(500.0f, 500.0f);
     entity1->setPosition(800.0f, 800.0f);
 
-    /*entity0->getAIAgent()->setVelocityX(1.0f);
+    entity0->getAIAgent()->setVelocityX(1.0f);
     entity0->getAIAgent()->setVelocityY(1.25f);
     entity1->getAIAgent()->setVelocityX(-1.5f);
-    entity1->getAIAgent()->setVelocityY(-1.0f);*/
-    entity0->mLuaScript = "test.lua";
+    entity1->getAIAgent()->setVelocityY(-1.0f);
+
+    entity0->mLuaScript = "entity0.lua";
+    entity1->mLuaScript = "entity1.lua";
 
     /*entity0->mFuncCallbackUpdate = [](liquid::common::Entity* entity) {
         if (entity->getAIAgent())
