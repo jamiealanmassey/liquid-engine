@@ -117,12 +117,12 @@ namespace shape {
         return rotate(PI * -0.5f);
     }
 
-    const float Vector2::getVectorX()
+    float Vector2::getVectorX() const
     {
         return mVectorX;
     }
 
-    const float Vector2::getVectorY()
+    float Vector2::getVectorY() const
     {
         return mVectorY;
     }

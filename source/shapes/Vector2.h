@@ -33,8 +33,9 @@ public:
     Vector2& normalise();
     Vector2& lineNormal();
 
-    const float getVectorX();
-    const float getVectorY();
+    float getVectorX() const;
+    float getVectorY() const;
+
     const float getMagnitude();
     const float getAngle();
 
@@ -65,9 +66,9 @@ protected:
     float mVectorY;
 };
 
-#define VECTOR2X Vector2(1.0f, 0.0f);
-#define VECTOR2Y Vector2(0.0f, 1.0f);
-#define VECTOR20 Vector2(0.0f, 0.0f);
+#define VECTOR2X Vector2(1.0f, 0.0f)
+#define VECTOR2Y Vector2(0.0f, 1.0f)
+#define VECTOR20 Vector2(0.0f, 0.0f)
 
 #endif // _VECTOR2_H
 }}

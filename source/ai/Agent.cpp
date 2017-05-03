@@ -6,29 +6,56 @@ namespace ai {
 
     Agent::Agent()
     {
-        mVelocityX = nullptr;
-        mVelocityY = nullptr;
+        mVelocityX = 0.f;
+        mVelocityY = 0.f;
         mVisionDistance = 0.0f;
         mEntityPtr = nullptr;
+        mSteeringManager = new SteeringManager(this);
+        mBehaviourTree = nullptr;
     }
 
     Agent::~Agent()
     {
+        delete mSteeringManager;
     }
 
     void Agent::update()
     {
-        // TODO: Update priority and Steering Behaviours
+        if (mBehaviourTree != nullptr)
+            mBehaviourTree->process();
+
+        mSteeringManager->update();
+
+        shape::Vector2 velocity(mSteeringManager->getSteeringVelocity());
+        mVelocityX = velocity.getVectorX();
+        mVelocityY = velocity.getVectorY();
     }
 
-    void Agent::setVelocityX(float* velocityX)
+    void Agent::loadBehaviourTree(std::string xmlBehaviourTree)
+    {
+        if (mBehaviourTree == nullptr)
+            mBehaviourTree = new BehaviourTree();
+
+        parser::ParserXML xmlBehaviourParser;
+        xmlBehaviourParser.parseFile(xmlBehaviourTree);
+
+        BehaviourTreeParser parser(xmlBehaviourParser);
+        mBehaviourTree->setNodeRoot(parser.getConstructedNode());
+    }
+
+    void Agent::setVelocityX(float velocityX)
     {
         mVelocityX = velocityX;
     }
 
-    void Agent::setVelocityY(float* velocityY)
+    void Agent::setVelocityY(float velocityY)
     {
         mVelocityY = velocityY;
+    }
+
+    void Agent::setMass(float mass)
+    {
+        mMass = mass;
     }
 
     void Agent::setVisionDistance(float visionDist)
@@ -47,11 +74,6 @@ namespace ai {
         mMaxVelocity = maxVelocity;
     }
 
-    void Agent::setTargetAgent(Agent* targetAgent)
-    {
-        mTargetAgent = targetAgent;
-    }
-
     void Agent::setEntityPtr(common::Entity* entityPtr)
     {
         mEntityPtr = entityPtr;
@@ -59,12 +81,17 @@ namespace ai {
 
     const float Agent::getVelocityX() const
     {
-        return *mVelocityX;
+        return mVelocityX;
     }
 
     const float Agent::getVelocityY() const
     {
-        return *mVelocityY;
+        return mVelocityY;
+    }
+
+    const float Agent::getMass() const
+    {
+        return mMass;
     }
 
     const float Agent::getVisionDistance() const
@@ -77,14 +104,9 @@ namespace ai {
         return mMaxVelocity;
     }
 
-    Agent* Agent::getTargetAgent() const
-    {
-        return mTargetAgent;
-    }
-
     shape::Vector2& Agent::getVelocity() const
     {
-        return shape::Vector2(*mVelocityX, *mVelocityY);
+        return shape::Vector2(mVelocityX, mVelocityY);
     }
 
     common::Entity* Agent::getEntityPtr() const
