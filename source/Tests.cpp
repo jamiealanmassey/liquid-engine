@@ -360,57 +360,64 @@ void Tests::ai(sf::Texture& texture)
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
 
     liquid::impl::SFMLRenderableBatch* renderable = new liquid::impl::SFMLRenderableBatch(texture, 2);
+    liquid::parser::ParserXML animXMLParser;
+    liquid::parser::ParserXML atlasXMLParser;
+
+    animXMLParser.parseFile("animation.xml");
+    atlasXMLParser.parseFile("atlas.xml");
+    atlasXMLParser.dumpXMLTreeToFile();
+
+    liquid::data::TextureAtlas atlas(atlasXMLParser);
+    liquid::animation::AnimationParser animParser(animXMLParser, atlas);
+
+    liquid::animation::Animator* animator0 = new liquid::animation::Animator(animParser);
+    liquid::animation::Animator* animator1 = new liquid::animation::Animator(animParser);
+
     liquid::common::Entity* entity0 = new liquid::common::Entity();
     liquid::common::Entity* entity1 = new liquid::common::Entity();
 
+    animator0->setVerticesPtr(renderable->nextVertices());
+    animator1->setVerticesPtr(renderable->nextVertices());
+    animator0->transformAnimation("run");
+    animator1->transformAnimation("run");
+
     entity0->createAIAgent();
     entity1->createAIAgent();
-    entity0->setVerticesPtr(renderable->nextVertices());
-    entity1->setVerticesPtr(renderable->nextVertices());
+    entity0->setVerticesPtr(animator0->getVerticesPtr());
+    entity1->setVerticesPtr(animator1->getVerticesPtr());
     entity0->setEntityUID("entity0");
     entity1->setEntityUID("entity1");
 
-    entity0->getAIAgent()->setMaxVelocity(1.f);
+    entity0->getAIAgent()->setMaxVelocity(.75f);
     entity1->getAIAgent()->setMaxVelocity(.5f);
     entity0->setPosition(500.0f, 500.0f);
     entity1->setPosition(800.0f, 800.0f);
 
-    entity0->getAIAgent()->setVelocityX(1.0f);
+    /*entity0->getAIAgent()->setVelocityX(1.0f);
     entity0->getAIAgent()->setVelocityY(1.25f);
     entity1->getAIAgent()->setVelocityX(-1.5f);
-    entity1->getAIAgent()->setVelocityY(-1.0f);
+    entity1->getAIAgent()->setVelocityY(-1.0f);*/
+    entity0->mLuaScript = "test.lua";
 
-    entity0->mFuncCallbackUpdate = [](liquid::common::Entity* entity) {
+    /*entity0->mFuncCallbackUpdate = [](liquid::common::Entity* entity) {
         if (entity->getAIAgent())
         {
             liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
+            liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
+
             liquid::ai::Agent* agent = entity->getAIAgent();
             liquid::ai::Agent* agent1 = scene->getEntityWithUID("entity1")->getAIAgent();
 
-            //agent0->getSteeringManager()->wander();
-            //agent0->getSteeringManager()->evade(agent1);
+            agent->getSteeringManager()->wander();
+            agent->getSteeringManager()->evade(agent1);
+
+            float velocityX = agent->getVelocityX() * liquid::utilities::DeltaTime::DELTA;
+            float velocityY = agent->getVelocityY() * liquid::utilities::DeltaTime::DELTA;
+            entity->addPosition(velocityX, velocityY);
 
             float positionX = entity->getPositionX();
             float positionY = entity->getPositionY();
-
-            float distanceX = std::fabs(agent->target.getVectorX() - positionX);
-            float distanceY = std::fabs(agent->target.getVectorY() - positionY);
-
-            if (distanceX >= 10.0f && distanceY >= 10.0f)
-                agent->getSteeringManager()->seek(agent->target, 20.0f);
-            else
-            {
-                float targetX = positionX + liquid::utilities::Random::instance().randomRange(-600.0f, 600.0f);
-                float targetY = positionY + liquid::utilities::Random::instance().randomRange(-600.0f, 600.0f);
-
-                targetX = std::min(std::max(0.0f, targetX), 1920.0f);
-                targetY = std::min(std::max(0.0f, targetY), 1080.0f);
-
-                agent->target.setVectorX(targetX);
-                agent->target.setVectorY(targetY);
-            }
-
-            entity->addPosition(agent->getVelocityX(), agent->getVelocityY());
+            static_cast<liquid::impl::SFMLRenderer*>(renderer)->getCamera()->setCentre({ positionX + 128.f, positionY + 128.f });
         }
     };
 
@@ -423,53 +430,16 @@ void Tests::ai(sf::Texture& texture)
         if (agent0 && agent1)
         {
             agent0->getSteeringManager()->pursue(agent1);
-            entity->addPosition(agent0->getVelocityX(), agent0->getVelocityY());
-        }
-    };
-
-    /*entity0->mFuncCallbackUpdate = [](liquid::common::Entity* entity) {
-        if (entity->getAIAgent())
-        {
-            liquid::ai::Agent* agent = entity->getAIAgent();
-            liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
-            liquid::impl::SFMLRenderer* sfmlRenderer = static_cast<liquid::impl::SFMLRenderer*>(renderer);
-            sf::Vector2i mouse = sf::Mouse::getPosition(*sfmlRenderer->getRenderWindow());
-
-            float positionX = entity->getPositionX();
-            float positionY = entity->getPositionY();
-
-            liquid::shape::Vector2 mouseConv(mouse.x, mouse.y);
-            liquid::shape::Vector2 mouseDist(mouseConv - liquid::shape::Vector2(positionX, positionY));
-
-            if (mouseDist.getMagnitude() <= 500.0f)
-                agent->getSteeringManager()->flee(mouseConv);
-            else
-            {
-                float distanceX = std::fabs(agent->target.getVectorX() - positionX);
-                float distanceY = std::fabs(agent->target.getVectorY() - positionY);
-
-                if (distanceX >= 10.0f && distanceY >= 10.0f)
-                    agent->getSteeringManager()->seek(agent->target, 20.0f);
-                else
-                {
-                    float targetX = positionX + liquid::utilities::Random::instance().randomRange(-600.0f, 600.0f);
-                    float targetY = positionY + liquid::utilities::Random::instance().randomRange(-600.0f, 600.0f);
-
-                    targetX = std::min(std::max(0.0f, targetX), 1920.0f);
-                    targetY = std::min(std::max(0.0f, targetY), 1080.0f);
-
-                    agent->target.setVectorX(targetX);
-                    agent->target.setVectorY(targetY);
-                }
-            }
-
-            positionX += agent->getVelocityX();
-            positionY += agent->getVelocityY();
-            entity->setPosition(positionX, positionY);
+            
+            float velocityX = agent0->getVelocityX() * liquid::utilities::DeltaTime::DELTA;
+            float velocityY = agent0->getVelocityY() * liquid::utilities::DeltaTime::DELTA;
+            entity->addPosition(velocityX, velocityY);
         }
     };*/
 
     renderer->addRenderable(renderable);
     scene->addEntity(entity0);
     scene->addEntity(entity1);
+    scene->addAnimator(animator0);
+    scene->addAnimator(animator1);
 }

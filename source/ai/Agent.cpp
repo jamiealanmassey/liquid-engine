@@ -6,8 +6,8 @@ namespace ai {
 
     Agent::Agent()
     {
-        mVelocityX = 1.f;
-        mVelocityY = 1.f;
+        mVelocityX = 0.f;
+        mVelocityY = 0.f;
         mMass = 1.f;
         mMaxVelocity = 2.0f;
         mVisionDistance = 0.0f;

@@ -7,7 +7,7 @@ namespace liquid {
 namespace ai {
 
     SteeringManager::SteeringManager(Agent* parentAgent) :
-        mCircleDistance(6.0f),
+        mCircleDistance(200.0f),
         mCircleRadius(8.0f),
         mAngleChange(1.0f),
         mMaxForce(5.4f)

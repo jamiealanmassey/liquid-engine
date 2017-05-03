@@ -1,9 +1,12 @@
 #include "Entity.h"
+#include "LuaManager.h"
 
 namespace liquid {
 namespace common {
     
-    Entity::Entity()
+    Entity::Entity() :
+        mLuaFuncUpdate(LuaManager::instance().getLuaState()),
+        mLuaFuncKill(LuaManager::instance().getLuaState())
     {
         mFuncCallbackUpdate = nullptr;
         mFuncCallbackSetPosition = nullptr;
@@ -42,6 +45,13 @@ namespace common {
     {
         if (mFuncCallbackUpdate != nullptr)
             mFuncCallbackUpdate(this);
+
+        LuaManager::instance().runScript(mLuaScript);
+        luabridge::LuaRef updateFunc = luabridge::getGlobal(
+            LuaManager::instance().getLuaState(), "update");
+
+        if (updateFunc.isNil() == false)
+            updateFunc();
     }
     
     void Entity::updatePost()
@@ -135,6 +145,12 @@ namespace common {
 
         if (mFuncCallbackKilled)
             mFuncCallbackKilled();
+
+        LuaManager::instance().runScript(mLuaScript);
+        mLuaFuncKill = luabridge::getGlobal(LuaManager::instance().getLuaState(), "killFunc");
+
+        if (mLuaFuncKill.isNil() == false)
+            mLuaFuncKill();
     }
     
     void Entity::setParentGameScene(GameScene* scene, bool remove)
@@ -236,6 +252,11 @@ namespace common {
     ai::Agent* Entity::getAIAgent() const
     {
         return mAIAgent;
+    }
+
+    std::array<utilities::Vertex2*, 4> Entity::getVerticesPtr() const
+    {
+        return mVerticesPtr;
     }
     
     void Entity::addChild(Entity* entity)

@@ -1,4 +1,11 @@
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 #include <string>
+#include <LuaBridge/LuaBridge.h>
 
 namespace liquid { namespace common {
 #ifndef _LUAMANAGER_H
@@ -16,21 +23,20 @@ namespace liquid { namespace common {
  *
  */
 
-// TODO: Link and initialise LuaBridge
 class LuaManager
 {
 public:
     LuaManager();
     ~LuaManager();
 
-    void initialise();
-    bool runScript(std::string scriptLoc);
-    virtual void registerFunctions();
+    bool runScript(std::string script);
 
-    // luabridge::lua_State* getLuaState();
+    lua_State* getLuaState();
+
+    static LuaManager& instance();
 
 protected:
-    // luabridge::lua_State* mLuaState;
+    lua_State* mLuaState;
 };
 
 #endif // _LUAINSTANCE_H

@@ -87,9 +87,9 @@ int main()
     texture3.loadFromFile("dude_animation_sheet.png");
     uiTexture.loadFromFile("interface.png");
 
-    tests.ai(texture);
-    //tests.interface(uiTexture);
-    //tests.particles(texture2); 
+    tests.ai(texture3);
+    tests.interface(uiTexture);
+    tests.particles(texture2); 
     //tests.animation(texture3);
     //tests.lighting();
     //tests.navigation();

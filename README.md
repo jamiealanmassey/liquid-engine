@@ -5,6 +5,7 @@ make 2D game development a little easier.
 # Dependencies
 PugiXML (http://pugixml.org/)  
 LuaBridge (https://github.com/vinniefalco/LuaBridge)  
+LUA 5.2+ (http://luabinaries.sourceforge.net/)  
 
 # Optional Dependencies
 SFML (https://www.sfml-dev.org/) (add SFML to Preprocessor definitions)  

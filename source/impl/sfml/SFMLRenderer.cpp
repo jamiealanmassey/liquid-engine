@@ -21,7 +21,8 @@ namespace impl {
             mode.height = 1080;
         }
 
-        mRenderWindow = new sf::RenderWindow(mode, "Window", sf::Style::Titlebar);
+        mRenderWindow = new sf::RenderWindow(mode, "Window", 
+            settings->getFullscreen() ? sf::Style::Fullscreen : sf::Style::Titlebar);
     }
 
     SFMLRenderer::~SFMLRenderer()

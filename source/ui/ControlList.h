@@ -8,10 +8,10 @@ namespace liquid { namespace ui {
 #define _CONTROLLIST_H
 
 /**
-* \class Toggle
+* \class ControlList
 *
 * \ingroup UI
-* \brief Similar to the Button class except toggles, extends the Button class
+* \brief Generic collection of Toggle objects that can be used to extract information from the user
 *
 * \author Jamie Massey
 * \version 1.0

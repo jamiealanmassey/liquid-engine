@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "LuaFuncs.h"
 #include "../utilities/DeltaTime.h"
 
 namespace liquid {
@@ -23,6 +24,7 @@ namespace common {
     {
         // TODO: Load game settings/bindings
         utilities::DeltaTime::instance().start();
+        LuaFuncs::registerFunctions();
 
         // TODO: Setup Context given
         // TODO: Start DeltaTime

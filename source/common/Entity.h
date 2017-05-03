@@ -1,3 +1,10 @@
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
+#include <LuaBridge/LuaBridge.h>
 #include <string>
 #include <vector>
 #include <list>
@@ -215,6 +222,11 @@ public:
       */
     ai::Agent* getAIAgent() const;
 
+    /** \brief Gets the stored Vertex2* objects
+      * \return Array of the Vertex objects
+      */
+    std::array<utilities::Vertex2*, 4> getVerticesPtr() const;
+
 protected:
     /** \brief Adds a child to this Entity
       * \param child The child Entity to add
@@ -247,7 +259,9 @@ public:
     std::function<void()>             mFuncCallbackKilled;      ///< Function callback for when this Entity is destroyed
 
 public:
-    // TODO: implement lua script callbacks
+    std::string       mLuaScript;
+    luabridge::LuaRef mLuaFuncUpdate;
+    luabridge::LuaRef mLuaFuncKill;
 
 protected:
     int32_t              mType;            ///< Numerical representation of the entity type
