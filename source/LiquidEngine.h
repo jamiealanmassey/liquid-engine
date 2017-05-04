@@ -12,6 +12,7 @@
   * \defgroup Impl
   * \defgroup Navigation
   * \defgroup Parser
+  * \defgroup Shape
   * \defgroup Spatial
   * \defgroup Tweener
   * \defgroup UI

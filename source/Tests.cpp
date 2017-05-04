@@ -398,8 +398,8 @@ void Tests::ai(sf::Texture& texture)
     entity1->getAIAgent()->setVelocityX(-1.5f);
     entity1->getAIAgent()->setVelocityY(-1.0f);
 
-    entity0->mLuaScript = "entity0.lua";
-    entity1->mLuaScript = "entity1.lua";
+    entity0->setLuaScript("entity0.lua");
+    entity1->setLuaScript("entity1.lua");
 
     /*entity0->mFuncCallbackUpdate = [](liquid::common::Entity* entity) {
         if (entity->getAIAgent())

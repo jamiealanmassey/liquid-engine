@@ -130,6 +130,11 @@ public:
     /// Sets m_State to eEntityState::ENTITYSTATE_DEAD and call m_FuncCallbackKilled
     void kill();
 
+    /** \brief Sets and loads a Lua script, passing to relative LuaRef objects
+      * \param Path to LuaScript with name as a std::string
+      */
+    void setLuaScript(std::string luaScript);
+
     /** \brief Sets the Parent GameScene of this Entity
       * \param scene The parent scene to be set
       * \param remove Flag to denote if the Entity should be removed from the current scene
@@ -258,8 +263,9 @@ public:
     std::function<void(float, float)> mFuncCallbackAddPosition; ///< Function callback for when position is added
     std::function<void()>             mFuncCallbackKilled;      ///< Function callback for when this Entity is destroyed
 
-public:
+protected:
     std::string       mLuaScript;
+    luabridge::LuaRef mLuaFuncCreate;
     luabridge::LuaRef mLuaFuncUpdate;
     luabridge::LuaRef mLuaFuncKill;
 

@@ -5,6 +5,7 @@ namespace liquid {
 namespace common {
     
     Entity::Entity() :
+        mLuaFuncCreate(LuaManager::instance().getLuaState()),
         mLuaFuncUpdate(LuaManager::instance().getLuaState()),
         mLuaFuncKill(LuaManager::instance().getLuaState())
     {
@@ -32,6 +33,8 @@ namespace common {
     
     void Entity::initialise()
     {
+        if (mLuaFuncCreate.isNil() == false)
+            mLuaFuncCreate();
     }
     
     void Entity::updatePre()
@@ -46,12 +49,8 @@ namespace common {
         if (mFuncCallbackUpdate != nullptr)
             mFuncCallbackUpdate(this);
 
-        LuaManager::instance().runScript(mLuaScript);
-        luabridge::LuaRef updateFunc = luabridge::getGlobal(
-            LuaManager::instance().getLuaState(), "update");
-
-        if (updateFunc.isNil() == false)
-            updateFunc();
+        if (mLuaFuncUpdate.isNil() == false)
+            mLuaFuncUpdate();
     }
     
     void Entity::updatePost()
@@ -146,13 +145,21 @@ namespace common {
         if (mFuncCallbackKilled)
             mFuncCallbackKilled();
 
-        LuaManager::instance().runScript(mLuaScript);
-        mLuaFuncKill = luabridge::getGlobal(LuaManager::instance().getLuaState(), "killFunc");
-
         if (mLuaFuncKill.isNil() == false)
             mLuaFuncKill();
     }
     
+    void Entity::setLuaScript(std::string luaScript)
+    {
+        mLuaScript = luaScript;
+        lua_State* lua = LuaManager::instance().getLuaState();
+        LuaManager::instance().runScript(mLuaScript);
+
+        mLuaFuncCreate = luabridge::getGlobal(lua, "create");
+        mLuaFuncUpdate = luabridge::getGlobal(lua, "update");
+        mLuaFuncKill = luabridge::getGlobal(lua, "kill");
+    }
+
     void Entity::setParentGameScene(GameScene* scene, bool remove)
     {
         // TODO: This is an issue for removing in-between updates :/
