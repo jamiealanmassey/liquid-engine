@@ -1,4 +1,4 @@
-#include "../BehaviourNode.h"
+#include "../base/DecoratorNode.h"
 
 namespace liquid { namespace ai {
 #ifndef _INVERTERNODE_H
@@ -12,11 +12,11 @@ namespace liquid { namespace ai {
  *
  * \author Jamie Massey
  * \version 1.0
- * \date 01/05/2017
+ * \date 04/05/2017
  *
  */
 
-class InverterNode : public BehaviourNode
+class InverterNode : public DecoratorNode
 {
 public:
     /// InverterNode Constructor
@@ -25,16 +25,10 @@ public:
     /// InverterNode Destructor
     ~InverterNode();
 
-    /// Overrides BehaviourNode::initialise
-    virtual void initialise() override;
-
-    /// Overrides BehaviourNode::process
-    virtual void process() override;
-
-    /** \brief Overrides BehaviourNode::insertChild to limit children to 1
-      * \param node Child node to be inserted
+    /** \brief Inverts the result of the child node (success = fail, fail = success)
+      * \return Opposite of the child result, default: false
       */
-    virtual void insertChild(BehaviourNode* node) override;
+    virtual bool process() override;
 };
 
 #endif // _INVERTERNODE_H

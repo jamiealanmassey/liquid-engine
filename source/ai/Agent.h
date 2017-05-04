@@ -4,6 +4,7 @@
 #include "../shapes/Vector2.h"
 #include "../shapes/Rectangle.h"
 #include "../parser/ParserXML.h"
+#include <functional>
 
 namespace liquid { namespace common { class Entity; } }
 
@@ -32,6 +33,7 @@ public:
     void setVisionCone(shape::Vector2& v1, shape::Vector2& v2);
     void setMaxVelocity(float maxVelocity);
     void setEntityPtr(common::Entity* entityPtr);
+    void setBehaviourTree(BehaviourTree* behaviourTree);
     void setVelocityFunc(VelocityFunc func);
 
     const float getVelocityX() const;

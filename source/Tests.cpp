@@ -398,7 +398,15 @@ void Tests::ai(sf::Texture& texture)
     entity1->getAIAgent()->setVelocityX(-1.5f);
     entity1->getAIAgent()->setVelocityY(-1.0f);
 
-    entity0->setLuaScript("entity0.lua");
+    liquid::ai::BehaviourTree* tree = new liquid::ai::BehaviourTree();
+    liquid::ai::RepeaterNode* node0 = new liquid::ai::RepeaterNode();
+    liquid::ai::LuaNode* node1 = new liquid::ai::LuaNode("entity0.lua");
+    node0->setRepeaterLimit(0);
+    node0->insertChild(node1);
+    tree->setNodeRoot(node0);
+    entity0->getAIAgent()->setBehaviourTree(tree);
+
+    //entity0->setLuaScript("entity0.lua");
     entity1->setLuaScript("entity1.lua");
 
     /*entity0->mFuncCallbackUpdate = [](liquid::common::Entity* entity) {

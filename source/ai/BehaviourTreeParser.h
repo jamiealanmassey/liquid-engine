@@ -1,7 +1,7 @@
-#include "BehaviourNode.h"
-#include "nodes/LeafNode.h"
-#include "nodes/RepeaterNode.h"
-#include "nodes/SequenceNode.h"
+#include "nodes/base/BehaviourNode.h"
+#include "nodes/base/LeafNode.h"
+#include "nodes/impl/RepeaterNode.h"
+#include "nodes/impl/SequenceNode.h"
 #include "../parser/ParserXML.h"
 #include "../parser/ParserNodeSearch.h"
 

@@ -10,7 +10,7 @@ namespace data {
             "frame_limit 60\n"
             "screen_width 1920\n"
             "screen_height 1080\n"
-            "fullscreen true\n"
+            "fullscreen false\n"
             "particles_enabled true\n"
             "enable_vsync false\n"
             "gui_scale 1.0\n"

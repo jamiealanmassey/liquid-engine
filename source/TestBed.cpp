@@ -46,7 +46,7 @@ int main()
     behaviourParserXML.parseFile("decisionTree.xml");
     liquid::ai::BehaviourTreeParser behaviourParser(behaviourParserXML);
 
-    liquid::ai::BehaviourTree* tree = new liquid::ai::BehaviourTree();
+    /*liquid::ai::BehaviourTree* tree = new liquid::ai::BehaviourTree();
     liquid::ai::RepeaterNode* node0 = new liquid::ai::RepeaterNode();
     liquid::ai::SequenceNode* node1 = new liquid::ai::SequenceNode();
     liquid::ai::LeafNode* node2 = new liquid::ai::LeafNode();
@@ -66,7 +66,7 @@ int main()
     //tree->setNodeRoot(behaviourParser.getConstructedNode());
 
     while (tree->getNodeState() == 0)
-        tree->process();
+        tree->process();*/
 
     // SHAPES
     liquid::shape::Circle circle0;

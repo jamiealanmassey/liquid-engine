@@ -1,4 +1,4 @@
-#include "BehaviourNode.h"
+#include "nodes/base/BehaviourNode.h"
 
 namespace liquid { namespace ai {
 #ifndef _BEHAVIOURTREE_H
@@ -16,7 +16,7 @@ namespace liquid { namespace ai {
  *
  */
 
-class BehaviourTree : public BehaviourNode
+class BehaviourTree /*: public BehaviourNode*/
 {
 public:
     /// BehaviourTree Constructor
@@ -26,11 +26,13 @@ public:
     ~BehaviourTree();
 
     /// Overrides BehaviourNode::initialise
-    virtual void initialise() override;
+    //virtual void initialise() override;
 
     /// Overrides BehaviourNode::process, uses mNodeCurrent to process accordingly
-    virtual void process() override;
+    //virtual bool process() override;
     
+    bool process();
+
     /// \return Returns mNodeCurrent
     virtual BehaviourNode* nextNode();
 
@@ -47,11 +49,11 @@ public:
     BehaviourNode* getNodeRoot();
 
     /// \return Pointer to the current BehaviourNode that the tree is processing
-    BehaviourNode* getNodeCurrent();
+    //BehaviourNode* getNodeCurrent();
 
 protected:
-    BehaviourNode* mNodeRoot;    ///< Root node of the BehaviourTree
-    BehaviourNode* mNodeCurrent; ///< Node that is currently being processed by the tree
+    BehaviourNode* mRootNode;    ///< Root node of the BehaviourTree
+    //BehaviourNode* mNodeCurrent; ///< Node that is currently being processed by the tree
 };
 
 #endif // _BEHAVIOURTREE_H

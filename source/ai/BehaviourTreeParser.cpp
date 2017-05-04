@@ -36,13 +36,6 @@ namespace ai {
             }
             else if (type == "SequenceNode")
                 nextNode = new SequenceNode;
-            else if (type == "LeafNode")
-            {
-                nextNode = new LeafNode;
-                static_cast<LeafNode*>(nextNode)->setFuncProcess(
-                    []()->uint32_t { return 1; }
-                ); // TODO: remove this lambda expression, replace with lua scripts
-            }
 
             if (bNode != nullptr)
                 bNode->insertChild(nextNode);

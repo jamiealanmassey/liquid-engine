@@ -84,6 +84,11 @@ namespace ai {
         mEntityPtr = entityPtr;
     }
 
+    void Agent::setBehaviourTree(BehaviourTree* behaviourTree)
+    {
+        mBehaviourTree = behaviourTree;
+    }
+
     void Agent::setVelocityFunc(Agent::VelocityFunc func)
     {
         mVelocityFunc = func;
