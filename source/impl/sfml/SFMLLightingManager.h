@@ -1,3 +1,4 @@
+#ifdef SFML
 #include "../../graphics/LightingManager.h"
 #include "../../data/Settings.h"
 #include <SFML/Graphics.hpp>
@@ -20,3 +21,5 @@ protected:
 
 #endif // _SFMLLIGHTINGMANAGER_H
 }}
+
+#endif // SFML

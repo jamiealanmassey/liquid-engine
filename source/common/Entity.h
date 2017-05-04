@@ -104,6 +104,10 @@ public:
       */
     virtual void addPosition(float x, float y);
 
+    /** \brief Sets the new size of the Entity
+      * \param w New width of the Entity
+      * \param h New height of the Entity
+      */
     virtual void setSize(float w, float h);
 
     // TODO: Abstract this out of this class if possible
@@ -133,7 +137,7 @@ public:
     /** \brief Sets and loads a Lua script, passing to relative LuaRef objects
       * \param Path to LuaScript with name as a std::string
       */
-    void setLuaScript(std::string luaScript);
+    virtual void setLuaScript(std::string luaScript);
 
     /** \brief Sets the Parent GameScene of this Entity
       * \param scene The parent scene to be set

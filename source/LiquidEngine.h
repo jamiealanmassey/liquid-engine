@@ -122,6 +122,7 @@
 
 #include "utilities/DeltaTime.h"
 #include "utilities/Random.h"
+#include "utilities/Stack.h"
 #include "utilities/Vertex2.h"
 
 #endif // _LIQUIDENGINE_H

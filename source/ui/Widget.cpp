@@ -1,11 +1,17 @@
 #include "Widget.h"
 #include "WidgetManager.h"
+#include "../common/LuaManager.h"
 
 namespace liquid {
 namespace ui {
 
     Widget::Widget(float x, float y) :
-        common::Entity()
+        common::Entity(),
+        mLuaFuncMousePressed(common::LuaManager::instance().getLuaState()),
+        mLuaFuncMouseReleased(common::LuaManager::instance().getLuaState()),
+        mLuaFuncMouseMoved(common::LuaManager::instance().getLuaState()),
+        mLuaFuncKeyboardPressed(common::LuaManager::instance().getLuaState()),
+        mLuaFuncKeyboardReleased(common::LuaManager::instance().getLuaState())
     {
         setPosition(x, y);
 
@@ -88,6 +94,22 @@ namespace ui {
         mSizeMax[0] = w;
         mSizeMax[1] = h;
         setSize(mSize[0], mSize[1]);
+    }
+
+    void Widget::setLuaScript(std::string luaScript)
+    {
+        mLuaScript = luaScript;
+        lua_State* lua = common::LuaManager::instance().getLuaState();
+        common::LuaManager::instance().runScript(mLuaScript);
+
+        mLuaFuncCreate = luabridge::getGlobal(lua, "create");
+        mLuaFuncUpdate = luabridge::getGlobal(lua, "update");
+        mLuaFuncKill = luabridge::getGlobal(lua, "kill");
+        mLuaFuncMousePressed = luabridge::getGlobal(lua, "mousePressed");
+        mLuaFuncMouseReleased = luabridge::getGlobal(lua, "mouseReleased");
+        mLuaFuncMouseMoved = luabridge::getGlobal(lua, "mouseMoved");
+        mLuaFuncKeyboardPressed = luabridge::getGlobal(lua, "keyboardPressed");
+        mLuaFuncKeyboardReleased = luabridge::getGlobal(lua, "keyboardReleased");
     }
 
     void Widget::show()
@@ -201,10 +223,34 @@ namespace ui {
         return mEntered;
     }
 
-    void Widget::handleMousePressed(int32_t button, float x, float y) {}
-    void Widget::handleMouseReleased(int32_t button, float x, float y) {}
-    void Widget::handleMouseMoved(float x, float y) {}
-    void Widget::handleKeyboardPressed(int32_t key) {}
-    void Widget::handleKeyboardReleased(int32_t key) {}
+    void Widget::handleMousePressed(int32_t button, float x, float y)
+    {
+        if (mLuaFuncMousePressed.isNil() == false)
+            mLuaFuncMousePressed(button, x, y);
+    }
+
+    void Widget::handleMouseReleased(int32_t button, float x, float y)
+    {
+        if (mLuaFuncMouseReleased.isNil() == false)
+            mLuaFuncMouseReleased(button, x, y);
+    }
+
+    void Widget::handleMouseMoved(float x, float y)
+    {
+        if (mLuaFuncMouseMoved.isNil() == false)
+            mLuaFuncMouseMoved(x, y);
+    }
+
+    void Widget::handleKeyboardPressed(int32_t key)
+    {
+        if (mLuaFuncKeyboardPressed.isNil() == false)
+            mLuaFuncKeyboardPressed(key);
+    }
+
+    void Widget::handleKeyboardReleased(int32_t key)
+    {
+        if (mLuaFuncKeyboardReleased.isNil() == false)
+            mLuaFuncKeyboardReleased(key);
+    }
 
 }}

@@ -1,3 +1,10 @@
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
+#include <LuaBridge/LuaBridge.h>
 #include "../common/Entity.h"
 #include "../data/TextureAtlas.h"
 
@@ -89,6 +96,11 @@ public:
       */
     virtual void setMaxSize(float w, float h);
 
+    /** \brief Sets and loads a Lua script, passing to relative LuaRef objects
+      * \param Path to LuaScript with name as a std::string
+      */
+    virtual void setLuaScript(std::string luaScript) override;
+
     /// \brief Shows the Widget
     virtual void show();
 
@@ -173,6 +185,13 @@ public:
 
     /// \brief Virtual for when the keyboard has been pressed
     virtual void handleKeyboardReleased(int32_t key);
+
+protected:
+    luabridge::LuaRef mLuaFuncMousePressed;     ///< Reference to lau function to be called when mouse is pressed
+    luabridge::LuaRef mLuaFuncMouseReleased;    ///< Reference to lau function to be called when mouse is released
+    luabridge::LuaRef mLuaFuncMouseMoved;       ///< Reference to lau function to be called when mouse is moved
+    luabridge::LuaRef mLuaFuncKeyboardPressed;  ///< Reference to lau function to be called when keyboard is pressed
+    luabridge::LuaRef mLuaFuncKeyboardReleased; ///< Reference to lau function to be called when keyboard is released
 
 protected:
     bool                 mFocused;              ///< Denotes if the Widget is being focused
