@@ -63,7 +63,7 @@ namespace ai {
         mMass = mass;
     }
 
-    void Agent::setVisionDistance(float visionDist)
+    /*void Agent::setVisionDistance(float visionDist)
     {
         mVisionDistance = visionDist;
     }
@@ -72,7 +72,7 @@ namespace ai {
     {
         mVisionCone[0] = v1;
         mVisionCone[1] = v2;
-    }
+    }*/
 
     void Agent::setMaxVelocity(float maxVelocity)
     {
@@ -109,10 +109,10 @@ namespace ai {
         return mMass;
     }
 
-    const float Agent::getVisionDistance() const
+    /*const float Agent::getVisionDistance() const
     {
         return mVisionDistance;
-    }
+    }*/
 
     const float Agent::getMaxVelocity() const
     {
