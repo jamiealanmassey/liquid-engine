@@ -29,14 +29,17 @@ public:
     LuaManager();
     ~LuaManager();
 
-    bool runScript(std::string script);
+    bool executeScript(std::string script);
+
+    bool executeExpression(std::string expr);
 
     lua_State* getLuaState();
 
     static LuaManager& instance();
 
 protected:
-    lua_State* mLuaState;
+    lua_State*  mLuaState;
+    bool        mLuaRegistered;
 };
 
 #endif // _LUAINSTANCE_H

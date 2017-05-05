@@ -4,7 +4,7 @@
 #include "LuaManager.h"
 #include "../ai/Agent.h"
 #include "../utilities/DeltaTime.h"
-#include "../graphics/ICamera.h"
+#include <iostream>
 
 namespace liquid {
 namespace common {
@@ -57,6 +57,41 @@ namespace common {
                 .addFunction("createLineSegment", luaCreateLineSegment)
             .endNamespace()
             
+            .beginClass<ai::BehaviourContext>("BehaviourContext")
+                .addConstructor<void(*) (void)>()
+                .addFunction("dataExists", &ai::BehaviourContext::dataExists)
+                .addFunction("stackExists", &ai::BehaviourContext::stackExists)
+                .addFunction("createStack", &ai::BehaviourContext::createStack)
+                .addFunction("deleteStack", &ai::BehaviourContext::deleteStack)
+                .addFunction("removeData", &ai::BehaviourContext::removeData)
+                .addFunction("setDataInt32", &ai::BehaviourContext::luaSetDataInt32)
+                .addFunction("setDataFloat", &ai::BehaviourContext::luaSetDataFloat)
+                .addFunction("setDataDouble", &ai::BehaviourContext::luaSetDataDouble)
+                .addFunction("setDataBoolean", &ai::BehaviourContext::luaSetDataBoolean)
+                .addFunction("setDataString", &ai::BehaviourContext::luaSetDataString)
+                .addFunction("pushStackInt32", &ai::BehaviourContext::luaPushStackInt32)
+                .addFunction("pushStackFloat", &ai::BehaviourContext::luaPushStackFloat)
+                .addFunction("pushStackDouble", &ai::BehaviourContext::luaPushStackDouble)
+                .addFunction("pushStackBoolean", &ai::BehaviourContext::luaPushStackBoolean)
+                .addFunction("pushStackString", &ai::BehaviourContext::luaPushStackString)
+                .addFunction("peekStackInt32", &ai::BehaviourContext::luaPeekStackInt32)
+                .addFunction("popStackInt32", &ai::BehaviourContext::luaPopStackInt32)
+                .addFunction("peekStackFloat", &ai::BehaviourContext::luaPeekStackFloat)
+                .addFunction("popStackFloat", &ai::BehaviourContext::luaPopStackFloat)
+                .addFunction("peekStackDouble", &ai::BehaviourContext::luaPeekStackDouble)
+                .addFunction("popStackDouble", &ai::BehaviourContext::luaPopStackDouble)
+                .addFunction("peekStackBoolean", &ai::BehaviourContext::luaPeekStackDouble)
+                .addFunction("popStackBoolean", &ai::BehaviourContext::luaPopStackBoolean)
+                .addFunction("peekStackString", &ai::BehaviourContext::luaPeekStackString)
+                .addFunction("popStackString", &ai::BehaviourContext::luaPopStackString)
+                .addFunction("convertInt32", &ai::BehaviourContext::convertInt32)
+                .addFunction("convertFloat", &ai::BehaviourContext::convertFloat)
+                .addFunction("convertDouble", &ai::BehaviourContext::convertDouble)
+                .addFunction("convertBoolean", &ai::BehaviourContext::convertBoolean)
+                .addFunction("convertString", &ai::BehaviourContext::convertString)
+            .endClass()
+
+            .addFunction("printLn", luaPrintLn)
             .addFunction("getDeltaTime", luaGetDeltaTime);
     }
 
@@ -309,6 +344,11 @@ namespace common {
     float LuaFuncs::luaGetDeltaTime()
     {
         return utilities::DeltaTime::DELTA;
+    }
+
+    void LuaFuncs::luaPrintLn(std::string line)
+    {
+        std::cout << line << std::endl;
     }
 
     Entity* LuaFuncs::getEntity(std::string entity)

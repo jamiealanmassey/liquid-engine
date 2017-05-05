@@ -51,6 +51,7 @@
 #include "common/Entity.h"
 #include "common/GameManager.h"
 #include "common/GameScene.h"
+#include "common/LuaFuncs.h"
 #include "common/LuaManager.h"
 #include "common/Particle.h"
 #include "common/ParticleEmitter.h"

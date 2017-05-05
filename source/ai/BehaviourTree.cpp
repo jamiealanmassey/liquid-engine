@@ -1,4 +1,5 @@
 #include "BehaviourTree.h"
+#include "../common/LuaManager.h"
 
 namespace liquid {
 namespace ai {
@@ -7,6 +8,8 @@ BehaviourTree::BehaviourTree() /*:
         BehaviourNode()*/
     {
         mRootNode = nullptr;
+        mContext = new BehaviourContext;
+
         //mNodeCurrent = nullptr;
         //mNodeType = eBehaviourNodeType::NODETYPE_COMPOSITE;
     }
@@ -26,7 +29,7 @@ BehaviourTree::BehaviourTree() /*:
     bool BehaviourTree::process()
     {
         if (mRootNode != nullptr)
-            return mRootNode->process();
+            return mRootNode->process(mContext);
 
         return true;
     }
@@ -45,6 +48,11 @@ BehaviourTree::BehaviourTree() /*:
     BehaviourNode* BehaviourTree::getNodeRoot()
     {
         return mRootNode;
+    }
+
+    BehaviourContext* BehaviourTree::getContext()
+    {
+        return mContext;
     }
 
     /*BehaviourNode* BehaviourTree::getNodeCurrent()

@@ -41,7 +41,7 @@ public:
     /** \brief Called to process the current node, takes the result of the lua function for success or fail
       * \return Gives a result of true if the script was successful, otherwise false
       */
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 
     /** \brief Sets the Lua script for this LuaNode, assigns LuaRef objects
       * \param luaScript Path + filename.lua to script to be loaded

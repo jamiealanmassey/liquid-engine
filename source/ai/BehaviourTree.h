@@ -1,4 +1,5 @@
 #include "nodes/base/BehaviourNode.h"
+#include "BehaviourContext.h"
 
 namespace liquid { namespace ai {
 #ifndef _BEHAVIOURTREE_H
@@ -48,11 +49,15 @@ public:
     /// \return Pointer to the root BehaviourNode of the tree
     BehaviourNode* getNodeRoot();
 
+    /// \return Pointer to the context for this BehaviourTree
+    BehaviourContext* getContext();
+
     /// \return Pointer to the current BehaviourNode that the tree is processing
     //BehaviourNode* getNodeCurrent();
 
 protected:
-    BehaviourNode* mRootNode;    ///< Root node of the BehaviourTree
+    BehaviourNode*    mRootNode; ///< Root node of the BehaviourTree
+    BehaviourContext* mContext;  ///< Context for the data stored for this tree
     //BehaviourNode* mNodeCurrent; ///< Node that is currently being processed by the tree
 };
 

@@ -12,10 +12,10 @@ namespace ai {
     {
     }
 
-    bool SuccessorNode::process()
+    bool SuccessorNode::process(BehaviourContext* context)
     {
         if (mChildren.empty() == false)
-            mChildren[0]->process();
+            mChildren[0]->process(context);
 
         return true;
     }

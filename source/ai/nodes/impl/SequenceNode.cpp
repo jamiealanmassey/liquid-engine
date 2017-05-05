@@ -12,11 +12,11 @@ namespace ai {
     {
     }
 
-    bool SequenceNode::process()
+    bool SequenceNode::process(BehaviourContext* context)
     {
         for (BehaviourNode* node : mChildren)
         {
-            if (node->process() == false)
+            if (node->process(context) == false)
                 return false;
         }
 

@@ -12,11 +12,11 @@ namespace ai {
     {
     }
 
-    bool SelectorRandomNode::process()
+    bool SelectorRandomNode::process(BehaviourContext* context)
     {
         for (BehaviourNode* node : getChildrenShuffled())
         {
-            if (node->process() == true)
+            if (node->process(context) == true)
                 return true;
         }
 

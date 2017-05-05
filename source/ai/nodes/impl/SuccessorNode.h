@@ -26,7 +26,7 @@ public:
     ~SuccessorNode();
 
     /// \brief Overload BehaviourNode::process, process always returns success
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 };
 
 #endif // _SUCCESSORNODE_H

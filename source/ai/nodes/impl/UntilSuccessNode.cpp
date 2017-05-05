@@ -12,12 +12,12 @@ namespace ai {
     {
     }
 
-    bool UntilSuccessNode::process()
+    bool UntilSuccessNode::process(BehaviourContext* context)
     {
         if (mChildren.empty() == true)
             return true;
 
-        if (mChildren[0]->process() == true)
+        if (mChildren[0]->process(context) == true)
             return true;
         else
             return false;

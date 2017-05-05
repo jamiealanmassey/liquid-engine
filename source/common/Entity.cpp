@@ -153,7 +153,7 @@ namespace common {
     {
         mLuaScript = luaScript;
         lua_State* lua = LuaManager::instance().getLuaState();
-        LuaManager::instance().runScript(mLuaScript);
+        LuaManager::instance().executeScript(mLuaScript);
 
         mLuaFuncCreate = luabridge::getGlobal(lua, "create");
         mLuaFuncUpdate = luabridge::getGlobal(lua, "update");

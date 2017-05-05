@@ -28,7 +28,7 @@ public:
     /** \brief Inverts the result of the child node (success = fail, fail = success)
       * \return Opposite of the child result, default: false
       */
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 };
 
 #endif // _INVERTERNODE_H

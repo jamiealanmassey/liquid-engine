@@ -1,5 +1,6 @@
 #include <vector>
 #include <algorithm>
+#include "../../BehaviourContext.h"
 
 namespace liquid { namespace ai {
 #ifndef _BEHAVIOURNODE_H
@@ -43,7 +44,7 @@ public:
     /** \brief Pure virtual function to be called when evaluating the tree
       * \return When true is returned the process was successful, otherwise it failed
       */
-    virtual bool process() = 0;
+    virtual bool process(BehaviourContext* context) = 0;
 
     /** \brief Pure virtual that adds a child BehaviourNode to this node
       * \param node Pointer to the node to be added

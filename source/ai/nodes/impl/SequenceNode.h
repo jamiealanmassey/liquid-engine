@@ -27,7 +27,7 @@ public:
     ~SequenceNode();
 
     /// \brief Overload BehaviourNode::process, processes until a child fails
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 };
 
 #endif // _SEQUENCENODE_H

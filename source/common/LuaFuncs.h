@@ -3,6 +3,8 @@
 #include "../shapes/Circle.h"
 #include "../shapes/LineSegment.h"
 #include "../graphics/ICamera.h"
+#include "../ai/BehaviourContext.h"
+#include "../ai/BehaviourTree.h"
 
 namespace liquid { namespace common {
 #ifndef _LUAFUNCS_H
@@ -49,6 +51,7 @@ public:
     static shape::LineSegment luaCreateLineSegment(float x1, float y1, float x2, float y2);
 
     static float luaGetDeltaTime();
+    static void luaPrintLn(std::string line);
     static Entity* getEntity(std::string entity);
 };
 

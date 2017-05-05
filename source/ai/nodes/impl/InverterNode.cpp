@@ -12,10 +12,10 @@ namespace ai {
     {
     }
 
-    bool InverterNode::process()
+    bool InverterNode::process(BehaviourContext* context)
     {
         if (mChildren.empty() == false)
-            return !mChildren[0]->process();
+            return !mChildren[0]->process(context);
 
         return false;
     }

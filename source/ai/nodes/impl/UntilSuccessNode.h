@@ -26,7 +26,7 @@ public:
     ~UntilSuccessNode();
 
     /// \brief Overload BehaviourNode::process, processes until the child succeeds
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 };
 
 #endif // _UNTILSUCCESSNODE_H

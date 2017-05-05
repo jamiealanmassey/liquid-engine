@@ -20,12 +20,12 @@ namespace ai {
         mRepeaterCount = 0;
     }
 
-    bool RepeaterNode::process()
+    bool RepeaterNode::process(BehaviourContext* context)
     {
         if (mChildren.empty() == true)
             return true;
 
-        bool result = mChildren[0]->process();
+        bool result = mChildren[0]->process(context);
         
         if (mRepeaterLimit > 0)
         {

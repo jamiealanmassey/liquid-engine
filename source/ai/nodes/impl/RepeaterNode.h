@@ -32,7 +32,7 @@ public:
     /** \brief Called to process the current node, called continuously or until the repeat limit is hit
       * \return Gives a result of true if the repeat limit is hit if it is set, otherwise false
       */
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 
     /** \brief Sets the limit of the repeater, 0 = continuous
       * \param limit New limit of the repeater

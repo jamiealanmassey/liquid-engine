@@ -23,10 +23,10 @@ namespace ai {
             mLuaFuncInitialise();
     }
 
-    bool LuaNode::process()
+    bool LuaNode::process(BehaviourContext* context)
     {
         if (mLuaFuncProcess.isNil() == false)
-            return mLuaFuncProcess();
+            return mLuaFuncProcess(context);
 
         return false;
     }
@@ -35,7 +35,7 @@ namespace ai {
     {
         mLuaScript = luaScript;
         lua_State* lua = common::LuaManager::instance().getLuaState();
-        common::LuaManager::instance().runScript(mLuaScript);
+        common::LuaManager::instance().executeScript(mLuaScript);
 
         mLuaFuncInitialise = luabridge::getGlobal(lua, "initialise");
         mLuaFuncProcess = luabridge::getGlobal(lua, "process");

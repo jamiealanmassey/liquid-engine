@@ -100,7 +100,7 @@ namespace ui {
     {
         mLuaScript = luaScript;
         lua_State* lua = common::LuaManager::instance().getLuaState();
-        common::LuaManager::instance().runScript(mLuaScript);
+        common::LuaManager::instance().executeScript(mLuaScript);
 
         mLuaFuncCreate = luabridge::getGlobal(lua, "create");
         mLuaFuncUpdate = luabridge::getGlobal(lua, "update");

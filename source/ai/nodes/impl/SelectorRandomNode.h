@@ -27,7 +27,7 @@ public:
     ~SelectorRandomNode();
 
     /// \brief Overload BehaviourNode::process, processes until a child succeeds
-    virtual bool process() override;
+    virtual bool process(BehaviourContext* context) override;
 };
 
 #endif // _SELECTORRANDOMNODE_H

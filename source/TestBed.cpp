@@ -7,6 +7,7 @@
 
 int main()
 {
+    liquid::common::LuaFuncs::registerFunctions();
     liquid::data::Bindings* bindings = new liquid::data::Bindings;
     bindings->parseString(bindings->mDefaultBindings);
 

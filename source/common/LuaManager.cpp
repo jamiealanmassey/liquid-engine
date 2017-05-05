@@ -5,22 +5,48 @@
 namespace liquid {
 namespace common {
 
-    LuaManager::LuaManager()
+    LuaManager::LuaManager() :
+        mLuaRegistered(false)
     {
         mLuaState = luaL_newstate();
         luaL_openlibs(mLuaState);
     }
 
     LuaManager::~LuaManager()
-    {}
+    {
+        lua_close(mLuaState);
+    }
 
-    bool LuaManager::runScript(std::string script)
+    bool LuaManager::executeScript(std::string script)
     {
         if (script == "")
             return false;
 
         int32_t message = 0;
         message = luaL_loadfile(mLuaState, script.c_str());
+
+        if (message == LUA_ERRFILE)
+            std::cout << "Could not find or access script" << std::endl;
+
+        else if (message == LUA_ERRSYNTAX)
+            std::cout << "Syntax Error: " << lua_tostring(mLuaState, -1) << std::endl;
+
+        if (lua_pcall(mLuaState, 0, LUA_MULTRET, 0) != 0)
+        {
+            std::cout << "Could not run script: " << lua_tostring(mLuaState, -1) << std::endl;
+            return false;
+        }
+
+        return true;
+    }
+
+    bool LuaManager::executeExpression(std::string expr)
+    {
+        if (expr == "")
+            return false;
+
+        int32_t message = 0;
+        message = luaL_loadstring(mLuaState, expr.c_str());
 
         if (message == LUA_ERRFILE)
             std::cout << "Could not find or access script" << std::endl;
