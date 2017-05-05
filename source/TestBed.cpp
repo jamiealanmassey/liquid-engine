@@ -83,13 +83,16 @@ int main()
     // ADD TEST CALLS HERE
     Tests tests;
     sf::Texture texture, texture2, texture3, uiTexture;
+    sf::Font font;
+
+    font.loadFromFile("asman.ttf");
     texture.loadFromFile("test.png");
     texture2.loadFromFile("test2.png");
     texture3.loadFromFile("dude_animation_sheet.png");
     uiTexture.loadFromFile("interface.png");
 
     tests.ai(texture3);
-    tests.interface(uiTexture);
+    tests.interface(uiTexture, font);
     tests.particles(texture2); 
     //tests.animation(texture3);
     //tests.lighting();

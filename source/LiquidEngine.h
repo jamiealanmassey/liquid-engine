@@ -76,6 +76,7 @@
 #include "graphics/LightingManager.h"
 #include "graphics/Renderable.h"
 #include "graphics/RenderableBatch.h"
+#include "graphics/RenderableText.h"
 #include "graphics/Renderer.h"
 
 #include "impl/sfml/SFMLCamera.h"
@@ -83,6 +84,7 @@
 #include "impl/sfml/SFMLLightingManager.h"
 #include "impl/sfml/SFMLRenderable.h"
 #include "impl/sfml/SFMLRenderableBatch.h"
+#include "impl/sfml/SFMLRenderableText.h"
 #include "impl/sfml/SFMLRenderer.h"
 
 #include "navigation/AStar.h"
@@ -117,6 +119,7 @@
 #include "ui/Button.h"
 #include "ui/ControlList.h"
 #include "ui/Slider.h"
+#include "ui/TextField.h"
 #include "ui/Toggle.h"
 #include "ui/Widget.h"
 #include "ui/WidgetManager.h"

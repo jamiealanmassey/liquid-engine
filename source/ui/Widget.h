@@ -186,6 +186,9 @@ public:
     /// \brief Virtual for when the keyboard has been pressed
     virtual void handleKeyboardReleased(int32_t key);
 
+    /// \brief Virtual for when text is entered
+    virtual void handleTextEntered(uint32_t character);
+
 protected:
     luabridge::LuaRef mLuaFuncMousePressed;     ///< Reference to lau function to be called when mouse is pressed
     luabridge::LuaRef mLuaFuncMouseReleased;    ///< Reference to lau function to be called when mouse is released

@@ -11,12 +11,16 @@ namespace ui {
 
         mHandleMouse = events::EventDispatcher<events::MouseEventData>::addListener(
             std::bind(&WidgetManager::handleMouseEvent, this, std::placeholders::_1));
+
+        mHandleText = events::EventDispatcher<events::TextEventData>::addListener(
+            std::bind(&WidgetManager::handleTextEvent, this, std::placeholders::_1));
     }
 
     WidgetManager::~WidgetManager()
     {
         events::EventDispatcher<events::KeyboardEventData>::removeListener(mHandleKeyboard);
         events::EventDispatcher<events::MouseEventData>::removeListener(mHandleMouse);
+        events::EventDispatcher < events::TextEventData>::removeListener(mHandleText);
     }
 
     void WidgetManager::update()
@@ -98,6 +102,11 @@ namespace ui {
                     mFocusedWidget = selection;
                     mFocusedWidget->setFocused(true);
                 }
+            }
+            else if (eventData.mMouseButton == 0 && mFocusedWidget)
+            {
+                if (mFocusedWidget->isPointInside(mouseX, mouseY) == false)
+                    mFocusedWidget = nullptr;
             }
             else if (eventData.mMouseButton == 1)
             {
@@ -214,6 +223,14 @@ namespace ui {
             }
         }
         
+        return true;
+    }
+
+    bool WidgetManager::handleTextEvent(const events::TextEventData& eventData)
+    {
+        if (mFocusedWidget != nullptr)
+            mFocusedWidget->handleTextEntered(eventData.mCharacter);
+
         return true;
     }
 

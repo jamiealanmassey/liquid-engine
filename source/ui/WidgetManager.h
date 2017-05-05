@@ -2,6 +2,7 @@
 #include "../events/EventDispatcher.h"
 #include "../events/KeyboardEventData.h"
 #include "../events/MouseEventData.h"
+#include "../events/TextEventData.h"
 #include "../data/TextureAtlas.h"
 
 namespace liquid { namespace ui {
@@ -104,12 +105,19 @@ protected:
       */
     bool handleMouseEvent(const events::MouseEventData& eventData);
 
+    /** \brief Callback passed to EventDispatcher<TextEventData>
+      * \param eventData Collected event data from events::EventManager
+      * \return True if successful
+      */
+    bool handleTextEvent(const events::TextEventData& eventData);
+
 protected:
     std::vector<Widget*> mWidgets;        ///< Collection of Widget objects for this manager
     Widget*              mEnteredWidget;  ///< Last Widget object that was entered
     Widget*              mFocusedWidget;  ///< Last Widget object that was focused
     int32_t              mHandleMouse;    ///< ID of the Mouse Event
     int32_t              mHandleKeyboard; ///< ID of the keyboard event
+    int32_t              mHandleText;     ///< ID of the text event
     data::TextureAtlas   mTextureAtlas;   ///< Texture atlas for the interface textures
 };
 

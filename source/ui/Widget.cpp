@@ -253,4 +253,8 @@ namespace ui {
             mLuaFuncKeyboardReleased(key);
     }
 
+    void Widget::handleTextEntered(uint32_t character)
+    {
+    }
+
 }}

@@ -303,7 +303,7 @@ void Tests::animation(sf::Texture& texture)
     liquid::common::GameManager::instance().getRendererClass()->addRenderable(batch);
 }
 
-void Tests::interface(sf::Texture& interfaceTexture)
+void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
 {
     liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
@@ -316,14 +316,24 @@ void Tests::interface(sf::Texture& interfaceTexture)
     liquid::ui::Widget* thumb = new liquid::ui::Widget(240.0f, 10.f);
 
     liquid::ui::Toggle* checkbox0 = new liquid::ui::Toggle(20.0f, 135.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 155.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
+    liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 215.0f, { "CheckboxDefault", "CheckboxSelected" });
     liquid::ui::ControlList* list = new liquid::ui::ControlList(20.0f, 135.0f, { "", "" });
+    liquid::impl::SFMLRenderableText* text;
+
+    text = new liquid::impl::SFMLRenderableText("testing the text\nwith multiline format");
+    text->setFont(font);
+    text->setPosition(400.0f, 20.0f);
+    renderer->addRenderable(text);
+
+    liquid::ui::TextField* field = new liquid::ui::TextField(400.0f, 20.0f);
+    field->setRenderableText(text);
+    field->setSize(200.0f, 50.0f);
 
     list->insertElement(checkbox0);
     list->insertElement(checkbox1);
     list->insertElement(checkbox2);
-    list->setSize(20.0f, 60.0f);
+    list->setSize(40.0f, 120.0f);
     list->setControlType(liquid::ui::ControlList::CONTROLTYPE_SINGLE);
 
     checkbox0->setCanEnter(false);
@@ -347,6 +357,7 @@ void Tests::interface(sf::Texture& interfaceTexture)
     widgetMgr->insertWidget(button);
     widgetMgr->insertWidget(slider);
     widgetMgr->insertWidget(thumb);
+    widgetMgr->insertWidget(field);
     renderer->addRenderable(batch);
 
     slider->setSliderThumb(thumb);
