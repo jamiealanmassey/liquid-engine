@@ -29,9 +29,19 @@ namespace impl {
         mText.setString(sfString);
     }
 
+    void SFMLRenderableText::setColour(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+    {
+        mText.setFillColor(sf::Color(r, g, b, a));
+    }
+
     void SFMLRenderableText::setPosition(float x, float y)
     {
         mText.setPosition(x, y);
+    }
+
+    float SFMLRenderableText::getCharacterSize(char character)
+    {
+        return mFont.getGlyph(character, mText.getCharacterSize(), false).advance;
     }
 
     void SFMLRenderableText::setFont(sf::Font& font)

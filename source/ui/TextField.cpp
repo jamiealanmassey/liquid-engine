@@ -8,10 +8,18 @@ namespace ui {
     TextField::TextField(float x, float y) :
         Widget(x, y)
     {
+        mRenderableText = nullptr;
+        mTextureName = "";
     }
 
     TextField::~TextField()
     {
+    }
+
+    void TextField::initialise()
+    {
+        if (mTextureName != "")
+            setTexture(mTextureName);
     }
 
     void TextField::setPosition(float x, float y)
@@ -27,6 +35,12 @@ namespace ui {
     void TextField::setRenderableText(graphics::RenderableText* renderableText)
     {
         mRenderableText = renderableText;
+        mRenderableText->setPosition(mPositionX + 10.0f, mPositionY + 5.0f);
+    }
+
+    void TextField::setTextureName(std::string textureName)
+    {
+        mTextureName = textureName;
     }
 
     void TextField::handleMousePressed(int32_t button, float x, float y)
@@ -61,21 +75,36 @@ namespace ui {
         
         std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
         std::wstring result = converter.from_bytes(character);
-        std::string text = mRenderableText->getString();
-        
+
         size_t convertedNum = 0;
         char convert[1024];
         memset(convert, 1024, '\0');
         wcstombs_s(&convertedNum, convert, result.c_str(), 2);
 
-        if (convert[0] == '\b')
-            text.pop_back();
-        else if (convert[0] == '\r')
-            text.append("\n");
-        else
-            text.append(convert);
+        if (convert[0] == '\b' && mWholeText.empty() == false)
+            mWholeText.pop_back();
+        else if (convert[0] != '\b' && convert[0] != '\r')
+            mWholeText.append(convert);
 
-        mRenderableText->setString(text);
+        resizeRenderableText();
+    }
+
+    void TextField::resizeRenderableText()
+    {
+        uint32_t count = mWholeText.size();
+        uint32_t i = count;
+        float sizeX = 0.0f;
+
+        for (; i > 0; i--)
+        {
+            sizeX += mRenderableText->getCharacterSize(mWholeText[i]);
+
+            if (sizeX >= mSize[0] - 30.0f)
+                break;
+        }
+
+        std::string parsed = mWholeText.substr(i, count - i);
+        mRenderableText->setString(parsed);
     }
 
 }}

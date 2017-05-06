@@ -17,7 +17,11 @@ public:
 
     virtual void setString(std::string str) override;
 
+    virtual void setColour(uint8_t r, uint8_t g, uint8_t b, uint8_t a) override;
+
     virtual void setPosition(float x, float y) override;
+
+    virtual float getCharacterSize(char character) override;
 
     void setFont(sf::Font& font);
 

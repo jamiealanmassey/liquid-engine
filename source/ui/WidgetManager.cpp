@@ -106,7 +106,10 @@ namespace ui {
             else if (eventData.mMouseButton == 0 && mFocusedWidget)
             {
                 if (mFocusedWidget->isPointInside(mouseX, mouseY) == false)
+                {
+                    mFocusedWidget->setFocused(false);
                     mFocusedWidget = nullptr;
+                }
             }
             else if (eventData.mMouseButton == 1)
             {

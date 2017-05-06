@@ -309,7 +309,7 @@ void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
     liquid::ui::WidgetManager* widgetMgr = scene->getWidgetManager();
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(interfaceTexture, 7);
+    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(interfaceTexture, 8);
     liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
     liquid::ui::Toggle* toggle = new liquid::ui::Toggle(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
     liquid::ui::Slider* slider = new liquid::ui::Slider(240.f, 10.f);
@@ -321,14 +321,15 @@ void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
     liquid::ui::ControlList* list = new liquid::ui::ControlList(20.0f, 135.0f, { "", "" });
     liquid::impl::SFMLRenderableText* text;
 
-    text = new liquid::impl::SFMLRenderableText("testing the text\nwith multiline format");
+    text = new liquid::impl::SFMLRenderableText("");
     text->setFont(font);
     text->setPosition(400.0f, 20.0f);
-    renderer->addRenderable(text);
+    text->setColour(0, 0, 0, 255);
 
     liquid::ui::TextField* field = new liquid::ui::TextField(400.0f, 20.0f);
     field->setRenderableText(text);
-    field->setSize(200.0f, 50.0f);
+    field->setTextureName("TextField");
+    //field->setSize(200.0f, 50.0f);
 
     list->insertElement(checkbox0);
     list->insertElement(checkbox1);
@@ -348,6 +349,7 @@ void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
     toggle->setVerticesPtr(batch->nextVertices());
     slider->setVerticesPtr(batch->nextVertices());
     thumb->setVerticesPtr(batch->nextVertices());
+    field->setVerticesPtr(batch->nextVertices());
 
     widgetMgr->insertWidget(checkbox0);
     widgetMgr->insertWidget(checkbox1);
@@ -358,11 +360,14 @@ void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
     widgetMgr->insertWidget(slider);
     widgetMgr->insertWidget(thumb);
     widgetMgr->insertWidget(field);
+
     renderer->addRenderable(batch);
+    renderer->addRenderable(text);
 
     slider->setSliderThumb(thumb);
     slider->setTexture("SliderVertical");
     thumb->setTexture("SliderVerticalThumb");
+    field->setSize(450.0f, 49.0f);
 }
 
 void Tests::ai(sf::Texture& texture)
