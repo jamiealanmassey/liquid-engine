@@ -1,5 +1,7 @@
 #include "TextField.h"
 #include "../common/GameManager.h"
+#include "../utilities/Vertex2.h"
+#include "../utilities/DeltaTime.h"
 #include <SFML/Graphics.hpp>
 
 namespace liquid {
@@ -9,7 +11,10 @@ namespace ui {
         Widget(x, y)
     {
         mRenderableText = nullptr;
+        mCaret = nullptr;
         mTextureName = "";
+        mAccumulator = 0.0f;
+        mCaretToggle = false;
     }
 
     TextField::~TextField()
@@ -20,6 +25,18 @@ namespace ui {
     {
         if (mTextureName != "")
             setTexture(mTextureName);
+    }
+
+    void TextField::update()
+    {
+        if (hasFocus() == true)
+            mAccumulator += utilities::DeltaTime::DELTA;
+
+        if (mAccumulator > 500.0f)
+        {
+            mCaretToggle ? turnCaretOff() : turnCaretOn();
+            mAccumulator = 0.0f;
+        }
     }
 
     void TextField::setPosition(float x, float y)
@@ -38,9 +55,23 @@ namespace ui {
         mRenderableText->setPosition(mPositionX + 10.0f, mPositionY + 5.0f);
     }
 
+    void TextField::setCaret(Widget* caret)
+    {
+        mCaret = caret;
+        mCaret->setPosition(mPositionX + 14.0f, mPositionY + 10.0f);
+        turnCaretOff();
+    }
+
     void TextField::setTextureName(std::string textureName)
     {
         mTextureName = textureName;
+    }
+
+    void TextField::setFocused(bool flag)
+    {
+        Widget::setFocused(flag);
+
+        flag ? turnCaretOn() : turnCaretOff();
     }
 
     void TextField::handleMousePressed(int32_t button, float x, float y)
@@ -105,6 +136,30 @@ namespace ui {
 
         std::string parsed = mWholeText.substr(i, count - i);
         mRenderableText->setString(parsed);
+        mCaret->setPosition(mPositionX + sizeX + (20.0f * (float)(i == 0)), mPositionY + 12.0f);
+    }
+
+    void TextField::turnCaretOn()
+    {
+        mCaretToggle = true;
+        setCaretTransparency(255.0f);
+    }
+
+    void TextField::turnCaretOff()
+    {
+        mCaretToggle = false;
+        setCaretTransparency(0.0f);
+    }
+
+    void TextField::setCaretTransparency(float alpha)
+    {
+        std::array<utilities::Vertex2*, 4> verts = mCaret->getVerticesPtr();
+        std::array<float, 4> colour = verts[0]->getColour();
+
+        verts[0]->setColour(colour[0], colour[1], colour[2], alpha);
+        verts[1]->setColour(colour[0], colour[1], colour[2], alpha);
+        verts[2]->setColour(colour[0], colour[1], colour[2], alpha);
+        verts[3]->setColour(colour[0], colour[1], colour[2], alpha);
     }
 
 }}

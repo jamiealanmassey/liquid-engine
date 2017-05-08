@@ -15,12 +15,18 @@ public:
 
     virtual void initialise() override;
 
+    virtual void update() override;
+
     virtual void setPosition(float x, float y) override;
     virtual void addPosition(float x, float y) override;
 
     void setRenderableText(graphics::RenderableText* renderableText);
 
+    void setCaret(Widget* caret);
+
     void setTextureName(std::string textureName);
+
+    virtual void setFocused(bool flag) override;
 
     /// \brief Virtual for when the mouse has been pressed
     virtual void handleMousePressed(int32_t button, float x, float y) override;
@@ -42,11 +48,17 @@ public:
 
 protected:
     void resizeRenderableText();
+    void turnCaretOn();
+    void turnCaretOff();
+    void setCaretTransparency(float alpha);
 
 protected:
     graphics::RenderableText* mRenderableText;
+    Widget*                   mCaret;
     std::string               mTextureName;
     std::string               mWholeText;
+    float                     mAccumulator;
+    bool                      mCaretToggle;
 };
 
 #endif // _TEXTFIELD_H
