@@ -91,6 +91,9 @@ namespace common {
                 mVerticesPtr[2]->setColour(mColour);
                 mVerticesPtr[3]->setColour(mColour);
             }
+
+            if (mLifeTime >= mLifeSpan)
+                sleep();
         }
         /*else if (std::min(mLifeTime, 8000.0f))
         {
@@ -106,6 +109,7 @@ namespace common {
 
     void Particle::emit(float x, float y)
     {
+        wake();
         mLifeTime = 0.0f;
         setPosition(x, y);
 

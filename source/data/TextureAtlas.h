@@ -61,11 +61,15 @@ public:
       */
     TextureCoord getTextureCoord(std::string name, int32_t index);
 
+    /// \brief Gets the Path to the specified texture
+    const std::string getTexturePath() const;
+
 protected:
     std::map<std::string, TextureRegion> mTextureAtlas; ///< Compiled std::map of atlas pairs (name, region)
 
 protected:
-    parser::Parser mParser; ///< Specified Parser to gather the required data
+    parser::Parser mParser;  ///< Specified Parser to gather the required data
+    std::string    mTexPath; ///< Texture path
 };
 
 #endif // _TEXTUREATLAS_H

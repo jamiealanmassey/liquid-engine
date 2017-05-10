@@ -16,6 +16,8 @@ namespace data {
     {
         parser::ParserNodeSearch nodes(mParser.getRootParserNode());
         std::list<parser::ParserNode*> regionNodes = nodes.findParserNodes("region");
+        parser::ParserNode* textureNode = nodes.findParserNodes("texture").front();
+        mTexPath = textureNode->getValueAsString("texture");
 
         for (auto node : regionNodes)
         {
@@ -58,6 +60,11 @@ namespace data {
             return mTextureAtlas[name][index];
 
         return {};
+    }
+
+    const std::string TextureAtlas::getTexturePath() const
+    {
+        return mTexPath;
     }
 
 }}

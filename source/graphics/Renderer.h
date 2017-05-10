@@ -2,6 +2,7 @@
 #include <map>
 #include <list>
 #include "../common/GameScene.h"
+#include "../data/Settings.h"
 #include "../graphics/LightingManager.h"
 #include "IRenderable.h"
 #include "ICamera.h"
@@ -17,12 +18,11 @@ namespace liquid { namespace graphics {
  * \brief Interface class to define how to render the game world
  * 
  * \author Jamie Massey
- * \version 2.0
+ * \version 2.1
  * \date 16/04/2017
  * 
  */
 
-// TODO: Implement these
 class PostProcessor;
 class Renderer
 {
@@ -30,7 +30,7 @@ public:
     /** \brief Renderer Constructor
       * \param gameSceneParent Pointer to the parent common::GameScene
       */
-    Renderer(common::GameScene* gameSceneParent);
+    Renderer(data::Settings* settings = nullptr);
 
     /// Renderer Destructor
     ~Renderer();
@@ -46,7 +46,7 @@ public:
     virtual void removeRenderable(IRenderable* renderable);
 
     /// \brief Called every frame to draw everything to the Screen
-    virtual void draw();
+    virtual void draw(common::GameScene* gameScene);
 
     /** \brief Sets the Camera for this Renderer
       * \param camera Camera to be assigned
@@ -76,11 +76,6 @@ public:
 
     void setLightingManager(graphics::LightingManager* lightingManager);
 
-    /** \brief Get this Renderer's Parent common::GameScene
-      * \return Pointer to the parent GameScene, nullptr if none
-      */
-    common::GameScene* getGameSceneParent();
-
     /** \brief Get PostProcessor with the given name
       * \param postProcessorName std::string representation of the PostProcessor name
       * \return Pointer to the PostProcessor, nullptr if not found
@@ -105,8 +100,8 @@ public:
 protected:
     std::list<IRenderable*>    mRenderables;     ///< Collection of Renderable objects to be drawn every frame
     std::list<PostProcessor*>  mPostProcessors;  ///< Collection of PostProcessor objects to apply
-    common::GameScene*         mGameSceneParent; ///< Pointer to the Parent common::GameScene
     graphics::LightingManager* mLightingManager; ///< Pointer to the lighting::LightingManager
+    data::Settings*            mSettings;        ///< Settings of the game
     ICamera*                   mCamera;          ///< Camera of the current Scene
 };
 

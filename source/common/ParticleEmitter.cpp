@@ -1,10 +1,12 @@
 #include "ParticleEmitter.h"
 #include "../utilities/DeltaTime.h"
+#include "../data/TextureAtlas.h"
+#include "ResourceManager.h"
 
 namespace liquid {
 namespace common {
 
-    ParticleEmitter::ParticleEmitter(data::ParticleData& particleData, graphics::RenderableBatch* batch, uint32_t count) :
+    ParticleEmitter::ParticleEmitter(data::ParticleData& particleData, Layer* layerPtr, uint32_t count) :
         Entity(),
         mParticleData(particleData)
     {
@@ -15,11 +17,18 @@ namespace common {
         mBirthAccumulator = 0.0f;
         mRepeat = true;
 
+        mAtlasID = ResourceManager<data::TextureAtlas>::getResourceID("particle");
+        mBlendMode = 1;
+
         for (uint32_t i = 0; i < mParticlesCount; i++)
         {
             mParticles[i] = new Particle(mParticleData);
-            mParticles[i]->setVerticesPtr(batch->nextVertices());
-            mParticles[i]->initialise();
+            mParticles[i]->setPosition(mPositionX, mPositionY);
+            mParticles[i]->mAtlasID = mAtlasID;
+            mParticles[i]->mBlendMode = mBlendMode;
+            mParticles[i]->setSize(64.0f, 64.0f);
+            mParticles[i]->setTexCoords(0.f, 0.f, 64.f, 64.f);
+            layerPtr->insertEntity(mParticles[i]);
         }
     }
 

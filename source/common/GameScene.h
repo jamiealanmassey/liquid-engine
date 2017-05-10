@@ -1,6 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include "Entity.h"
+#include "Layer.h"
 #include "../animation/Animator.h"
 #include "../ui/WidgetManager.h"
 
@@ -44,7 +45,7 @@ public:
       * pertaining to those events that've been triggered on this frame. This
       * could include events such as mouse, keyboard, gamepad input etc.
       */
-    virtual void updateEvents(/*LiquidEventData eventData*/);
+    //virtual void updateEvents(/*LiquidEventData eventData*/);
 
     /** \brief Updates the Scene, called every frame
       *
@@ -53,32 +54,22 @@ public:
       * the Renderer rendered.
       */
     virtual void update(); // NOTE: Render at end of update loop, using renderer
-        
-    /** \brief Adds a new Entity to the GameScene
-      * \param entity Entity you wish to add to the Scene
-      * 
-      * Inserts a new Entity into the GameScene, once called this will add the Entity
-      * to the m_EntitiesBuffer vector and then any entities that you have added on
-      * this frame will be inserted to the GameScene at the start of the next running
-      * frame.
-      *
-      * When the given Entity is inserted to the GameScene, it will be given this scene
-      * as its parent and the Entity::initialise() function will be called on it.
-      */
-    virtual void addEntity(Entity* entity);
 
-    /** \brief Adds a collection of Entities to the GameScene
-      * \param entities Collection of Entities you wish to add to the Scene
-      *
-      * Inserts a collection of Entities into the GameScene, once called this will 
-      * add each Entity to the m_EntitiesBuffer vector and then any entities that you 
-      * have added on this frame will be inserted to the GameScene at the start of 
-      * the next running frame.
-      *
-      * When the given Entities are inserted to the GameScene, they will be given this scene
-      * as their parent and the Entity::initialise() function will be called on them.
+    /** \brief Inserts a new Layer into the Scene
+      * \param name std::string representation of this Layer
+      * \param layerPtr Pointer to the Layer object to insert
       */
-    virtual void addEntity(std::vector<Entity*> entities);
+    virtual void insertLayer(std::string name, Layer* layerPtr);
+
+    /** \brief Uses the mLayerIndexer to find the index of the layer and removes it
+      * \param std::string representation of the Layer object
+      */
+    virtual void removeLayer(std::string name);
+
+    /** \brief Gets the Layer with the given name
+      * \return Pointer to the found layer, nullptr if not found
+      */
+    virtual Layer* getLayer(std::string name);
 
     /** \brief Find if an Entity is at the given point
       * \param x X-Coordinate to check against
@@ -102,20 +93,10 @@ public:
       * Uses the given unique identifier to find an Entity in the GameScene
       */
     Entity* getEntityWithUID(std::string uid);
-    // TODO: Closest to point?
 
     void addAnimator(animation::Animator* animator);
 
     void setWidgetManager(ui::WidgetManager* widgetManager);
-
-    /** \brief Sets the Spatial Manager of the GameScene
-      * \param spatial The Spatial Partitioning method as a class
-      *
-      * Sets the class for partitioning the space in this GameScene, you cannot
-      * just pass the Spatial class, this class is simply an interface. For this to
-      * work you need to pass an implemented Spatial class that implements it.
-      */
-    //void setSpatialManager(Spatial* spatial);
 
     /** \brief Denotes if the GameScene is allowed to Update
       * \param isAllowed Value to assign the flag, default: true
@@ -140,7 +121,12 @@ public:
     /** \brief Gets the current Collection of Entities in the Scene
       * \return Collection of Entities as a std::vector
       */
-    std::vector<Entity*>& getEntities();
+    std::vector<Entity*> getEntities();
+
+    /** \brief Gets the layers associated with this GameScene
+      * \return Collection of Layer objects as a std::list
+      */
+    std::vector<Layer*> getLayers();
 
     /** \brief Gets the name of the Scene
       * \return Name of the GameScene as a std::string, default: ""
@@ -176,10 +162,10 @@ public:
 
 protected:
     std::list<animation::Animator*> mAnimators;
-    std::vector<Entity*> mEntities;       ///< Collection of Entities that exist in the Scene
-    std::vector<Entity*> mEntitiesBuffer; ///< Collection buffer to slowly introduce new Entities
-    std::string          mSceneName;      ///< String identifier for the Scene
-    ui::WidgetManager*   mWidgetManager;  ///< Pointer to the ui::WidgetManager class for UI management
+    std::map<std::string, uint32_t> mLayerIndexer;
+    std::vector<Layer*>             mLayers;
+    std::string                     mSceneName;      ///< String identifier for the Scene
+    ui::WidgetManager*              mWidgetManager;  ///< Pointer to the ui::WidgetManager class for UI management
     //Spatial*             mSpatialManager; ///< Pointer to a spatial manager used to divide and query space
 
 private:

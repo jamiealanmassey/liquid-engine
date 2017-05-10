@@ -4,9 +4,9 @@
 namespace liquid {
 namespace graphics {
 
-    Renderer::Renderer(common::GameScene* gameSceneParent)
+    Renderer::Renderer(data::Settings* settings)
     {
-        mGameSceneParent = gameSceneParent;
+        mSettings = settings;
     }
 
     Renderer::~Renderer()
@@ -24,7 +24,7 @@ namespace graphics {
                     renderable);
     }
 
-    void Renderer::draw()
+    void Renderer::draw(common::GameScene* gameScene)
     {
         if (mCamera != nullptr)
             mCamera->update();
@@ -86,11 +86,6 @@ namespace graphics {
     void Renderer::setLightingManager(graphics::LightingManager* lightingManager)
     {
         mLightingManager = lightingManager;
-    }
-
-    common::GameScene* Renderer::getGameSceneParent()
-    {
-        return mGameSceneParent;
     }
 
     PostProcessor* Renderer::getPostProcessor(std::string postProcessorName)

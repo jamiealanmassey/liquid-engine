@@ -1,5 +1,10 @@
 #include "Directories.h"
 #include "../common/ResourceManager.h"
+#include "../data/TextureAtlas.h"
+#include "../parser/ParserXML.h"
+#include <Windows.h>
+#include <iostream>
+#include <filesystem>
 
 namespace liquid {
 namespace data {
@@ -13,7 +18,29 @@ namespace data {
     {}
 
     void Directories::fillResourceManager()
-    {}
+    {
+        for (auto directory : mDirectories)
+        {
+            std::string search = std::experimental::filesystem::current_path().string();
+            search.append("\\");
+            search.append(directory.second);
+
+            for (auto& p : std::experimental::filesystem::
+                recursive_directory_iterator(search))
+            {
+                std::string name = p.path().stem().string();
+                std::string extension = p.path().extension().string();
+                
+                if (extension == ".atlas")
+                {
+                    parser::ParserXML atlasParser;
+                    atlasParser.parseFile(name + extension);
+                    data::TextureAtlas* textureAtlas = new data::TextureAtlas(atlasParser);
+                    common::ResourceManager<data::TextureAtlas>::addResource(name, textureAtlas);
+                }
+            }  
+        }
+    }
 
     void Directories::addDirectory(std::string identifier, std::string path)
     {

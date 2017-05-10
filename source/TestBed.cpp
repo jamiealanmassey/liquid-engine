@@ -14,16 +14,19 @@ int main()
     liquid::data::Settings* settings = new liquid::data::Settings;
     settings->parseString(settings->mDefaultSettings);
 
+    liquid::data::Directories::instance().addDirectory("root", "");
+    liquid::data::Directories::instance().fillResourceManager();
+
     // TODO: Make GameScene dependant on the RENDERER not the Renderer dependant on GAMESCENE
     liquid::parser::ParserXML interfaceParser;
-    interfaceParser.parseFile("interfaceAtlas.xml");
+    interfaceParser.parseFile("interfaceAtlas.atlas");
 
     liquid::data::TextureAtlas interfaceAtlas(interfaceParser);
     liquid::ui::WidgetManager* widgetMgr = new liquid::ui::WidgetManager(interfaceAtlas);
     liquid::common::GameScene* scene = new liquid::common::GameScene();
     scene->setWidgetManager(widgetMgr);
     
-    liquid::impl::SFMLRenderer* renderer = new liquid::impl::SFMLRenderer(scene, settings);
+    liquid::impl::SFMLRenderer* renderer = new liquid::impl::SFMLRenderer(settings);
     liquid::impl::SFMLEventManager* eventMgr = new liquid::impl::SFMLEventManager(renderer);
 
     liquid::common::GameManager::instance().setBindingsClass(bindings);

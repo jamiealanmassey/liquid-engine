@@ -23,7 +23,14 @@ namespace common {
         mParentEntity = nullptr;
         mParentGameScene = nullptr;
         mAIAgent = nullptr;
-        mVerticesSet = false;
+        mVerticesSet = true;
+
+        mAtlasID = -1;
+        mShaderID = -1;
+        mBlendMode = 0;
+
+        for (uint32_t i = 0; i < 4; i++)
+            mVerticesPtr[i] = new utilities::Vertex2();
     }
     
     Entity::~Entity()
@@ -111,12 +118,23 @@ namespace common {
         mWidth = w;
         mHeight = h;
 
-        if (mVerticesSet)
+        if (mVerticesSet == true)
         {
             mVerticesPtr[0]->setPosition(mPositionX, mPositionY);
             mVerticesPtr[1]->setPosition(mPositionX + mWidth, mPositionY);
             mVerticesPtr[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
             mVerticesPtr[3]->setPosition(mPositionX, mPositionY + mHeight);
+        }
+    }
+
+    void Entity::setTexCoords(float x, float y, float w, float h)
+    {
+        if (mVerticesSet == true)
+        {
+            mVerticesPtr[0]->setTexCoord(x, y);
+            mVerticesPtr[1]->setTexCoord(x + w, y);
+            mVerticesPtr[2]->setTexCoord(x + w, y + h);
+            mVerticesPtr[3]->setTexCoord(x, y + h);
         }
     }
     

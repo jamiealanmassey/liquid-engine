@@ -110,10 +110,7 @@ public:
       */
     virtual void setSize(float w, float h);
 
-    // TODO: Abstract this out of this class if possible
-    /*void makeBox2DBody(b2BodyDef definition);
-    void makeBox2DFixture(b2FixtureDef fixture);
-    void destroyBox2DBody();*/
+    virtual void setTexCoords(float x, float y, float w, float h);
 
     /** \brief Computes if a point is inside of this Entity
       * \param x X-Coordinate to be tested
@@ -262,11 +259,18 @@ protected:
     void removeChild(Entity* child);
 
 public:
+    std::string mTextureName;
+    // TODO: HIDE THIS
+    int32_t mAtlasID;
+    int32_t mShaderID;
+    int32_t mBlendMode;
+
+public:
     std::function<void(Entity*)>      mFuncCallbackUpdate;      ///< Function callback for when Entity is updated
     std::function<void(float, float)> mFuncCallbackSetPosition; ///< Function callback for when position is set
     std::function<void(float, float)> mFuncCallbackAddPosition; ///< Function callback for when position is added
     std::function<void()>             mFuncCallbackKilled;      ///< Function callback for when this Entity is destroyed
-
+    
 protected:
     std::string       mLuaScript;
     luabridge::LuaRef mLuaFuncCreate;

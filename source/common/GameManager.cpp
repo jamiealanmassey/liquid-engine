@@ -40,9 +40,8 @@ namespace common {
             if (mGameSuspended == false)
             {
                 mEventManager->updateEvents();
-                mGameScenes.front()->updateEvents(); // NOTE: Required function anymore?
                 mGameScenes.front()->update();
-                mRenderer->draw();
+                mRenderer->draw(mGameScenes.front());
 
                 if (mPopNextSceneFront && mGameScenes.size() > 1)
                 {

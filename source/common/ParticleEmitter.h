@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "Particle.h"
+#include "Layer.h"
 #include "../data/ParticleData.h"
 #include "../graphics/RenderableBatch.h"
 
@@ -36,7 +37,7 @@ public:
       * \param batch Pointer to the graphics::BatchRenderable to use for drawing
       * \param count Number of Particles to emit
       */
-    ParticleEmitter(data::ParticleData& particleData, graphics::RenderableBatch* batch, uint32_t count);
+    ParticleEmitter(data::ParticleData& particleData, Layer* layerPtr, uint32_t count);
    
     /// ParticleEmitter Destructor
     ~ParticleEmitter();

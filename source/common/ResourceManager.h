@@ -30,10 +30,14 @@ public:
       * \param resource Resource to be added to the collection
       * \return Next ResourceID that represents this resource
       */
-    static ResourceID addResource(T* resource)
+    static ResourceID addResource(std::string name, T* resource)
     {
+        if (getResourceIndexer().find(name) != getResourceIndexer().end())
+            return getResourceID(name);
+
         ResourceID id = getNextResourceID();
         getResources()[id] = resource;
+        getResourceIndexer()[name] = id;
         return id;
     }
 
@@ -42,6 +46,16 @@ public:
       */
     static void removeResource(ResourceID id)
     {
+        std::map<std::string, uint32_t>::iterator it;
+        for (it = getResourceIndexer().begin(); it != getResourceIndexer().end(); ++it)
+        {
+            if ((*it).second == id)
+            {
+                getResourceIndexer().erase(it);
+                break;
+            }
+        }
+
         getResources().erase(id);
     }
 
@@ -52,6 +66,19 @@ public:
     static T* getResource(ResourceID id)
     {
         return getResources()[id];
+    }
+
+    static T* getResource(std::string name)
+    {
+        return getResource(getResourceID(name));
+    }
+
+    static ResourceID getResourceID(std::string name)
+    {
+        if (getResourceIndexer().find(name) != getResourceIndexer().end())
+            return getResourceIndexer()[name];
+
+        return -1;
     }
 
     /// \brief Removes all Resources from this class specific store
@@ -69,6 +96,12 @@ protected:
     {
         static std::map<ResourceID, T*> resources;
         return resources;
+    }
+
+    static std::map<std::string, ResourceID>& getResourceIndexer()
+    {
+        static std::map<std::string, ResourceID> resourceIndexer;
+        return resourceIndexer;
     }
 
     /// \return The next Event Handle for this class-type

@@ -7,7 +7,6 @@ namespace common {
     GameScene::GameScene()
     {
         mSceneName = "";
-        //mSpatialManager = nullptr;
         mAllowUpdate = true;
         mAllowUpdateEvents = true;
         mAllowRenderer = true;
@@ -19,13 +18,6 @@ namespace common {
 
     void GameScene::initialise()
     {
-
-    }
-
-    // TODO: Use LiquidEventData definition
-    void GameScene::updateEvents()
-    {
-        
     }
 
     void GameScene::update()
@@ -33,64 +25,52 @@ namespace common {
         if (mAllowUpdate == false)
             return;
 
-        for (auto entity : mEntitiesBuffer)
-        {
-            mEntities.push_back(entity);
-            mEntities.back()->setParentGameScene(this);
-            mEntities.back()->initialise();
-
-            // TODO: Add entity to the Spatial Manager if possible
-        }
-
-        mEntitiesBuffer.clear();
-
-        for (auto entity : mEntities)
-        {
-            if (entity->getEntityState() == Entity::eEntityState::ENTITYSTATE_ACTIVE)
-            {
-                entity->updatePre();
-                entity->update();
-                entity->updatePost();
-            }
-        }
-
-        /*if (mSpatialManager)
-            mSpatialManager->update();*/
-
         if (mWidgetManager)
             mWidgetManager->update();
 
-        std::vector<Entity*>::iterator it;
-        for (it = mEntities.begin(); it != mEntities.end(); ++it)
-        {
-            if ((*it)->getEntityState() == Entity::eEntityState::ENTITYSTATE_DEAD)
-            {
-                it = mEntities.erase(it);
-                if (it == mEntities.end())
-                    break;
-            }
-        }
+        for (Layer* layer : mLayers)
+            layer->update();
 
         for (auto animator : mAnimators)
             animator->update();
     }
 
-    void GameScene::addEntity(Entity* entity)
+    void GameScene::insertLayer(std::string name, Layer* layerPtr)
     {
-        mEntitiesBuffer.push_back(entity);
+        layerPtr->setParentScene(this);
+        mLayers.push_back(layerPtr);
+        mLayerIndexer[name] = mLayers.size() - 1;
     }
 
-    void GameScene::addEntity(std::vector<Entity*> entities)
+    void GameScene::removeLayer(std::string name)
     {
-        mEntitiesBuffer.insert(mEntitiesBuffer.begin(), entities.begin(), entities.end());
+        std::map<std::string, uint32_t>::iterator it;
+        if ((it = mLayerIndexer.find(name)) == mLayerIndexer.end())
+            return;
+
+        delete mLayers[mLayerIndexer[name]];
+        mLayers.erase(mLayers.begin() + mLayerIndexer[name]);
+
+        for (; it != mLayerIndexer.end(); ++it)
+            (*it).second--;
+
+        mLayerIndexer.erase(name);
+    }
+
+    Layer* GameScene::getLayer(std::string name)
+    {
+        if (mLayerIndexer.find(name) != mLayerIndexer.end())
+            return mLayers[mLayerIndexer[name]];
+
+        return nullptr;
     }
 
     Entity* GameScene::getEntityAtPoint(float x, float y)
     {
-        // TODO: Use spatial to make this more efficient
-        for (auto entity : mEntities)
+        Entity* entity = nullptr;
+        for (Layer* layer : mLayers)
         {
-            if (entity->isPointInside(x, y))
+            if ((entity = layer->getEntityAtPoint(x, y)) != nullptr)
                 return entity;
         }
 
@@ -99,14 +79,14 @@ namespace common {
 
     Entity* GameScene::getEntityWithUID(std::string uid)
     {
-        // TODO: Maybe make a lookup table?
-        std::vector<Entity*>::iterator it = 
-        std::find_if(mEntities.begin(), mEntities.end(),
-            [&id = uid](const Entity* entity) {
-            return entity->getEntityUID() == id;
-        });
+        Entity* entity = nullptr;
+        for (Layer* layer : mLayers)
+        {
+            if ((entity = layer->getEntityWithID(uid)) != nullptr)
+                return entity;
+        }
 
-        return (*it);
+        return nullptr;
     }
 
     void GameScene::addAnimator(animation::Animator* animator)
@@ -145,9 +125,21 @@ namespace common {
         mAllowPostProcesses = isAllowed;
     }
 
-    std::vector<Entity*>& GameScene::getEntities()
+    std::vector<Entity*> GameScene::getEntities()
     {
-        return mEntities;
+        std::vector<Entity*> entities;
+        for (Layer* layer : mLayers)
+        {
+            std::vector<Entity*> layerEnts = layer->getEntities();
+            entities.insert(entities.begin(), layerEnts.begin(), layerEnts.end());
+        }
+
+        return entities;
+    }
+
+    std::vector<Layer*> GameScene::getLayers()
+    {
+        return mLayers;
     }
 
     std::string GameScene::getSceneName() const
@@ -159,11 +151,6 @@ namespace common {
     {
         return mWidgetManager;
     }
-
-    /*Spatial* GameScene::getSpatialManager() const
-    {
-        return mSpatialManager;
-    }*/
 
     bool GameScene::isAllowedUpdate() const
     {

@@ -24,19 +24,21 @@ void Tests::batchedSFMLRendering(sf::Texture& texture)
     liquid::common::Entity* entity1 = new liquid::common::Entity();
     liquid::common::Entity* entity2 = new liquid::common::Entity();
     liquid::common::Entity* entity3 = new liquid::common::Entity();
+    liquid::common::Layer* layer0 = new liquid::common::Layer(scene);
 
     entity1->setPosition(340.0f, 340.0f);
     entity2->setPosition(475.0f, 175.0f);
     entity3->setPosition(800.0f, 350.0f);
 
-    scene->addEntity(entity1);
-    scene->addEntity(entity2);
-    scene->addEntity(entity3);
+    layer0->insertEntity(entity1);
+    layer0->insertEntity(entity2);
+    layer0->insertEntity(entity3);
 
     entity1->setVerticesPtr(batch->nextVertices());
     entity2->setVerticesPtr(batch->nextVertices());
     entity3->setVerticesPtr(batch->nextVertices());
-    renderer->addRenderable(batch);
+    scene->insertLayer("default", layer0);
+    //renderer->addRenderable(batch);
 
     mEntity = entity1;
 
@@ -62,18 +64,20 @@ void Tests::particles(sf::Texture& texture)
 {
     liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
+    liquid::common::Layer* layer0 = new liquid::common::Layer(scene);
 
     liquid::parser::ParserConfig particleParser;
     particleParser.parseString(liquid::data::ParticleData::mDefaultParticle);
 
     liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture, 150);
     liquid::data::ParticleData* particleData = new liquid::data::ParticleData(particleParser);
-    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, particleBatch, 150);
+    liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, layer0, 150);
     emitter->setPosition(950.0f, 500.0f);
-    emitter->setRepeat(true);
+    emitter->setRepeat(false);
     particleBatch->setBlendMode(sf::BlendAdd);
     renderer->addRenderable(particleBatch);
-    scene->addEntity(emitter);
+    layer0->insertEntity(emitter);
+    scene->insertLayer("default", layer0);
     mEmitter = emitter;
 
     auto mouseHandle = liquid::events::EventDispatcher<liquid::events::MouseEventData>::addListener(
@@ -135,10 +139,10 @@ void Tests::events()
     Entity* entity = new Entity();
     entity->setEntityUID("TestEntity");
     entity->setPosition(450.0f, 320.0f);
-    int32_t resID = ResourceManager<Entity>::addResource(entity);
+    int32_t resID = ResourceManager<Entity>::addResource("entity", entity);
 
     KeyboardEventData kData(23, true);
-    int32_t resID2 = ResourceManager<KeyboardEventData>::addResource(&kData);
+    int32_t resID2 = ResourceManager<KeyboardEventData>::addResource("kEvent", &kData);
 
     std::cout << "\nEntity Resource ID: " << resID << std::endl;
     std::cout << "Keyboard Data Resource ID: " << resID2 << "\n\n";
@@ -237,7 +241,7 @@ void Tests::quadTree()
 
 void Tests::animation(sf::Texture& texture)
 {
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 500);
+    //liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 500);
     liquid::parser::ParserXML animXMLParser;
     liquid::parser::ParserXML atlasXMLParser;
 
@@ -248,12 +252,15 @@ void Tests::animation(sf::Texture& texture)
     liquid::data::TextureAtlas atlas(atlasXMLParser);
     liquid::animation::AnimationParser animParser(animXMLParser, atlas);
 
+    liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
+    liquid::common::Layer* layer0 = new liquid::common::Layer(scene);
+
     for (uint32_t i = 0; i < 500; i++)
     {
-        std::array<liquid::utilities::Vertex2*, 4> vertices = batch->nextVertices();
+        //std::array<liquid::utilities::Vertex2*, 4> vertices = batch->nextVertices();
         liquid::common::Entity* player = new liquid::common::Entity();
         liquid::animation::Animator* animator = new liquid::animation::Animator(animParser);
-        player->setVerticesPtr(vertices);
+        //player->setVerticesPtr(vertices);
 
         /*liquid::animation::Animation animation;
 
@@ -290,17 +297,20 @@ void Tests::animation(sf::Texture& texture)
 
         animator->insertAnimation("run", animation);*/
         animator->transformAnimation("run");
-        animator->setVerticesPtr(vertices);
+        animator->setVerticesPtr(player->getVerticesPtr());
+        player->mTextureName = "player";
 
-        liquid::common::GameManager::instance().peekGameSceneFront()->addEntity(player);
-        liquid::common::GameManager::instance().peekGameSceneFront()->addAnimator(animator);
+        // liquid::common::GameManager::instance().peekGameSceneFront()->insertLayer(player);
+        //liquid::common::GameManager::instance().peekGameSceneFront()->addAnimator(animator);
+        layer0->insertEntity(player);
+        scene->addAnimator(animator);
 
         float positionX = liquid::utilities::Random::instance().randomRange(0.0f, 1850.0f);
         float positionY = liquid::utilities::Random::instance().randomRange(0.0f, 950.0f);
         player->setPosition(positionX, positionY);
     }
 
-    liquid::common::GameManager::instance().getRendererClass()->addRenderable(batch);
+    scene->insertLayer("default", layer0);
 }
 
 void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
@@ -379,13 +389,14 @@ void Tests::ai(sf::Texture& texture)
 {
     liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
+    liquid::common::Layer* layer0 = new liquid::common::Layer(scene);
 
-    liquid::impl::SFMLRenderableBatch* renderable = new liquid::impl::SFMLRenderableBatch(texture, 2);
+    //liquid::impl::SFMLRenderableBatch* renderable = new liquid::impl::SFMLRenderableBatch(texture, 2);
     liquid::parser::ParserXML animXMLParser;
     liquid::parser::ParserXML atlasXMLParser;
 
     animXMLParser.parseFile("animation.xml");
-    atlasXMLParser.parseFile("atlas.xml");
+    atlasXMLParser.parseFile("player.atlas");
     atlasXMLParser.dumpXMLTreeToFile();
 
     liquid::data::TextureAtlas atlas(atlasXMLParser);
@@ -397,8 +408,12 @@ void Tests::ai(sf::Texture& texture)
     liquid::common::Entity* entity0 = new liquid::common::Entity();
     liquid::common::Entity* entity1 = new liquid::common::Entity();
 
-    animator0->setVerticesPtr(renderable->nextVertices());
-    animator1->setVerticesPtr(renderable->nextVertices());
+    int32_t resID = liquid::common::ResourceManager<liquid::data::TextureAtlas>::getResourceID("player");
+    entity0->mAtlasID = resID;
+    entity1->mAtlasID = resID;
+
+    animator0->setVerticesPtr(entity0->getVerticesPtr());
+    animator1->setVerticesPtr(entity1->getVerticesPtr());
     animator0->transformAnimation("run");
     animator1->transformAnimation("run");
 
@@ -468,9 +483,10 @@ void Tests::ai(sf::Texture& texture)
         }
     };*/
 
-    renderer->addRenderable(renderable);
-    scene->addEntity(entity0);
-    scene->addEntity(entity1);
+    //renderer->addRenderable(renderable);
+    layer0->insertEntity(entity0);
+    layer0->insertEntity(entity1);
+    scene->insertLayer("default", layer0);
     scene->addAnimator(animator0);
     scene->addAnimator(animator1);
 }
