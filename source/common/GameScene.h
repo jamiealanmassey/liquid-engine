@@ -3,7 +3,6 @@
 #include "Entity.h"
 #include "Layer.h"
 #include "../animation/Animator.h"
-#include "../ui/WidgetManager.h"
 
 namespace liquid { namespace common {
 #ifndef _GAMESCENE_H
@@ -96,8 +95,6 @@ public:
 
     void addAnimator(animation::Animator* animator);
 
-    void setWidgetManager(ui::WidgetManager* widgetManager);
-
     /** \brief Denotes if the GameScene is allowed to Update
       * \param isAllowed Value to assign the flag, default: true
       */
@@ -133,8 +130,6 @@ public:
       */
     std::string getSceneName() const;
 
-    ui::WidgetManager* getWidgetManager() const;
-
     /** \brief Gets the Spatial Manager attached to this GameScene
       * \return Spatial object attached to this GameScene, nullptr if none
       */
@@ -165,7 +160,6 @@ protected:
     std::map<std::string, uint32_t> mLayerIndexer;
     std::vector<Layer*>             mLayers;
     std::string                     mSceneName;      ///< String identifier for the Scene
-    ui::WidgetManager*              mWidgetManager;  ///< Pointer to the ui::WidgetManager class for UI management
     //Spatial*             mSpatialManager; ///< Pointer to a spatial manager used to divide and query space
 
 private:

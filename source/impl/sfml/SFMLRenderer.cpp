@@ -1,6 +1,5 @@
 #ifdef SFML
 #include "SFMLRenderer.h"
-#include "../../graphics/Renderable.h"
 #include "../../utilities/DeltaTime.h"
 #include "../../common/Entity.h"
 #include "../../common/ResourceManager.h"
@@ -36,18 +35,8 @@ namespace impl {
         updateCamera();
         mRenderWindow->clear(sf::Color::Black);
 
-        //std::vector<common::Entity*> entities = gameScene->getEntities();
-        //std::vector<sf::Vertex> sfmlVertices(entities.size() * 4);
-
         drawPreprocess(gameScene);
         drawBatched(gameScene);
-
-        //mRenderWindow->draw(sfmlVertices.data(), entities.size() * 4, sf::PrimitiveType::Quads, mStates);
-
-        /*for (auto object : mRenderables)
-            object->draw(this);*/
-
-        //Renderer::draw();
 
         mRenderWindow->display();
         std::string dt = std::to_string(1000.0f / utilities::DELTA);

@@ -25,9 +25,6 @@ namespace common {
         if (mAllowUpdate == false)
             return;
 
-        if (mWidgetManager)
-            mWidgetManager->update();
-
         for (Layer* layer : mLayers)
             layer->update();
 
@@ -94,17 +91,6 @@ namespace common {
         mAnimators.push_back(animator);
     }
 
-    void GameScene::setWidgetManager(ui::WidgetManager* widgetManager)
-    {
-        mWidgetManager = widgetManager;
-    }
-
-    /*void GameScene::setSpatialManager(Spatial* spatial)
-    {
-        mSpatialManager = spatial;
-        mSpatialManager->initialise();
-    }*/
-
     void GameScene::setAllowUpdate(bool isAllowed)
     {
         mAllowUpdate = isAllowed;
@@ -145,11 +131,6 @@ namespace common {
     std::string GameScene::getSceneName() const
     {
         return mSceneName;
-    }
-
-    ui::WidgetManager* GameScene::getWidgetManager() const
-    {
-        return mWidgetManager;
     }
 
     bool GameScene::isAllowedUpdate() const

@@ -20,7 +20,6 @@ void Tests::batchedSFMLRendering(sf::Texture& texture)
     liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
 
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(texture, 3);
     liquid::common::Entity* entity1 = new liquid::common::Entity();
     liquid::common::Entity* entity2 = new liquid::common::Entity();
     liquid::common::Entity* entity3 = new liquid::common::Entity();
@@ -34,12 +33,7 @@ void Tests::batchedSFMLRendering(sf::Texture& texture)
     layer0->insertEntity(entity2);
     layer0->insertEntity(entity3);
 
-    entity1->setVerticesPtr(batch->nextVertices());
-    entity2->setVerticesPtr(batch->nextVertices());
-    entity3->setVerticesPtr(batch->nextVertices());
     scene->insertLayer("default", layer0);
-    //renderer->addRenderable(batch);
-
     mEntity = entity1;
 
     auto leftHandle = liquid::events::EventDispatcher<liquid::events::KeyboardEventData>::addListener(
@@ -69,13 +63,10 @@ void Tests::particles(sf::Texture& texture)
     liquid::parser::ParserConfig particleParser;
     particleParser.parseString(liquid::data::ParticleData::mDefaultParticle);
 
-    liquid::impl::SFMLRenderableBatch* particleBatch = new liquid::impl::SFMLRenderableBatch(texture, 150);
     liquid::data::ParticleData* particleData = new liquid::data::ParticleData(particleParser);
     liquid::common::ParticleEmitter* emitter = new liquid::common::ParticleEmitter(*particleData, layer0, 150);
     emitter->setPosition(950.0f, 500.0f);
     emitter->setRepeat(false);
-    particleBatch->setBlendMode(sf::BlendAdd);
-    renderer->addRenderable(particleBatch);
     layer0->insertEntity(emitter);
     scene->insertLayer("default", layer0);
     mEmitter = emitter;
@@ -311,78 +302,6 @@ void Tests::animation(sf::Texture& texture)
     }
 
     scene->insertLayer("default", layer0);
-}
-
-void Tests::interface(sf::Texture& interfaceTexture, sf::Font& font)
-{
-    liquid::graphics::Renderer* renderer = liquid::common::GameManager::instance().getRendererClass();
-    liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
-    liquid::ui::WidgetManager* widgetMgr = scene->getWidgetManager();
-
-    liquid::impl::SFMLRenderableBatch* batch = new liquid::impl::SFMLRenderableBatch(interfaceTexture, 9);
-    liquid::ui::Button* button = new liquid::ui::Button(20.f, 10.f, { "ButtonDefault", "ButtonPressed", "ButtonDisabled" });
-    liquid::ui::Toggle* toggle = new liquid::ui::Toggle(20.f, 70.f, { "ButtonDefault", "ButtonDisabled", "" });
-    liquid::ui::Slider* slider = new liquid::ui::Slider(240.f, 10.f);
-    liquid::ui::Widget* thumb = new liquid::ui::Widget(240.0f, 10.f);
-    liquid::ui::Widget* caret = new liquid::ui::Widget(400.0f, 20.0f);
-
-    liquid::ui::Toggle* checkbox0 = new liquid::ui::Toggle(20.0f, 135.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::Toggle* checkbox1 = new liquid::ui::Toggle(20.0f, 175.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::Toggle* checkbox2 = new liquid::ui::Toggle(20.0f, 215.0f, { "CheckboxDefault", "CheckboxSelected" });
-    liquid::ui::ControlList* list = new liquid::ui::ControlList(20.0f, 135.0f, { "", "" });
-    liquid::impl::SFMLRenderableText* text;
-
-    text = new liquid::impl::SFMLRenderableText("");
-    text->setFont(font);
-    text->setPosition(400.0f, 20.0f);
-    text->setColour(0, 0, 0, 255);
-
-    liquid::ui::TextField* field = new liquid::ui::TextField(400.0f, 20.0f);
-    field->setRenderableText(text);
-    field->setTextureName("TextField");
-    //field->setSize(200.0f, 50.0f);
-
-    list->insertElement(checkbox0);
-    list->insertElement(checkbox1);
-    list->insertElement(checkbox2);
-    list->setSize(40.0f, 120.0f);
-    list->setControlType(liquid::ui::ControlList::CONTROLTYPE_SINGLE);
-
-    checkbox0->setCanEnter(false);
-    checkbox1->setCanEnter(false);
-    checkbox2->setCanEnter(false);
-    thumb->setCanEnter(false);
-
-    checkbox0->setVerticesPtr(batch->nextVertices());
-    checkbox1->setVerticesPtr(batch->nextVertices());
-    checkbox2->setVerticesPtr(batch->nextVertices());
-    button->setVerticesPtr(batch->nextVertices());
-    toggle->setVerticesPtr(batch->nextVertices());
-    slider->setVerticesPtr(batch->nextVertices());
-    thumb->setVerticesPtr(batch->nextVertices());
-    field->setVerticesPtr(batch->nextVertices());
-    caret->setVerticesPtr(batch->nextVertices());
-
-    widgetMgr->insertWidget(checkbox0);
-    widgetMgr->insertWidget(checkbox1);
-    widgetMgr->insertWidget(checkbox2);
-    widgetMgr->insertWidget(list);
-    widgetMgr->insertWidget(toggle);
-    widgetMgr->insertWidget(button);
-    widgetMgr->insertWidget(slider);
-    widgetMgr->insertWidget(thumb);
-    widgetMgr->insertWidget(field);
-    widgetMgr->insertWidget(caret);
-
-    renderer->addRenderable(batch);
-    renderer->addRenderable(text);
-
-    field->setCaret(caret);
-    slider->setSliderThumb(thumb);
-    slider->setTexture("SliderVertical");
-    thumb->setTexture("SliderVerticalThumb");
-    caret->setTexture("Caret");
-    field->setSize(450.0f, 49.0f);
 }
 
 void Tests::ai(sf::Texture& texture)

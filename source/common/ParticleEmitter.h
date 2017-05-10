@@ -2,7 +2,6 @@
 #include "Particle.h"
 #include "Layer.h"
 #include "../data/ParticleData.h"
-#include "../graphics/RenderableBatch.h"
 
 namespace liquid { namespace common {
 #ifndef _PARTICLEEMITTER_H
@@ -112,10 +111,7 @@ protected:
     bool                   mRepeat;           ///< Denotes if the emitter should repeat
     eEmitterType           mType;             ///< Stored type of this emitter
     std::vector<Particle*> mParticles;        ///< Collection of Particle objects for use by this emitter
-
-protected:
-    graphics::RenderableBatch* mRenderableBatch; ///< Pointer to the graphics::RenderableBatch to draw with
-    data::ParticleData&        mParticleData;    ///< Reference to the ParticleData (i.e. a template for birthing particles)
+    data::ParticleData&    mParticleData;     ///< Reference to the ParticleData (i.e. a template for birthing particles)
 };
 
 #endif // _PARTICLEEMITTER_H

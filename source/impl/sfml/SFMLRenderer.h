@@ -1,6 +1,5 @@
 #ifdef SFML
 #include <SFML/Graphics.hpp>
-#include "SFMLRenderable.h"
 #include "SFMLCamera.h"
 #include "SFMLBatchGroup.h"
 #include "../../data/Settings.h"

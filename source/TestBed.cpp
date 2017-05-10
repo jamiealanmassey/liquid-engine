@@ -18,14 +18,7 @@ int main()
     liquid::data::Directories::instance().fillResourceManager();
 
     // TODO: Make GameScene dependant on the RENDERER not the Renderer dependant on GAMESCENE
-    liquid::parser::ParserXML interfaceParser;
-    interfaceParser.parseFile("interfaceAtlas.atlas");
-
-    liquid::data::TextureAtlas interfaceAtlas(interfaceParser);
-    liquid::ui::WidgetManager* widgetMgr = new liquid::ui::WidgetManager(interfaceAtlas);
     liquid::common::GameScene* scene = new liquid::common::GameScene();
-    scene->setWidgetManager(widgetMgr);
-    
     liquid::impl::SFMLRenderer* renderer = new liquid::impl::SFMLRenderer(settings);
     liquid::impl::SFMLEventManager* eventMgr = new liquid::impl::SFMLEventManager(renderer);
 
@@ -95,7 +88,6 @@ int main()
     uiTexture.loadFromFile("interface.png");
 
     tests.ai(texture3);
-    tests.interface(uiTexture, font);
     tests.particles(texture2); 
     //tests.animation(texture3);
     //tests.lighting();

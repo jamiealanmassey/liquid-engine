@@ -19,7 +19,6 @@ public:
     void navigation();
     void parserXML();
     void quadTree();
-    void interface(sf::Texture& interfaceTexture, sf::Font& font);
     void ai(sf::Texture& texture);
 
 private:
