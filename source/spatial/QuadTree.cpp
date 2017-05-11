@@ -27,7 +27,6 @@ namespace spatial {
         if (mTrackedEntities.find(entityPtr) == mTrackedEntities.end())
         {
             mRootNode->insertEntity(entityPtr);
-            mNumEntities++;
         }
     }
 
@@ -39,13 +38,17 @@ namespace spatial {
             node->removeEntity(entityPtr);
             mTrackedEntities.erase(entityPtr);
             mRootNode->pruneDeadBranches();
-            mNumEntities--;
         }
     }
 
     QuadNode* QuadTree::getRootNode() const
     {
         return mRootNode;
+    }
+
+    const int32_t QuadTree::getCount() const
+    {
+        return mTrackedEntities.size();
     }
 
     std::vector<common::Entity*> QuadTree::query(std::array<float, 4> region)
@@ -87,6 +90,16 @@ namespace spatial {
     void QuadTree::setTrackedNode(common::Entity* entity, QuadNode* node)
     {
         mTrackedEntities[entity] = node;
+    }
+
+    std::vector<common::Entity*> QuadTree::getEntities()
+    {
+        std::vector<common::Entity*> entities;
+
+        for (auto elem : mTrackedEntities)
+            entities.push_back(elem.first);
+
+        return entities;
     }
 
 }}

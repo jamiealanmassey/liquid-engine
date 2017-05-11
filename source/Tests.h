@@ -21,9 +21,16 @@ public:
     void quadTree();
     void ai(sf::Texture& texture);
 
-private:
+    void createOverlay(liquid::spatial::QuadNode* node, liquid::common::Entity* entity);
+    void createEntities(liquid::spatial::QuadNode* node, liquid::common::Entity* entity);
+
+public:
     liquid::common::Entity* mEntity;
     liquid::common::ParticleEmitter* mEmitter;
+    liquid::spatial::QuadTree* mQuadTree;
+    liquid::common::Entity* mQuadOverlay;
+    liquid::common::Entity* mQuadEntities;
+    float mQuadAccum;
 };
 
 #endif // _TESTS_H

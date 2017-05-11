@@ -57,6 +57,8 @@ public:
 
     QuadNode* getRootNode() const;
 
+    const int32_t getCount() const;
+
     /** \brief Query the QuadTree and find all common::Entity objects in the given region
       * \param region Area to search in an Array format where = (x, y, width, height)
       */
@@ -69,6 +71,9 @@ public:
     virtual std::vector<common::Entity*> query(std::array<float, 4> region, int32_t type) override;
 
     void setTrackedNode(common::Entity* entity, QuadNode* node);
+
+    // TEMP
+    std::vector<common::Entity*> getEntities();
 
 protected:
     /** \brief Search recursively using a depth search to find all Entities in the region

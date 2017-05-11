@@ -204,7 +204,7 @@ void Tests::parserXML()
     liquid::parser::ParserNode* curNode = nodeSearch.getCurrentNode();
 }
 
-void createOverlay(liquid::spatial::QuadNode* node, liquid::common::Entity* entity)
+void Tests::createOverlay(liquid::spatial::QuadNode* node, liquid::common::Entity* entity)
 {
     float positionX = node->getCentre()[0] - (node->getSize()[0] / 2.0f);
     float positionY = node->getCentre()[1] - (node->getSize()[1] / 2.0f);
@@ -249,7 +249,7 @@ void createOverlay(liquid::spatial::QuadNode* node, liquid::common::Entity* enti
     }
 }
 
-void createEntities(liquid::spatial::QuadNode* node, liquid::common::Entity* entity)
+void Tests::createEntities(liquid::spatial::QuadNode* node, liquid::common::Entity* entity)
 {
     for (auto e : node->getEntities())
     {
@@ -271,8 +271,8 @@ void createEntities(liquid::spatial::QuadNode* node, liquid::common::Entity* ent
 void Tests::quadTree()
 {
     std::vector<liquid::common::Entity*> entities;
-    entities.resize(150);
-    for (uint32_t i = 0; i < 150; i++)
+    entities.resize(350);
+    for (uint32_t i = 0; i < 350; i++)
     {
         float posX = liquid::utilities::Random::instance().randomRange(10.0f, 1910.0f);
         float posY = liquid::utilities::Random::instance().randomRange(10.0f, 1070.0f);
@@ -281,33 +281,52 @@ void Tests::quadTree()
         entities[i]->setPosition(posX, posY);
     }
 
-    liquid::spatial::QuadTree* quadTree =
-        new liquid::spatial::QuadTree(4, { 960.0f, 540.f }, { 1920.0f, 1080.0f });
+    mQuadTree = new liquid::spatial::QuadTree(8, { 960.0f, 540.f }, { 1920.0f, 1080.0f });
+    mQuadAccum = 0.0f;
 
-    for (int32_t i = 0; i < 150; i++)
-        quadTree->insertEntity(entities[i]);
-
-    quadTree->removeEntity(entities[50]);
+    for (uint32_t i = 0; i < 350; i++)
+        mQuadTree->insertEntity(entities[i]);
 
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
-    liquid::common::Entity* debugOverlay = new liquid::common::Entity();
-    liquid::common::Entity* debugEntities = new liquid::common::Entity();
+    mQuadOverlay = new liquid::common::Entity();
+    mQuadEntities = new liquid::common::Entity();
 
-    createOverlay(quadTree->getRootNode(), debugOverlay);
-    createEntities(quadTree->getRootNode(), debugEntities);
+    createOverlay(mQuadTree->getRootNode(), mQuadOverlay);
+    createEntities(mQuadTree->getRootNode(), mQuadEntities);
 
-    debugEntities->mPrimitiveType = 2;
-    debugOverlay->mPrimitiveType = 1;
+    mQuadOverlay->mPrimitiveType = 1;
+    mQuadEntities->mPrimitiveType = 2;
 
     liquid::common::Layer* layer = new liquid::common::Layer(scene);
-    layer->insertEntity(debugOverlay);
-    layer->insertEntity(debugEntities);
+    layer->insertEntity(mQuadOverlay);
+    layer->insertEntity(mQuadEntities);
     scene->insertLayer("default", layer);
+
+    mQuadEntities->mFuncCallbackUpdate =
+        [&tests = *this, &tree = mQuadTree, &accum = mQuadAccum](liquid::common::Entity* entity) {
+            accum += liquid::utilities::DELTA;
+
+            if (accum > 200.0f)
+            {
+                accum = 0.0f;
+                if (tree->getCount() == 0)
+                    return;
+
+                int32_t rand = liquid::utilities::Random::instance().randomRange(0, tree->getCount());
+                tree->removeEntity(tree->getEntities()[rand]);
+                
+                tests.mQuadOverlay->clearVertices();
+                tests.mQuadEntities->clearVertices();
+
+                tests.createOverlay(tree->getRootNode(), tests.mQuadOverlay);
+                tests.createEntities(tree->getRootNode(), tests.mQuadEntities);
+            }
+        };
 
     /*for (int32_t i = 0; i < 20; i++)
         quadTree->removeEntity(entities[i]);*/
 
-    std::vector<liquid::common::Entity*> query = quadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
+    std::vector<liquid::common::Entity*> query = mQuadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
 }
 
 void Tests::animation(sf::Texture& texture)

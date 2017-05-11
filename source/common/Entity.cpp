@@ -218,6 +218,11 @@ namespace common {
         mVerticesCount++;
     }
 
+    void Entity::removeVertex2(uint32_t index)
+    {
+        mVertices.erase(std::find(mVertices.begin(), mVertices.end(), mVertices[index]));
+    }
+
     int32_t Entity::getEntityType() const
     {
         return mType;

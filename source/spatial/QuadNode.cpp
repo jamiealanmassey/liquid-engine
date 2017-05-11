@@ -74,7 +74,7 @@ namespace spatial {
         for (uint32_t i = 0; i < 4; i++)
         {
             mChildNodes[i]->pruneDeadBranches();
-            empty += (mChildNodes[i]->getCount() == 0);
+            empty += (mChildNodes[i]->isSubdivided() == false && mChildNodes[i]->getCount() == 0);
         }
 
         if (empty == 4)

@@ -185,6 +185,8 @@ public:
       */
     void addVertex2(utilities::Vertex2* vertex);
 
+    void removeVertex2(uint32_t index);
+
     /** \brief Gets the type of the Entity as 32-bit integer
       * \return Type of the Entity as a 32-bit integer, default: ENTITYTYPE_UNKNOWN/0x0000
       */
@@ -237,6 +239,12 @@ public:
 
     /// \return Number of Vertices in this Entity
     const uint32_t getVerticesCount() const;
+
+    void clearVertices()
+    {
+        mVertices.clear();
+        mVerticesCount = 0;
+    }
 
 protected:
     /** \brief Adds a child to this Entity
