@@ -1,5 +1,6 @@
 #include "../utilities/Vertex2.h"
 #include "../parser/Parser.h"
+#include "../common/Entity.h"
 #include "AnimationFrame.h"
 #include "AnimationDefs.h"
 #include "AnimationParser.h"
@@ -101,16 +102,16 @@ public:
       */
     void transformAnimationMode(eAnimationMode mode);
 
-    /** \brief Assign vertices to use for traversing frames via texture coordinates
-      * \param vertices Array of utilities::Vertex2 pointers
+    void setFlippedX(bool flipped = true);
+    void setFlippedY(bool flipped = true);
+
+    /** \brief Assign the Entity for this Animator to manipulate
+      * \param entityPtr Pointer to the Entity to animate
       */
-    void setVerticesPtr(std::array<liquid::utilities::Vertex2*, 4> vertices);
+    void setEntityPtr(common::Entity* entityPtr);
 
-    /// \return Gets the std::array of utilities::Vertex2 pointers
-    const std::array<liquid::utilities::Vertex2*, 4>& getVerticesPtr() const;
-
-    /// \return True if the Vertices for this Animator have been set, otherwise false
-    const bool getVerticesSet() const;
+    const bool isFlippedX() const;
+    const bool isFlippedY() const;
 
     /** \brief Gets an Animation from the specified index via mAnimationIndexer
       * \param index Index of the Animation to get
@@ -171,10 +172,9 @@ protected:
     int32_t             mCurrentFrame;       ///< Current frame index of the Animation
     float               mAccumulator;        ///< Accumulating time for the Animator in milliseconds
     float               mFrameDelay;         ///< Current frame's delay time
-
-protected:
-    std::array<liquid::utilities::Vertex2*, 4> mVerticesPtr; ///< Pointer to array of vertices, usually for transforming Renderable data
-    bool                                       mVerticesSet; ///< Denotes if the Vertices pointer was ever set
+    bool                mFlippedX;           ///< Flips the Animation on the X-Axis
+    bool                mFlippedY;           ///< Flips the Animation on the Y-Axis
+    common::Entity*     mEntityPtr;          ///< Pointer to the Animating common::Entity
 };
 
 #endif // _ANIMATOR_H

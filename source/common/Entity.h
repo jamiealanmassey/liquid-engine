@@ -200,12 +200,15 @@ public:
     /** \brief Gets the X-Coordinate of the Entity in 2D space
       * \return X-Coordinate of the Entity, default: 0.0f
       */
-    float getPositionX() const;
+    const float getPositionX() const;
 
     /** \brief Gets the Y-Coordinate of the Entity in 2D space
       * \return Y-Coordinate of the Entity, default: 0.0f
       */
-    float getPositionY() const;
+    const float getPositionY() const;
+
+    const float getOriginX() const;
+    const float getOriginY() const;
 
     /** \brief Gets the unique string identifier of this Entity
       * \return Unique ID of the Entity, empty string if nothing
@@ -240,11 +243,7 @@ public:
     /// \return Number of Vertices in this Entity
     const uint32_t getVerticesCount() const;
 
-    void clearVertices()
-    {
-        mVertices.clear();
-        mVerticesCount = 0;
-    }
+    void clearVertices();
 
 protected:
     /** \brief Adds a child to this Entity
@@ -296,6 +295,8 @@ protected:
     eEntityState         mState;           ///< The current state of the entity: active, sleep or dead
     float                mPositionX;       ///< X-Coordinate of the Entity in 2D space
     float                mPositionY;       ///< Y-Coordinate of the Entity in 2D space
+    float                mOriginX;         ///< Origin on X-Axis relative to position (0-1)
+    float                mOriginY;         ///< Origin on Y-Axis relative to position (0-1)
     float                mWidth;           ///< Width of the Entity in 2D space
     float                mHeight;          ///< Height of the Entity in 2D space
     std::string          mUniqueID;        ///< Unique identifier of the Entity

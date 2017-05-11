@@ -17,6 +17,8 @@ namespace common {
         mState = eEntityState::ENTITYSTATE_ACTIVE;
         mPositionX = 0.0f;
         mPositionY = 0.0f;
+        mOriginX = 0.5f;
+        mOriginY = 0.5f;
         mWidth = 0.0f;
         mHeight = 0.0f;
         mUniqueID = "Invalid";
@@ -75,10 +77,13 @@ namespace common {
         float w = mVertices[1]->getTexCoord()[0] - mVertices[0]->getTexCoord()[0];
         float h = mVertices[2]->getTexCoord()[1] - mVertices[1]->getTexCoord()[1];
 
-        mVertices[0]->setPosition(x, y);
-        mVertices[1]->setPosition(x + w, y);
-        mVertices[2]->setPosition(x + w, y + h);
-        mVertices[3]->setPosition(x, y + h);
+        float calcX = x - (mOriginX * w);
+        float calcY = y - (mOriginY * h);
+
+        mVertices[0]->setPosition(calcX, calcY);
+        mVertices[1]->setPosition(calcX + w, calcY);
+        mVertices[2]->setPosition(calcX + w, calcY + h);
+        mVertices[3]->setPosition(calcX, calcY + h);
 
         for (auto child : mChildren)
             child->setPosition(x, y);
@@ -116,10 +121,7 @@ namespace common {
         mWidth = w;
         mHeight = h;
 
-        mVertices[0]->setPosition(mPositionX, mPositionY);
-        mVertices[1]->setPosition(mPositionX + mWidth, mPositionY);
-        mVertices[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
-        mVertices[3]->setPosition(mPositionX, mPositionY + mHeight);
+        setPosition(mPositionX, mPositionY);
     }
 
     void Entity::setTexCoords(float x, float y, float w, float h)
@@ -233,16 +235,26 @@ namespace common {
         return mState;
     }
 
-    float Entity::getPositionX() const
+    const float Entity::getPositionX() const
     {
         return mPositionX;
     }
     
-    float Entity::getPositionY() const
+    const float Entity::getPositionY() const
     {
         return mPositionY;
     }
     
+    const float Entity::getOriginX() const
+    {
+        return mOriginX;
+    }
+
+    const float Entity::getOriginY() const
+    {
+        return mOriginY;
+    }
+
     std::string Entity::getEntityUID() const
     {
         return mUniqueID;
@@ -276,6 +288,12 @@ namespace common {
     const uint32_t Entity::getVerticesCount() const
     {
         return mVertices.size();
+    }
+
+    void Entity::clearVertices()
+    {
+        mVertices.clear();
+        mVerticesCount = 0;
     }
 
     void Entity::addChild(Entity* entity)

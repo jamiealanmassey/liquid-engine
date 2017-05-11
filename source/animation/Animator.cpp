@@ -35,6 +35,7 @@ namespace animation {
         mBeginFrame = 0;
         mEndFrame = (mAnimationTable[mCurrentAnimation].size() - 1);
         mFrameDelay = 0.f;
+        mEntityPtr = nullptr;
 
         updateFrame(getAnimation(0)[0]);
     }
@@ -184,22 +185,30 @@ namespace animation {
         mAnimationMode = mode;
     }
 
-    void Animator::setVerticesPtr(std::array<liquid::utilities::Vertex2*, 4> vertices)
+    void Animator::setFlippedX(bool flipped)
     {
-        mVerticesPtr = vertices;
-        mVerticesSet = true;
+        mFlippedX = flipped;
+    }
 
+    void Animator::setFlippedY(bool flipped)
+    {
+        mFlippedY = flipped;
+    }
+
+    void Animator::setEntityPtr(common::Entity* entityPtr)
+    {
+        mEntityPtr = entityPtr;
         updateFrame(getAnimation(mCurrentAnimation)[mCurrentFrame]);
     }
 
-    const std::array<liquid::utilities::Vertex2*, 4>& Animator::getVerticesPtr() const
+    const bool Animator::isFlippedX() const
     {
-        return mVerticesPtr;
+        return mFlippedX;
     }
 
-    const bool Animator::getVerticesSet() const
+    const bool Animator::isFlippedY() const
     {
-        return mVerticesSet;
+        return mFlippedY;
     }
 
     Animation& Animator::getAnimation(int32_t index)
@@ -267,23 +276,33 @@ namespace animation {
     {
         mFrameDelay = frame.getFrameDelay();
 
-        if (mVerticesSet == true)
-        {
-            float positionX = mVerticesPtr[0]->getPosition()[0];
-            float positionY = mVerticesPtr[0]->getPosition()[1];
-            float width = frame.getTexCoord2()[0] - frame.getTexCoord1()[0];
-            float height = frame.getTexCoord3()[1] - frame.getTexCoord2()[1];
+        if (mEntityPtr == nullptr)
+            return;
 
-            mVerticesPtr[0]->setTexCoord(frame.getTexCoord1());
-            mVerticesPtr[1]->setTexCoord(frame.getTexCoord2());
-            mVerticesPtr[2]->setTexCoord(frame.getTexCoord3());
-            mVerticesPtr[3]->setTexCoord(frame.getTexCoord4());
+        std::vector<utilities::Vertex2*> verts = mEntityPtr->getVertices();
+        float positionX = mEntityPtr->getPositionX();
+        float positionY = mEntityPtr->getPositionY();
+        float width = frame.getTexCoord2()[0] - frame.getTexCoord1()[0];
+        float height = frame.getTexCoord3()[1] - frame.getTexCoord2()[1];
 
-            mVerticesPtr[0]->setPosition(positionX, positionY);
-            mVerticesPtr[1]->setPosition(positionX + width, positionY);
-            mVerticesPtr[2]->setPosition(positionX + width, positionY + height);
-            mVerticesPtr[3]->setPosition(positionX, positionY + height);
-        }
+        verts[0]->setTexCoord(frame.getTexCoord1());
+        verts[1]->setTexCoord(frame.getTexCoord2());
+        verts[2]->setTexCoord(frame.getTexCoord3());
+        verts[3]->setTexCoord(frame.getTexCoord4());
+
+        if (isFlippedX() == true)
+            width = -width;
+
+        if (isFlippedY() == true)
+            height = -height;
+
+        positionX -= (mEntityPtr->getOriginX() * width);
+        positionY -= (mEntityPtr->getOriginY() * height);
+
+        verts[0]->setPosition(positionX, positionY);
+        verts[1]->setPosition(positionX + width, positionY);
+        verts[2]->setPosition(positionX + width, positionY + height);
+        verts[3]->setPosition(positionX, positionY + height);
     }
 
 }}

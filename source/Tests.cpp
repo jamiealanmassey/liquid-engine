@@ -271,8 +271,8 @@ void Tests::createEntities(liquid::spatial::QuadNode* node, liquid::common::Enti
 void Tests::quadTree()
 {
     std::vector<liquid::common::Entity*> entities;
-    entities.resize(350);
-    for (uint32_t i = 0; i < 350; i++)
+    entities.resize(150);
+    for (uint32_t i = 0; i < 150; i++)
     {
         float posX = liquid::utilities::Random::instance().randomRange(10.0f, 1910.0f);
         float posY = liquid::utilities::Random::instance().randomRange(10.0f, 1070.0f);
@@ -284,7 +284,7 @@ void Tests::quadTree()
     mQuadTree = new liquid::spatial::QuadTree(8, { 960.0f, 540.f }, { 1920.0f, 1080.0f });
     mQuadAccum = 0.0f;
 
-    for (uint32_t i = 0; i < 350; i++)
+    for (uint32_t i = 0; i < 150; i++)
         mQuadTree->insertEntity(entities[i]);
 
     liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
@@ -322,9 +322,6 @@ void Tests::quadTree()
                 tests.createEntities(tree->getRootNode(), tests.mQuadEntities);
             }
         };
-
-    /*for (int32_t i = 0; i < 20; i++)
-        quadTree->removeEntity(entities[i]);*/
 
     std::vector<liquid::common::Entity*> query = mQuadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
 }
@@ -389,7 +386,8 @@ void Tests::animation(sf::Texture& texture)
         std::vector<liquid::utilities::Vertex2*> verts = player->getVertices();
 
         animator->transformAnimation("run");
-        animator->setVerticesPtr({ verts[0],verts[1],verts[2],verts[3] });
+        animator->setEntityPtr(player);
+        //animator->setVerticesPtr({ verts[0],verts[1],verts[2],verts[3] });
         player->mTextureName = "player";
 
         // liquid::common::GameManager::instance().peekGameSceneFront()->insertLayer(player);
@@ -440,8 +438,11 @@ void Tests::ai(sf::Texture& texture)
     entity0->setEntityUID("entity0");
     entity1->setEntityUID("entity1");
 
-    animator0->setVerticesPtr({ entity0Verts[0], entity0Verts[1], entity0Verts[2], entity0Verts[3] });
-    animator1->setVerticesPtr({ entity1Verts[0], entity1Verts[1], entity1Verts[2], entity1Verts[3] });
+    animator0->setFlippedX();
+    animator0->setEntityPtr(entity0);
+    animator1->setEntityPtr(entity1);
+    //animator0->setVerticesPtr({ entity0Verts[0], entity0Verts[1], entity0Verts[2], entity0Verts[3] });
+    //animator1->setVerticesPtr({ entity1Verts[0], entity1Verts[1], entity1Verts[2], entity1Verts[3] });
     animator0->transformAnimation("run");
     animator1->transformAnimation("run");
 
