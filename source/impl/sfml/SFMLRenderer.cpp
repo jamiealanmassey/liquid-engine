@@ -32,15 +32,16 @@ namespace impl {
 
     void SFMLRenderer::draw(common::GameScene* gameScene)
     {
-        updateCamera();
         mRenderWindow->clear(sf::Color::Black);
-
         drawPreprocess(gameScene);
         drawBatched(gameScene);
 
+        Renderer::draw(gameScene);
         mRenderWindow->display();
+
         std::string dt = std::to_string(1000.0f / utilities::DELTA);
         mRenderWindow->setTitle("Window - " + dt);
+        updateCamera();
     }
 
     void SFMLRenderer::drawPreprocess(common::GameScene* gameScene)
@@ -76,20 +77,14 @@ namespace impl {
                 if (it == mBatchGroups[layerCounter].end())
                 {
                     SFMLBatchGroup batchGroup(atlasID, shaderID, blendMode);
-                    std::array<utilities::Vertex2*, 4> verts = entities[i]->getVerticesPtr();
-                    batchGroup.insertVertex(convertSFMLVertex(verts[0]));
-                    batchGroup.insertVertex(convertSFMLVertex(verts[1]));
-                    batchGroup.insertVertex(convertSFMLVertex(verts[2]));
-                    batchGroup.insertVertex(convertSFMLVertex(verts[3]));
+                    for (auto vertex : entities[i]->getVertices())
+                        batchGroup.insertVertex(convertSFMLVertex(vertex));
                     mBatchGroups[layerCounter].push_back(batchGroup);
                 }
                 else
                 {
-                    std::array<utilities::Vertex2*, 4> verts = entities[i]->getVerticesPtr();
-                    (*it).insertVertex(convertSFMLVertex(verts[0]));
-                    (*it).insertVertex(convertSFMLVertex(verts[1]));
-                    (*it).insertVertex(convertSFMLVertex(verts[2]));
-                    (*it).insertVertex(convertSFMLVertex(verts[3]));
+                    for (auto vertex : entities[i]->getVertices())
+                        (*it).insertVertex(convertSFMLVertex(vertex));
                 }
 
                 if (atlasID != -1 && mTextures.find(atlasID) == mTextures.end())

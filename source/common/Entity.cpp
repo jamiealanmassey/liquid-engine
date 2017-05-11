@@ -23,14 +23,15 @@ namespace common {
         mParentEntity = nullptr;
         mParentGameScene = nullptr;
         mAIAgent = nullptr;
-        mVerticesSet = true;
+        mVerticesCount = 4;
 
         mAtlasID = -1;
         mShaderID = -1;
         mBlendMode = 0;
+        mVertices.resize(4);
 
         for (uint32_t i = 0; i < 4; i++)
-            mVerticesPtr[i] = new utilities::Vertex2();
+            mVertices[i] = new utilities::Vertex2;
     }
     
     Entity::~Entity()
@@ -71,13 +72,13 @@ namespace common {
         mPositionX = x;
         mPositionY = y;
         
-        if (mVerticesSet)
-        {
-            mVerticesPtr[0]->setPosition(x, y);
-            mVerticesPtr[1]->setPosition(x + mWidth, y);
-            mVerticesPtr[2]->setPosition(x + mWidth, y + mHeight);
-            mVerticesPtr[3]->setPosition(x, y + mHeight);
-        }
+        float w = mVertices[1]->getTexCoord()[0] - mVertices[0]->getTexCoord()[0];
+        float h = mVertices[2]->getTexCoord()[1] - mVertices[1]->getTexCoord()[1];
+
+        mVertices[0]->setPosition(x, y);
+        mVertices[1]->setPosition(x + w, y);
+        mVertices[2]->setPosition(x + w, y + h);
+        mVertices[3]->setPosition(x, y + h);
 
         for (auto child : mChildren)
             child->setPosition(x, y);
@@ -91,20 +92,17 @@ namespace common {
         mPositionX += x;
         mPositionY += y;
         
-        if (mVerticesSet)
-        {
-            mVerticesPtr[0]->setPosition(mVerticesPtr[0]->getPosition()[0] + x, 
-                                         mVerticesPtr[0]->getPosition()[1] + y);
+        mVertices[0]->setPosition(mVertices[0]->getPosition()[0] + x, 
+                                  mVertices[0]->getPosition()[1] + y);
 
-            mVerticesPtr[1]->setPosition(mVerticesPtr[1]->getPosition()[0] + x,
-                                         mVerticesPtr[1]->getPosition()[1] + y);
+        mVertices[1]->setPosition(mVertices[1]->getPosition()[0] + x,
+                                  mVertices[1]->getPosition()[1] + y);
 
-            mVerticesPtr[2]->setPosition(mVerticesPtr[2]->getPosition()[0] + x,
-                                         mVerticesPtr[2]->getPosition()[1] + y);
+        mVertices[2]->setPosition(mVertices[2]->getPosition()[0] + x,
+                                  mVertices[2]->getPosition()[1] + y);
 
-            mVerticesPtr[3]->setPosition(mVerticesPtr[3]->getPosition()[0] + x,
-                                         mVerticesPtr[3]->getPosition()[1] + y);
-        }
+        mVertices[3]->setPosition(mVertices[3]->getPosition()[0] + x,
+                                  mVertices[3]->getPosition()[1] + y);
 
         for (auto child : mChildren)
             child->setPosition(x, y);
@@ -118,24 +116,18 @@ namespace common {
         mWidth = w;
         mHeight = h;
 
-        if (mVerticesSet == true)
-        {
-            mVerticesPtr[0]->setPosition(mPositionX, mPositionY);
-            mVerticesPtr[1]->setPosition(mPositionX + mWidth, mPositionY);
-            mVerticesPtr[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
-            mVerticesPtr[3]->setPosition(mPositionX, mPositionY + mHeight);
-        }
+        mVertices[0]->setPosition(mPositionX, mPositionY);
+        mVertices[1]->setPosition(mPositionX + mWidth, mPositionY);
+        mVertices[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
+        mVertices[3]->setPosition(mPositionX, mPositionY + mHeight);
     }
 
     void Entity::setTexCoords(float x, float y, float w, float h)
     {
-        if (mVerticesSet == true)
-        {
-            mVerticesPtr[0]->setTexCoord(x, y);
-            mVerticesPtr[1]->setTexCoord(x + w, y);
-            mVerticesPtr[2]->setTexCoord(x + w, y + h);
-            mVerticesPtr[3]->setTexCoord(x, y + h);
-        }
+        mVertices[0]->setTexCoord(x, y);
+        mVertices[1]->setTexCoord(x + w, y);
+        mVertices[2]->setTexCoord(x + w, y + h);
+        mVertices[3]->setTexCoord(x, y + h);
     }
     
     bool Entity::isPointInside(float x, float y) const
@@ -181,8 +173,8 @@ namespace common {
     void Entity::setParentGameScene(GameScene* scene, bool remove)
     {
         // TODO: This is an issue for removing in-between updates :/
-        if (mParentGameScene)
-            ;// mParentGameScene->removeEntity(this);
+        //if (mParentGameScene)
+            // mParentGameScene->removeEntity(this);
         
         mParentGameScene = scene;
     }
@@ -220,18 +212,10 @@ namespace common {
         mUniqueID = uid;
     }
     
-    void Entity::setVerticesPtr(std::array<liquid::utilities::Vertex2*, 4> vertices)
+    void Entity::addVertex2(utilities::Vertex2* vertex)
     {
-        mVerticesSet = true;
-        mVerticesPtr = vertices;
-
-        mWidth = mVerticesPtr[1]->getTexCoord()[0] - mVerticesPtr[0]->getTexCoord()[0];
-        mHeight = mVerticesPtr[2]->getTexCoord()[1] - mVerticesPtr[1]->getTexCoord()[1];
-
-        mVerticesPtr[0]->setPosition(mPositionX, mPositionY);
-        mVerticesPtr[1]->setPosition(mPositionX + mWidth, mPositionY);
-        mVerticesPtr[2]->setPosition(mPositionX + mWidth, mPositionY + mHeight);
-        mVerticesPtr[3]->setPosition(mPositionX, mPositionY + mHeight);
+        mVertices.push_back(vertex);
+        mVerticesCount++;
     }
 
     int32_t Entity::getEntityType() const
@@ -279,11 +263,16 @@ namespace common {
         return mAIAgent;
     }
 
-    std::array<utilities::Vertex2*, 4> Entity::getVerticesPtr() const
+    std::vector<utilities::Vertex2*> Entity::getVertices()
     {
-        return mVerticesPtr;
+        return mVertices;
     }
     
+    const uint32_t Entity::getVerticesCount() const
+    {
+        return mVertices.size();
+    }
+
     void Entity::addChild(Entity* entity)
     {
         mChildren.push_back(entity);

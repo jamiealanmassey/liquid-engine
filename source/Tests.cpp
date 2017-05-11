@@ -287,8 +287,10 @@ void Tests::animation(sf::Texture& texture)
         animation.push_back(liquid::animation::AnimationFrame({ 650,450 }, { 780,450 }, { 780, 600 }, { 650,600 }, 35.0f));
 
         animator->insertAnimation("run", animation);*/
+        std::vector<liquid::utilities::Vertex2*> verts = player->getVertices();
+
         animator->transformAnimation("run");
-        animator->setVerticesPtr(player->getVerticesPtr());
+        animator->setVerticesPtr({ verts[0],verts[1],verts[2],verts[3] });
         player->mTextureName = "player";
 
         // liquid::common::GameManager::instance().peekGameSceneFront()->insertLayer(player);
@@ -331,17 +333,18 @@ void Tests::ai(sf::Texture& texture)
     entity0->mAtlasID = resID;
     entity1->mAtlasID = resID;
 
-    animator0->setVerticesPtr(entity0->getVerticesPtr());
-    animator1->setVerticesPtr(entity1->getVerticesPtr());
-    animator0->transformAnimation("run");
-    animator1->transformAnimation("run");
+    std::vector<liquid::utilities::Vertex2*> entity0Verts = entity0->getVertices();
+    std::vector<liquid::utilities::Vertex2*> entity1Verts = entity1->getVertices();
 
     entity0->createAIAgent();
     entity1->createAIAgent();
-    entity0->setVerticesPtr(animator0->getVerticesPtr());
-    entity1->setVerticesPtr(animator1->getVerticesPtr());
     entity0->setEntityUID("entity0");
     entity1->setEntityUID("entity1");
+
+    animator0->setVerticesPtr({ entity0Verts[0], entity0Verts[1], entity0Verts[2], entity0Verts[3] });
+    animator1->setVerticesPtr({ entity1Verts[0], entity1Verts[1], entity1Verts[2], entity1Verts[3] });
+    animator0->transformAnimation("run");
+    animator1->transformAnimation("run");
 
     entity0->getAIAgent()->setMaxVelocity(.75f);
     entity1->getAIAgent()->setMaxVelocity(.5f);

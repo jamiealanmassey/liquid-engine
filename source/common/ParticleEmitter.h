@@ -103,6 +103,11 @@ public:
     /// Gets a referenced list to the collection of Particle objects stored
     const std::vector<Particle*>& getParticles();
 
+    /** \brief Gets the stored Vertex2* objects
+      * \return Array of the Vertex objects
+      */
+    virtual std::vector<utilities::Vertex2*> getVertices();
+
 protected:
     uint32_t               mParticlesBirth;   ///< Number of particles to birth
     uint32_t               mParticlesCount;   ///< Number of particles stored in this emitter

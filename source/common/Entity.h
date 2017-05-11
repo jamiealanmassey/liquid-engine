@@ -174,14 +174,10 @@ public:
       */
     void setEntityUID(std::string uid);
 
-    /** \brief Sets the Vertices pointer for transformation
-      * \param vertices Vertices to manipulate
-      *
-      * If you want this Entity to have an affect on Renderables in the game then
-      * set this list pointing to the Vertices data that is also being used by that
-      * Renderable.
+    /** \brief Adds a new Vertex pointer for rendering
+      * \param vertex Vertex2 to add
       */
-    void setVerticesPtr(std::array<liquid::utilities::Vertex2*, 4> vertices);
+    void addVertex2(utilities::Vertex2* vertex);
 
     /** \brief Gets the type of the Entity as 32-bit integer
       * \return Type of the Entity as a 32-bit integer, default: ENTITYTYPE_UNKNOWN/0x0000
@@ -231,7 +227,10 @@ public:
     /** \brief Gets the stored Vertex2* objects
       * \return Array of the Vertex objects
       */
-    std::array<utilities::Vertex2*, 4> getVerticesPtr() const;
+    virtual std::vector<utilities::Vertex2*> getVertices();
+
+    /// \return Number of Vertices in this Entity
+    const uint32_t getVerticesCount() const;
 
 protected:
     /** \brief Adds a child to this Entity
@@ -290,10 +289,10 @@ protected:
     Entity*              mParentEntity;    ///< Pointer to the parent entity of this entity
     GameScene*           mParentGameScene; ///< Pointer to the parent scene of this entity
     ai::Agent*           mAIAgent;         ///< AI Agent that is linked with this Entity
-
+    
 protected:
-    std::array<liquid::utilities::Vertex2*, 4> mVerticesPtr; ///< Pointer to array of vertices, usually for transforming Renderable data
-    bool                                       mVerticesSet; ///< Denotes if the Vertices pointer was ever set
+    std::vector<utilities::Vertex2*> mVertices;
+    uint32_t                         mVerticesCount;
 };
 
 #endif // _ENTITY_H

@@ -7,7 +7,6 @@ namespace liquid {
 namespace common {
 
     Particle::Particle(const data::ParticleData& data) :
-        Entity(),
         mParticleData(data)
     {
         calculateTargets();
@@ -52,13 +51,6 @@ namespace common {
 
     void Particle::initialise()
     {
-        if (mVerticesSet)
-        {
-            mVerticesPtr[0]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            mVerticesPtr[1]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            mVerticesPtr[2]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            mVerticesPtr[3]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-        }
     }
 
     void Particle::update()
@@ -80,52 +72,22 @@ namespace common {
             mVelocityX = mVelocityTweeners[0].getValue();
             mVelocityY = mVelocityTweeners[1].getValue();
 
-            float positionX = mPositionX + (mVelocityX * delta);
-            float positionY = mPositionY + (mVelocityY * delta);
-            setPosition(positionX, positionY);
-
-            if (mVerticesSet)
-            {
-                mVerticesPtr[0]->setColour(mColour);
-                mVerticesPtr[1]->setColour(mColour);
-                mVerticesPtr[2]->setColour(mColour);
-                mVerticesPtr[3]->setColour(mColour);
-            }
-
-            if (mLifeTime >= mLifeSpan)
-                sleep();
+            mPositionX += mVelocityX * delta;
+            mPositionY += mVelocityY * delta;
         }
-        /*else if (std::min(mLifeTime, 8000.0f))
-        {
-            if (mVerticesSet)
-            {
-                mVerticesPtr[0]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-                mVerticesPtr[1]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-                mVerticesPtr[2]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-                mVerticesPtr[3]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            }
-        }*/
     }
 
     void Particle::emit(float x, float y)
     {
-        wake();
         mLifeTime = 0.0f;
-        setPosition(x, y);
+        mPositionX = x;
+        mPositionY = y;
 
         mVelocityTweeners[0].reset();
         mVelocityTweeners[1].reset();
 
         for (uint32_t i = 0; i < 4; i++)
             mColourTweeners[i].reset();
-
-        if (mVerticesSet)
-        {
-            mVerticesPtr[0]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            mVerticesPtr[1]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            mVerticesPtr[2]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-            mVerticesPtr[3]->setColour(mColour[0], mColour[1], mColour[2], 0.0f);
-        }
 
         calculateTargets();
     }
@@ -152,6 +114,16 @@ namespace common {
     const bool Particle::isAlive() const
     {
         return (mLifeTime < mLifeSpan);
+    }
+
+    const float Particle::getPositionX() const
+    {
+        return mPositionX;
+    }
+
+    const float Particle::getPositionY() const
+    {
+        return mPositionY;
     }
 
     const float Particle::getVelocityX() const

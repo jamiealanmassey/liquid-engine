@@ -36,7 +36,7 @@ int main()
             screenWidth, screenHeight);
 
     renderer->setCamera(camera);
-    camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
+    //camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
     // AI BEHAVIOURS
     liquid::parser::ParserXML behaviourParserXML;

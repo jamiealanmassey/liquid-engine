@@ -1,6 +1,6 @@
-#include "Entity.h"
 #include "../data/ParticleData.h"
 #include "../tweener/Tweener.h"
+#include "../utilities/Vertex2.h"
 #include <array>
 
 namespace liquid { namespace common {
@@ -19,7 +19,7 @@ namespace liquid { namespace common {
  *
  */
 
-class Particle : public Entity
+class Particle
 {
 public:
     /** \brief Particle Constructor
@@ -31,7 +31,7 @@ public:
     ~Particle();
 
     /// Called when Particle is first initialised
-    void initialise() override;
+    void initialise();
 
     /** \brief Updates the Particle
       *
@@ -40,7 +40,7 @@ public:
       * updated on every step. Additionality if some Vertices are set for this
       * particle then they will be updated also.
       */
-    void update() override;
+    void update();
 
     /** \brief Emit the Particle
       * \param x X-Coordinate to emit from
@@ -72,6 +72,9 @@ public:
     /// \return True if the Particle is still alive, otherwise False
     const bool isAlive() const;
 
+    const float getPositionX() const;
+    const float getPositionY() const;
+
     /// \return Gets the X-Axis velocity of this Particle
     const float getVelocityX() const;
 
@@ -92,6 +95,9 @@ protected:
     void calculateTargets();
 
 protected:
+    bool                 mActive;    ///< Flag to denote if this Particle is active
+    float                mPositionX; ///< Position on the X-Axis
+    float                mPositionY; ///< Position on the Y-Axis
     float                mVelocityX; ///< Velocity to apply on the X-Axis
     float                mVelocityY; ///< Velocity to apply on the Y-Axis
     float                mLifeTime;  ///< Total lifetime of the Particle so far
@@ -103,7 +109,7 @@ protected:
     tweener::Tweener mColourTweeners[4];   ///< Tweeners for colour (r,g,b,a) == (0,1,2,3)
 
 private:
-    const data::ParticleData& mParticleData; ///< Copy of particle data
+    const data::ParticleData&          mParticleData; ///< Copy of particle data
 };
 
 #endif // _PARTICLE_H

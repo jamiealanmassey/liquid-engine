@@ -63,7 +63,7 @@ public:
 protected:
     sf::RenderWindow* mRenderWindow; ///< Pointer to the stored sf::Renderwindow
     LayeredBatchGroup mBatchGroups;
-    std::map<int32_t, sf::Texture> mTextures; // TODO: Make this sf::RenderStates?
+    std::map<int32_t, sf::Texture> mTextures;
                                      
     //sf::RenderStates  mStates;
     //sf::Texture       mTexture;
