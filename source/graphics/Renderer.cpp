@@ -26,9 +26,6 @@ namespace graphics {
 
     void Renderer::draw(common::GameScene* gameScene)
     {
-        if (mCamera != nullptr)
-            mCamera->update();
-
         if (mLightingManager != nullptr)
             mLightingManager->draw(this);
 
@@ -37,11 +34,6 @@ namespace graphics {
             proc->update();
             proc->process();
         }
-    }
-
-    void Renderer::setCamera(ICamera* camera)
-    {
-        mCamera = camera;
     }
 
     void Renderer::addPostProcessor(PostProcessor* postProcessor)
@@ -116,11 +108,6 @@ namespace graphics {
     graphics::LightingManager* Renderer::getLightingManager()
     {
         return mLightingManager;
-    }
-
-    ICamera* Renderer::getCamera()
-    {
-        return mCamera;
     }
 
 }}

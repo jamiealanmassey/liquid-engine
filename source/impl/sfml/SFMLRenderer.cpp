@@ -23,6 +23,11 @@ namespace impl {
             mode.height = 1080;
         }
 
+        mRenderBuffer = new sf::RenderTexture;
+        mRenderBufferSpr = new sf::Sprite();
+
+        mRenderBuffer->create(mode.width, mode.height);
+        mRenderBufferSpr->setTexture(mRenderBuffer->getTexture());
         mRenderWindow = new sf::RenderWindow(mode, "Window", 
             settings->getFullscreen() ? sf::Style::Fullscreen : sf::Style::Titlebar);
     }
@@ -32,16 +37,25 @@ namespace impl {
 
     void SFMLRenderer::draw(common::GameScene* gameScene)
     {
+        mRenderBuffer->clear(sf::Color::Black);
         mRenderWindow->clear(sf::Color::Black);
+
         drawPreprocess(gameScene);
         drawBatched(gameScene);
 
         Renderer::draw(gameScene);
+        mRenderBuffer->display();
+        mRenderWindow->draw(*mRenderBufferSpr);
         mRenderWindow->display();
 
         std::string dt = std::to_string(1000.0f / utilities::DELTA);
         mRenderWindow->setTitle("Window - " + dt);
-        updateCamera();
+
+        if (gameScene->getCamera() != nullptr)
+        {
+            SFMLCamera* sfmlCamera = static_cast<SFMLCamera*>(gameScene->getCamera());
+            mRenderWindow->setView(sfmlCamera->getSFMLView());
+        }
     }
 
     void SFMLRenderer::drawPreprocess(common::GameScene* gameScene)
@@ -51,13 +65,20 @@ namespace impl {
         mBatchGroups.resize(layers.size());
         int32_t layerCounter = -1;
 
+        float x1 = 0.f, y1 = 0.f;
+        float x2 = 0.f, y2 = 0.f;
+
+        if (gameScene->getCamera() != nullptr)
+        {
+            common::Camera* camera = gameScene->getCamera();
+            x1 = camera->getCentre()[0] - camera->getDimensions()[0];
+            y1 = camera->getCentre()[1] - camera->getDimensions()[1];
+            x2 = camera->getCentre()[0] + camera->getDimensions()[0];
+            y2 = camera->getCentre()[1] + camera->getDimensions()[1];
+        }
+
         for (common::Layer* layer : layers)
         {
-            float x1 = mCamera->getCentre()[0] - mCamera->getDimensions()[0];
-            float y1 = mCamera->getCentre()[1] - mCamera->getDimensions()[1];
-            float x2 = mCamera->getCentre()[0] + mCamera->getDimensions()[0];
-            float y2 = mCamera->getCentre()[1] + mCamera->getDimensions()[1];
-
             std::vector<common::Entity*> entities = layer->getEntities({ x1,y1,x2,y2 });
             layerCounter++;
 
@@ -129,7 +150,7 @@ namespace impl {
                 else
                     type = sf::PrimitiveType::Quads;
 
-                mRenderWindow->draw(vertices.data(), vertices.size(), type, states);
+                mRenderBuffer->draw(vertices.data(), vertices.size(), type, states);
             }
         }
     }
@@ -176,25 +197,14 @@ namespace impl {
         return sf::BlendNone;
     }
 
-    void SFMLRenderer::setCamera(graphics::ICamera* camera)
-    {
-        Renderer::setCamera(camera);
-        SFMLCamera* sfmlCamera = static_cast<SFMLCamera*>(camera);
-        mRenderWindow->setView(sfmlCamera->getSFMLView());
-    }
-
     sf::RenderWindow* SFMLRenderer::getRenderWindow() const
     {
         return mRenderWindow;
     }
 
-    void SFMLRenderer::updateCamera() const
+    sf::RenderTexture* SFMLRenderer::getRenderBuffer() const
     {
-        if (mCamera != nullptr)
-        {
-            SFMLCamera* sfmlCamera = static_cast<SFMLCamera*>(mCamera);
-            mRenderWindow->setView(sfmlCamera->getSFMLView());
-        }
+        return mRenderBuffer;
     }
 
 }}

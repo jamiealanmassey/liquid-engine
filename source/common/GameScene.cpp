@@ -30,6 +30,9 @@ namespace common {
 
         for (auto animator : mAnimators)
             animator->update();
+
+        if (mCamera != nullptr)
+            mCamera->update();
     }
 
     void GameScene::insertLayer(std::string name, Layer* layerPtr)
@@ -91,6 +94,11 @@ namespace common {
         mAnimators.push_back(animator);
     }
 
+    void GameScene::setCamera(Camera* camera)
+    {
+        mCamera = camera;
+    }
+
     void GameScene::setAllowUpdate(bool isAllowed)
     {
         mAllowUpdate = isAllowed;
@@ -131,6 +139,11 @@ namespace common {
     std::string GameScene::getSceneName() const
     {
         return mSceneName;
+    }
+
+    Camera* GameScene::getCamera() const
+    {
+        return mCamera;
     }
 
     bool GameScene::isAllowedUpdate() const

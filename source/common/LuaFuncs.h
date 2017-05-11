@@ -2,7 +2,7 @@
 #include "../shapes/Rectangle.h"
 #include "../shapes/Circle.h"
 #include "../shapes/LineSegment.h"
-#include "../graphics/ICamera.h"
+#include "../common/Camera.h"
 #include "../ai/BehaviourContext.h"
 #include "../ai/BehaviourTree.h"
 

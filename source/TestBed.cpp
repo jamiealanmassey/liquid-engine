@@ -35,7 +35,7 @@ int main()
         new liquid::impl::SFMLCamera(screenWidth / 2.0f, screenHeight / 2.0f,
             screenWidth, screenHeight);
 
-    renderer->setCamera(camera);
+    scene->setCamera(camera);
     //camera->shake(100.0f, 30.0f, liquid::graphics::ICamera::SHAKEAXIS_XY);
 
     // AI BEHAVIOURS
@@ -89,7 +89,7 @@ int main()
 
     tests.ai(texture3);
     tests.particles(texture2); 
-    tests.quadTree();
+    //tests.quadTree();
     //tests.animation(texture3);
     //tests.lighting();
     //tests.navigation();
@@ -109,7 +109,7 @@ int main()
                 else if (evnt.mKeyCode == sf::Keyboard::S)
                     cam->setCentre({ cam->getCentre()[0], cam->getCentre()[1] + 10.0f });
                 else if (evnt.mKeyCode == sf::Keyboard::Space)
-                    cam->shake(100.0f, 25.f, liquid::graphics::ICamera::SHAKEAXIS_XY);
+                    cam->shake(100.0f, 25.f, liquid::common::Camera::SHAKEAXIS_XY);
 
                 return true;
             }

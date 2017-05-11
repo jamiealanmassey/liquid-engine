@@ -1,9 +1,9 @@
 #include "../tweener/Tweener.h"
 #include <array>
 
-namespace liquid { namespace graphics {
-#ifndef _ICAMERA_H
-#define _ICAMERA_H
+namespace liquid { namespace common {
+#ifndef _CAMERA_H
+#define _CAMERA_H
 
 /**
  * \class ICamera
@@ -17,7 +17,7 @@ namespace liquid { namespace graphics {
  *
  */
 
-class ICamera
+class Camera
 {
 public:
     /// Defines on which Axis to shake the Camera
@@ -29,11 +29,11 @@ public:
     };
 
 public:
-    /// ICamera Constructor
-    ICamera() {}
+    /// Camera Constructor
+    Camera();
 
-    /// ICamera Destructor
-    ~ICamera() {}
+    /// Camera Destructor
+    ~Camera();
 
     /// \brief Called every frame, do anything that needs updating in here
     virtual void update() = 0;
@@ -84,22 +84,13 @@ public:
     virtual void shake(float duration, float radius, eShakeAxis axis) = 0;
 
     /// \return Gets the Centre of the Camera
-    const std::array<float, 2> getCentre() const
-    {
-        return mCentre;
-    }
+    const std::array<float, 2> getCentre() const;
 
     /// \return Gets the Dimensions of the Camera
-    const std::array<float, 2> getDimensions() const
-    {
-        return mDimensions;
-    }
+    const std::array<float, 2> getDimensions() const;
 
     /// \return Gets the Rotation of the Camera
-    const float getRotation() const
-    {
-        return mRotation;
-    }
+    const float getRotation() const;
 
 protected:
     std::array<float, 2> mCentre;     ///< Centre of the Camera in 2D space

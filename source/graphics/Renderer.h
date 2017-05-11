@@ -5,7 +5,6 @@
 #include "../data/Settings.h"
 #include "../graphics/LightingManager.h"
 #include "IRenderable.h"
-#include "ICamera.h"
 
 namespace liquid { namespace graphics {
 #ifndef _RENDERER_H
@@ -48,11 +47,6 @@ public:
     /// \brief Called every frame to draw everything to the Screen
     virtual void draw(common::GameScene* gameScene);
 
-    /** \brief Sets the Camera for this Renderer
-      * \param camera Camera to be assigned
-      */
-    virtual void setCamera(ICamera* camera);
-
     /** \brief Adds a PostProcessor effect to the Renderer
       * \param postProcessor Pointer to post processor to add
       */
@@ -94,15 +88,11 @@ public:
 
     graphics::LightingManager* getLightingManager();
 
-    /// \return Gets the current ICamera, nullptr if not set
-    ICamera* getCamera();
-
 protected:
     std::list<IRenderable*>    mRenderables;     ///< Collection of Renderable objects to be drawn every frame
     std::list<PostProcessor*>  mPostProcessors;  ///< Collection of PostProcessor objects to apply
     graphics::LightingManager* mLightingManager; ///< Pointer to the lighting::LightingManager
     data::Settings*            mSettings;        ///< Settings of the game
-    ICamera*                   mCamera;          ///< Camera of the current Scene
 };
 
 #endif // _RENDERER_H

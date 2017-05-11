@@ -95,6 +95,9 @@ namespace common {
 
     std::vector<Entity*> Layer::getEntities(std::array<float, 4> region)
     {
+        if (region[0] == 0 && region[1] == 0 && region[2] == 0 && region[3] == 0)
+            return mEntities;
+
         if (mSpatialHash != nullptr)
         {
             float x1 = region[0];

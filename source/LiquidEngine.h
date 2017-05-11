@@ -48,6 +48,7 @@
 #include "animation/AnimationParser.h"
 #include "animation/Animator.h"
 
+#include "common/Camera.h"
 #include "common/Entity.h"
 #include "common/GameManager.h"
 #include "common/GameScene.h"
@@ -71,7 +72,6 @@
 #include "events/MouseEventData.h"
 #include "events/WindowEventData.h"
 
-#include "graphics/ICamera.h"
 #include "graphics/IRenderable.h"
 #include "graphics/Light.h"
 #include "graphics/LightingManager.h"

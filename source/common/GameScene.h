@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "Entity.h"
 #include "Layer.h"
+#include "Camera.h"
 #include "../animation/Animator.h"
 
 namespace liquid { namespace common {
@@ -36,15 +37,6 @@ public:
       * scenes in the manager.
       */
     virtual void initialise();
-
-    /** \brief Updates the game for any incoming input events from user
-      *
-      * This should be called every frame and will supply the program with
-      * a compiled list of events that have occured and the respective data
-      * pertaining to those events that've been triggered on this frame. This
-      * could include events such as mouse, keyboard, gamepad input etc.
-      */
-    //virtual void updateEvents(/*LiquidEventData eventData*/);
 
     /** \brief Updates the Scene, called every frame
       *
@@ -95,6 +87,8 @@ public:
 
     void addAnimator(animation::Animator* animator);
 
+    void setCamera(Camera* camera);
+
     /** \brief Denotes if the GameScene is allowed to Update
       * \param isAllowed Value to assign the flag, default: true
       */
@@ -130,10 +124,7 @@ public:
       */
     std::string getSceneName() const;
 
-    /** \brief Gets the Spatial Manager attached to this GameScene
-      * \return Spatial object attached to this GameScene, nullptr if none
-      */
-    //Spatial* getSpatialManager() const;
+    Camera* getCamera() const;
 
     /** \brief Denotes if the GameScene is allowed to Update
       * \return Boolean value of True or False
@@ -160,7 +151,7 @@ protected:
     std::map<std::string, uint32_t> mLayerIndexer;
     std::vector<Layer*>             mLayers;
     std::string                     mSceneName;      ///< String identifier for the Scene
-    //Spatial*             mSpatialManager; ///< Pointer to a spatial manager used to divide and query space
+    Camera*                         mCamera;         ///< Camera of the current Scene
 
 private:
     bool mAllowUpdate;        ///< Flag that denotes if the scene should update

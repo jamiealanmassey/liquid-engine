@@ -299,26 +299,26 @@ namespace common {
 
     void LuaFuncs::luaSetCameraCentre(float x, float y)
     {
-        graphics::ICamera* camera = GameManager::instance().getRendererClass()->getCamera();
-        camera->setCentre({ x, y });
+        common::GameScene* scene = GameManager::instance().peekGameSceneFront();
+        scene->getCamera()->setCentre({ x, y });
     }
 
     void LuaFuncs::luaSetCameraSize(float w, float h)
     {
-        graphics::ICamera* camera = GameManager::instance().getRendererClass()->getCamera();
-        camera->setDimensions({ w, h });
+        common::GameScene* scene = GameManager::instance().peekGameSceneFront();
+        scene->getCamera()->setDimensions({ w, h });
     }
 
     void LuaFuncs::luaSetCameraRotation(float rotation)
     {
-        graphics::ICamera* camera = GameManager::instance().getRendererClass()->getCamera();
-        camera->setRotation(rotation);
+        common::GameScene* scene = GameManager::instance().peekGameSceneFront();
+        scene->getCamera()->setRotation(rotation);
     }
 
     void LuaFuncs::luaShakeCamera(float duration, float radius, int32_t axis)
     {
-        graphics::ICamera* camera = GameManager::instance().getRendererClass()->getCamera();
-        camera->shake(duration, radius, (graphics::ICamera::eShakeAxis)axis);
+        common::GameScene* scene = GameManager::instance().peekGameSceneFront();
+        scene->getCamera()->shake(duration, radius, (common::Camera::eShakeAxis)axis);
     }
 
     shape::Rectangle LuaFuncs::luaCreateRectangle(float x, float y, float w, float h)

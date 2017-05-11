@@ -4,7 +4,6 @@
 #include "SFMLBatchGroup.h"
 #include "../../data/Settings.h"
 #include "../../graphics/Renderer.h"
-#include "../../graphics/ICamera.h"
 #include "../../common/GameScene.h"
 
 namespace liquid { namespace impl {
@@ -52,21 +51,21 @@ public:
 
     sf::BlendMode convertBlendMode(int32_t blendMode);
 
-    virtual void setCamera(graphics::ICamera* camera) override;
-
     /// \return Pointer to the running sf::RenderWindow for this Renderer
     sf::RenderWindow* getRenderWindow() const;
+
+    /// \return Pointer to the current sf::RenderTexture that is the buffer
+    sf::RenderTexture* getRenderBuffer() const;
 
     /// \brief Updates the mRenderWindow with the current Camera
     void updateCamera() const;
 
 protected:
     sf::RenderWindow* mRenderWindow; ///< Pointer to the stored sf::Renderwindow
-    LayeredBatchGroup mBatchGroups;
+    sf::RenderTexture* mRenderBuffer;
+    sf::Sprite* mRenderBufferSpr;
     std::map<int32_t, sf::Texture> mTextures;
-                                     
-    //sf::RenderStates  mStates;
-    //sf::Texture       mTexture;
+    LayeredBatchGroup mBatchGroups;
 };
 
 #endif // _SFMLRENDERER_H

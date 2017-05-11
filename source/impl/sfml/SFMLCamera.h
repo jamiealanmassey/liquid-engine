@@ -1,5 +1,5 @@
 #ifdef SFML
-#include "../../graphics/ICamera.h"
+#include "../../common/Camera.h"
 #include <SFML/Graphics.hpp>
 
 namespace liquid { namespace impl {
@@ -18,7 +18,7 @@ namespace liquid { namespace impl {
  *
  */
 
-class SFMLCamera : public graphics::ICamera
+class SFMLCamera : public common::Camera
 {
 public:
     /** \brief SFMLCamera Constructor
