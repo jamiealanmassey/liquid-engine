@@ -89,6 +89,7 @@ int main()
 
     tests.ai(texture3);
     tests.particles(texture2); 
+    tests.quadTree();
     //tests.animation(texture3);
     //tests.lighting();
     //tests.navigation();

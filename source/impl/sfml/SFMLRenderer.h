@@ -46,7 +46,7 @@ public:
     virtual void drawPreprocess(common::GameScene* gameScene);
     virtual void drawBatched(common::GameScene* gameScene);
 
-    bool predicateFunc(SFMLBatchGroup& batch, int32_t atlasID, int32_t shaderID, int32_t blendMode);
+    bool predicateFunc(SFMLBatchGroup& batch, int32_t atlasID, int32_t shaderID, int32_t blendMode, int32_t primitiveType);
 
     sf::Vertex convertSFMLVertex(utilities::Vertex2* vert);
 

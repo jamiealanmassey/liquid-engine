@@ -43,18 +43,15 @@ public:
       * \param entityPtr Pointer to the Entity to be added
       * \return True of the Entity was added, otherwise false
       */
-    bool insertEntity(common::Entity* entityPtr);
+    void insertEntity(common::Entity* entityPtr);
+
+    void insertEntity(std::vector<common::Entity*> entities);
 
     /** \brief Removes a common::Entity from the QuadNode or its children
       * \param entityPtr Pointer to the Entity to be removed
       * \return True of the Entity was removed, otherwise false
       */
-    bool removeEntity(common::Entity* entityPtr);
-
-    /** \brief Deletes the specified child node from this Node
-      * \param node Pointer to QuadNode for removal
-      */
-    void deleteChildNode(QuadNode* node);
+    void removeEntity(common::Entity* entityPtr);
 
     /// \brief Search each child branch and this one recursively, removing unused ones
     void pruneDeadBranches();
@@ -83,12 +80,12 @@ public:
       * \param centre Array representing where the size of this node is in 2D-space
       */
     void setSize(std::array<float, 2> size);
-    
-    /// \return True if at least one child QuadNode is not a nullptr, otherwise false
-    const bool hasChildren() const;
 
     /// \return True if this is the root QuadNode to the QuadTree
     const bool isRootNode() const;
+
+    /// \return True if there are child buckets
+    const bool isSubdivided() const;
 
     /// \return The Capacity of this QuadNode
     const int32_t getCapacity() const;
@@ -119,6 +116,10 @@ public:
       * \return True if the Entity is inside, otherwise false
       */
     const bool intersection(common::Entity* entityPtr) const;
+
+protected:
+    void subdivide();
+    void combine();
 
 protected:
     bool                         mIsRootNode;     ///< Denotes of this QuadNode is the root node

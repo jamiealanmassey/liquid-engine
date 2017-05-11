@@ -1,4 +1,5 @@
 #include "QuadNode.h"
+#include "QuadTree.h"
 
 namespace liquid {
 namespace spatial {
@@ -20,95 +21,64 @@ namespace spatial {
         float positionX = entityPtr->getPositionX();
         float positionY = entityPtr->getPositionY();
 
-        for (uint32_t i = 0; i < 4; i++)
-        {
-            if (positionY < mCentre[1])
-                return (positionX <= mCentre[0]) ? 0 : 1;
-            else
-                return (positionX <= mCentre[0]) ? 2 : 3;
-        }
+        if (positionY < mCentre[1])
+            return (positionX <= mCentre[0]) ? 0 : 1;
+        else
+            return (positionX <= mCentre[0]) ? 2 : 3;
 
         return -1;
     }
 
-    bool QuadNode::insertEntity(common::Entity* entityPtr)
+    void QuadNode::insertEntity(common::Entity* entityPtr)
     {
-        if (intersection(entityPtr) == false)
-            return false;
-
-        if (mEntities.size() < mCapacity)
-        {
-            mEntities.push_back(entityPtr);
-            return true;
-        }
-
-        int32_t quad = quadrant(entityPtr);
-        if (mChildNodes[quad] == nullptr)
-        {
-            int32_t signX = (quad == 0 || quad == 2);
-            int32_t signY = (quad == 0 || quad == 1);
-
-            float halfWidth = mSize[0] / 4.0f;
-            float halfHeight = mSize[1] / 4.0f;
-
-            float centreX = mCentre[0] + (signX ? -halfWidth : halfWidth);
-            float centreY = mCentre[1] + (signY ? -halfHeight : halfHeight);
-
-            mChildNodes[quad] = new QuadNode(mCapacity);
-            mChildNodes[quad]->setSize({ mSize[0] / 2.0f,mSize[1] / 2.0f });
-            mChildNodes[quad]->setCentre({ centreX,centreY });
-            mChildNodes[quad]->setParentQuadTree(mParentQuadTree);
-            mChildNodes[quad]->setParentNode(mParentNode);
-
-            return mChildNodes[quad]->insertEntity(entityPtr);
-        }
-        return mChildNodes[quad]->insertEntity(entityPtr);
-    }
-
-    bool QuadNode::removeEntity(common::Entity* entityPtr)
-    {
-        std::vector<common::Entity*>::iterator it;
-        it = std::find(mEntities.begin(), mEntities.end(), entityPtr);
-
-        if (it == mEntities.end())
+        if (isSubdivided() == true)
         {
             int32_t q = quadrant(entityPtr);
-            if (mChildNodes[q] != nullptr)
-                return mChildNodes[q]->removeEntity(entityPtr);
-        }
-        else
-        {
-            mEntities.erase(it);
-            return true;
+            return mChildNodes[q]->insertEntity(entityPtr);
         }
 
-        return false;
+        mEntities.push_back(entityPtr);
+        mParentQuadTree->setTrackedNode(entityPtr, this);
+
+        if (mEntities.size() > mCapacity)
+        {
+            subdivide();
+
+            for (auto entity : mEntities)
+            {
+                int32_t q = quadrant(entity);
+                mChildNodes[q]->insertEntity(entity);
+            }
+            
+            mEntities.clear();
+        }
     }
 
-    void QuadNode::deleteChildNode(QuadNode* node)
+    void QuadNode::insertEntity(std::vector<common::Entity*> entities)
     {
-        for (uint32_t i = 0; i < 4; i++)
-        {
-            if (mChildNodes[i] == node)
-                delete mChildNodes[i];
-        }
+        // TODO
+    }
+
+    void QuadNode::removeEntity(common::Entity* entityPtr)
+    {
+        mEntities.erase(std::find(mEntities.begin(), mEntities.end(), entityPtr));
     }
 
     void QuadNode::pruneDeadBranches()
     {
-        for (int32_t i = 0; i < 4; i++)
-        {
-            if (mChildNodes[i] != nullptr)
-            {
-                mChildNodes[i]->pruneDeadBranches();
+        int32_t empty = 0;
 
-                if (mChildNodes[i]->getCount() == 0 && hasChildren() == false)
-                {
-                    delete mChildNodes[i];
-                    mChildNodes[i] = nullptr;
-                }
-            }
+        if (isSubdivided() == false)
+            return;
+
+        for (uint32_t i = 0; i < 4; i++)
+        {
+            mChildNodes[i]->pruneDeadBranches();
+            empty += (mChildNodes[i]->getCount() == 0);
         }
+
+        if (empty == 4)
+            combine();
     }
 
     void QuadNode::setParentNode(QuadNode* quadNode)
@@ -136,20 +106,14 @@ namespace spatial {
         mSize = size;
     }
 
-    const bool QuadNode::hasChildren() const
-    {
-        for (int32_t i = 0; i < 4; i++)
-        {
-            if (mChildNodes[i] != nullptr)
-                return true;
-        }
-
-        return false;
-    }
-
     const bool QuadNode::isRootNode() const
     {
         return mIsRootNode;
+    }
+
+    const bool QuadNode::isSubdivided() const
+    {
+        return mChildNodes[0] != nullptr;
     }
 
     const int32_t QuadNode::getCapacity() const
@@ -199,6 +163,38 @@ namespace spatial {
 
         return (positionX >= mCentre[0] - mSize[0] / 2.0f && positionX <= mCentre[0] + mSize[0] / 2.0f &&
                 positionY >= mCentre[1] - mSize[1] / 2.0f && positionY <= mCentre[1] + mSize[1] / 2.0f);
+    }
+
+    void QuadNode::subdivide()
+    {
+        mChildNodes[0] = new QuadNode(mCapacity);
+        mChildNodes[1] = new QuadNode(mCapacity);
+        mChildNodes[2] = new QuadNode(mCapacity);
+        mChildNodes[3] = new QuadNode(mCapacity);
+
+        float w = mSize[0] / 4.0f;
+        float h = mSize[1] / 4.0f;
+
+        mChildNodes[0]->setCentre({ mCentre[0] - w, mCentre[1] - h });
+        mChildNodes[1]->setCentre({ mCentre[0] + w, mCentre[1] - h });
+        mChildNodes[2]->setCentre({ mCentre[0] + w, mCentre[1] + h });
+        mChildNodes[3]->setCentre({ mCentre[0] - w, mCentre[1] + h });
+
+        for (uint32_t i = 0; i < 4; i++)
+        {
+            mChildNodes[i]->setParentNode(this);
+            mChildNodes[i]->setParentQuadTree(mParentQuadTree);
+            mChildNodes[i]->setSize({ w*2.0f,h*2.0f });
+        }
+    }
+
+    void QuadNode::combine()
+    {
+        for (uint32_t i = 0; i < 4; i++)
+        {
+            delete mChildNodes[i];
+            mChildNodes[i] = nullptr;
+        }
     }
 
 }}

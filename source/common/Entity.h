@@ -44,6 +44,12 @@ public:
         ENTITYSTATE_DEAD = 2,
     };
 
+    enum ePrimitiveType
+    {
+        PRIMITIVETYPE_QUAD = 0,
+        PRIMITIVETYPE_LINES = 1,
+    };
+
 public:
     /// Entity Constructor
     Entity();
@@ -263,6 +269,7 @@ public:
     int32_t mAtlasID;
     int32_t mShaderID;
     int32_t mBlendMode;
+    int32_t mPrimitiveType;
 
 public:
     std::function<void(Entity*)>      mFuncCallbackUpdate;      ///< Function callback for when Entity is updated

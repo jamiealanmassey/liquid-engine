@@ -55,6 +55,8 @@ public:
       */
     virtual void removeEntity(common::Entity* entityPtr) override;
 
+    QuadNode* getRootNode() const;
+
     /** \brief Query the QuadTree and find all common::Entity objects in the given region
       * \param region Area to search in an Array format where = (x, y, width, height)
       */
@@ -66,8 +68,7 @@ public:
       */
     virtual std::vector<common::Entity*> query(std::array<float, 4> region, int32_t type) override;
 
-    /// \brief Call down to the root QuadNode and remove any unused branches
-    void pruneDeadBranches();
+    void setTrackedNode(common::Entity* entity, QuadNode* node);
 
 protected:
     /** \brief Search recursively using a depth search to find all Entities in the region
@@ -80,6 +81,9 @@ protected:
 protected:
     QuadNode* mRootNode;    ///< Pointer to the stored root QuadNode for this QuadTree
     int32_t   mNumEntities; ///< Number of Entities that exist in the whole tree
+
+private:
+    std::map<common::Entity*, QuadNode*> mTrackedEntities;
 };
 
 #endif // _QUADTREE_H

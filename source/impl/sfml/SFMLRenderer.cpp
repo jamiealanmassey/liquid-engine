@@ -70,13 +70,14 @@ namespace impl {
                 int32_t atlasID = entities[i]->mAtlasID;
                 int32_t shaderID = entities[i]->mShaderID;
                 int32_t blendMode = entities[i]->mBlendMode;
+                int32_t primitiveType = entities[i]->mPrimitiveType;
 
                 it = std::find_if(mBatchGroups[layerCounter].begin(), mBatchGroups[layerCounter].end(),
-                    std::bind(&SFMLRenderer::predicateFunc, this, std::placeholders::_1, atlasID, shaderID, blendMode));
+                    std::bind(&SFMLRenderer::predicateFunc, this, std::placeholders::_1, atlasID, shaderID, blendMode, primitiveType));
 
                 if (it == mBatchGroups[layerCounter].end())
                 {
-                    SFMLBatchGroup batchGroup(atlasID, shaderID, blendMode);
+                    SFMLBatchGroup batchGroup(atlasID, shaderID, blendMode, primitiveType);
                     for (auto vertex : entities[i]->getVertices())
                         batchGroup.insertVertex(convertSFMLVertex(vertex));
                     mBatchGroups[layerCounter].push_back(batchGroup);
@@ -110,20 +111,35 @@ namespace impl {
                 sf::RenderStates states;
                 std::vector<sf::Vertex> vertices;
 
-                states.texture = &mTextures[mBatchGroups[i][b].getAtlasID()];
+                if (mBatchGroups[i][b].getAtlasID() != -1)
+                    states.texture = &mTextures[mBatchGroups[i][b].getAtlasID()];
+
                 states.blendMode = convertBlendMode(mBatchGroups[i][b].getBlendMode());
                 vertices = mBatchGroups[i][b].getVertices();
 
-                mRenderWindow->draw(vertices.data(), vertices.size(), sf::PrimitiveType::Quads, states);
+                sf::PrimitiveType type;
+                int32_t pType = mBatchGroups[i][b].getPrimitiveType();
+
+                if (pType == 0)
+                    type = sf::PrimitiveType::Quads;
+                else if (pType == 1)
+                    type = sf::PrimitiveType::Lines;
+                else if (pType == 2)
+                    type = sf::PrimitiveType::Points;
+                else
+                    type = sf::PrimitiveType::Quads;
+
+                mRenderWindow->draw(vertices.data(), vertices.size(), type, states);
             }
         }
     }
 
-    bool SFMLRenderer::predicateFunc(SFMLBatchGroup& batch, int32_t atlasID, int32_t shaderID, int32_t blendMode)
+    bool SFMLRenderer::predicateFunc(SFMLBatchGroup& batch, int32_t atlasID, int32_t shaderID, int32_t blendMode, int32_t primitiveType)
     {
         return (atlasID == batch.getAtlasID() &&
                 shaderID == batch.getShaderID() &&
-                blendMode == batch.getBlendMode());
+                blendMode == batch.getBlendMode() &&
+                primitiveType == batch.getPrimitiveType());
     }
 
     sf::Vertex SFMLRenderer::convertSFMLVertex(utilities::Vertex2* vert)

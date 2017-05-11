@@ -3,11 +3,12 @@
 namespace liquid {
 namespace impl {
 
-    SFMLBatchGroup::SFMLBatchGroup(int32_t atlasID, int32_t shaderID, int32_t blendMode)
+    SFMLBatchGroup::SFMLBatchGroup(int32_t atlasID, int32_t shaderID, int32_t blendMode, int32_t primitiveType)
     {
         mAtlasID = atlasID;
         mShaderID = shaderID;
         mBlendMode = blendMode;
+        mPrimitiveType = primitiveType;
     }
 
     SFMLBatchGroup::~SFMLBatchGroup()
@@ -32,6 +33,11 @@ namespace impl {
     const int32_t SFMLBatchGroup::getBlendMode() const
     {
         return mBlendMode;
+    }
+
+    const int32_t SFMLBatchGroup::getPrimitiveType() const
+    {
+        return mPrimitiveType;
     }
 
     const std::vector<sf::Vertex> SFMLBatchGroup::getVertices() const

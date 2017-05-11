@@ -9,7 +9,7 @@ namespace liquid { namespace impl {
 class SFMLBatchGroup
 {
 public:
-    SFMLBatchGroup(int32_t atlasID, int32_t shaderID, int32_t blendMode);
+    SFMLBatchGroup(int32_t atlasID, int32_t shaderID, int32_t blendMode, int32_t primitiveType);
     ~SFMLBatchGroup();
 
     void insertVertex(sf::Vertex& vertex);
@@ -17,12 +17,14 @@ public:
     const int32_t getAtlasID() const;
     const int32_t getShaderID() const;
     const int32_t getBlendMode() const;
+    const int32_t getPrimitiveType() const;
     const std::vector<sf::Vertex> getVertices() const;
 
 protected:
     int32_t mAtlasID;
     int32_t mShaderID;
     int32_t mBlendMode;
+    int32_t mPrimitiveType;
     std::vector<sf::Vertex> mVertices;
 };
 

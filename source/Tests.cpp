@@ -204,29 +204,109 @@ void Tests::parserXML()
     liquid::parser::ParserNode* curNode = nodeSearch.getCurrentNode();
 }
 
+void createOverlay(liquid::spatial::QuadNode* node, liquid::common::Entity* entity)
+{
+    float positionX = node->getCentre()[0] - (node->getSize()[0] / 2.0f);
+    float positionY = node->getCentre()[1] - (node->getSize()[1] / 2.0f);
+    liquid::utilities::Vertex2* vert = new liquid::utilities::Vertex2();
+    vert->setPosition({ positionX, positionY });
+    vert->setColour(255.0, 0.0f, 0.0f, 255.0f);
+
+    positionX = node->getCentre()[0] + (node->getSize()[0] / 2.0f);
+    positionY = node->getCentre()[1] - (node->getSize()[1] / 2.0f);
+    liquid::utilities::Vertex2* vert1 = new liquid::utilities::Vertex2();
+    vert1->setPosition({ positionX, positionY });
+    vert1->setColour(255.0, 0.0f, 0.0f, 255.0f);
+
+    positionX = node->getCentre()[0] + (node->getSize()[0] / 2.0f);
+    positionY = node->getCentre()[1] + (node->getSize()[1] / 2.0f);
+    liquid::utilities::Vertex2* vert2 = new liquid::utilities::Vertex2();
+    vert2->setPosition({ positionX, positionY });
+    vert2->setColour(255.0, 0.0f, 0.0f, 255.0f);
+
+    positionX = node->getCentre()[0] - (node->getSize()[0] / 2.0f);
+    positionY = node->getCentre()[1] + (node->getSize()[1] / 2.0f);
+    liquid::utilities::Vertex2* vert3 = new liquid::utilities::Vertex2();
+    vert3->setPosition({ positionX, positionY });
+    vert3->setColour(255.0, 0.0f, 0.0f, 255.0f);
+
+    entity->addVertex2(vert);
+    entity->addVertex2(vert1);
+
+    entity->addVertex2(vert1);
+    entity->addVertex2(vert2);
+
+    entity->addVertex2(vert2);
+    entity->addVertex2(vert3);
+
+    entity->addVertex2(vert3);
+    entity->addVertex2(vert);
+
+    if (node->isSubdivided() == true)
+    {
+        for (auto child : node->getChildNodes())
+            createOverlay(child, entity);
+    }
+}
+
+void createEntities(liquid::spatial::QuadNode* node, liquid::common::Entity* entity)
+{
+    for (auto e : node->getEntities())
+    {
+        float positionX = e->getPositionX();
+        float positionY = e->getPositionY();
+        liquid::utilities::Vertex2* vert = new liquid::utilities::Vertex2();
+        vert->setPosition({ positionX, positionY });
+        vert->setColour(255.0f, 255.0f, 255.0f, 255.0f);
+        entity->addVertex2(vert);
+    }
+
+    if (node->isSubdivided() == true)
+    {
+        for (auto child : node->getChildNodes())
+            createEntities(child, entity);
+    }
+}
+
 void Tests::quadTree()
 {
     std::vector<liquid::common::Entity*> entities;
     entities.resize(150);
     for (uint32_t i = 0; i < 150; i++)
     {
-        float posX = liquid::utilities::Random::instance().randomRange(100.0f, 500.0f);
-        float posY = liquid::utilities::Random::instance().randomRange(100.0f, 500.0f);
+        float posX = liquid::utilities::Random::instance().randomRange(10.0f, 1910.0f);
+        float posY = liquid::utilities::Random::instance().randomRange(10.0f, 1070.0f);
 
         entities[i] = new liquid::common::Entity();
         entities[i]->setPosition(posX, posY);
     }
 
     liquid::spatial::QuadTree* quadTree =
-        new liquid::spatial::QuadTree(4, { 300.0f,300.0f }, { 600.0f, 600.0f });
+        new liquid::spatial::QuadTree(4, { 960.0f, 540.f }, { 1920.0f, 1080.0f });
 
     for (int32_t i = 0; i < 150; i++)
         quadTree->insertEntity(entities[i]);
 
-    for (int32_t i = 0; i < 20; i++)
-        quadTree->removeEntity(entities[i]);
+    quadTree->removeEntity(entities[50]);
 
-    quadTree->pruneDeadBranches();
+    liquid::common::GameScene* scene = liquid::common::GameManager::instance().peekGameSceneFront();
+    liquid::common::Entity* debugOverlay = new liquid::common::Entity();
+    liquid::common::Entity* debugEntities = new liquid::common::Entity();
+
+    createOverlay(quadTree->getRootNode(), debugOverlay);
+    createEntities(quadTree->getRootNode(), debugEntities);
+
+    debugEntities->mPrimitiveType = 2;
+    debugOverlay->mPrimitiveType = 1;
+
+    liquid::common::Layer* layer = new liquid::common::Layer(scene);
+    layer->insertEntity(debugOverlay);
+    layer->insertEntity(debugEntities);
+    scene->insertLayer("default", layer);
+
+    /*for (int32_t i = 0; i < 20; i++)
+        quadTree->removeEntity(entities[i]);*/
+
     std::vector<liquid::common::Entity*> query = quadTree->query({ 0.0f, 0.0f, 600.0f, 600.0f });
 }
 
